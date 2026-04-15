@@ -7,25 +7,31 @@ import {
   Alert,
   StyleSheet,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 
 const RouteListScreen = ({ navigation }) => {
-  const { token, user } = useContext(AuthContext);
+  const { token, user, userToken } = useContext(AuthContext);
+  const authToken = token || userToken;
+
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchRoutes = useCallback(async () => {
     try {
       setLoading(true);
+
       const response = await api.get("/routes", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authToken}`,
         },
       });
+
       setRoutes(response.data);
     } catch (error) {
+      console.log("Fetch routes error:", error?.response?.data || error.message);
       Alert.alert(
         "Error",
         error?.response?.data?.message || "Failed to fetch routes"
@@ -33,32 +39,47 @@ const RouteListScreen = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
-  }, [token]);
+  }, [authToken]);
 
   const handleDeleteRoute = async (routeId) => {
-    Alert.alert("Confirm Delete", "Are you sure you want to delete this route?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await api.delete(`/routes/${routeId}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            Alert.alert("Success", "Route deleted successfully");
-            fetchRoutes();
-          } catch (error) {
-            Alert.alert(
-              "Error",
-              error?.response?.data?.message || "Failed to delete route"
-            );
-          }
+    const doDelete = async () => {
+      try {
+        console.log("Deleting route:", routeId);
+
+        await api.delete(`/routes/${routeId}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
+
+        Alert.alert("Success", "Route deleted successfully");
+        fetchRoutes();
+      } catch (error) {
+        console.log("Delete route error:", error?.response?.data || error.message);
+        Alert.alert(
+          "Error",
+          error?.response?.data?.message || "Failed to delete route"
+        );
+      }
+    };
+
+    if (Platform.OS === "web") {
+      const confirmed = window.confirm(
+        "Are you sure you want to delete this route?"
+      );
+      if (confirmed) {
+        await doDelete();
+      }
+    } else {
+      Alert.alert("Confirm Delete", "Are you sure you want to delete this route?", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: doDelete,
         },
-      },
-    ]);
+      ]);
+    }
   };
 
   useEffect(() => {
@@ -118,7 +139,9 @@ const RouteListScreen = ({ navigation }) => {
               <Text
                 style={[
                   styles.statusBadge,
-                  item.status === "active" ? styles.activeBadge : styles.inactiveBadge,
+                  item.status === "active"
+                    ? styles.activeBadge
+                    : styles.inactiveBadge,
                 ]}
               >
                 {item.status}
@@ -131,11 +154,15 @@ const RouteListScreen = ({ navigation }) => {
 
             <View style={styles.infoRow}>
               <Text style={styles.infoText}>Price: LKR {item.price}</Text>
-              <Text style={styles.infoText}>Distance: {item.distanceKm} km</Text>
+              <Text style={styles.infoText}>
+                Distance: {item.distanceKm ?? "-"} km
+              </Text>
             </View>
 
             <View style={styles.infoRow}>
-              <Text style={styles.infoText}>Duration: {item.estimatedDuration}</Text>
+              <Text style={styles.infoText}>
+                Duration: {item.estimatedDuration || "-"}
+              </Text>
               <Text style={styles.infoText}>Stops: {item.stopCount || 0}</Text>
             </View>
 
