@@ -19,7 +19,7 @@ const RouteFormScreen = ({ route, navigation }) => {
   const [startLocation, setStartLocation] = useState(editingRoute?.startLocation || "");
   const [endLocation, setEndLocation] = useState(editingRoute?.endLocation || "");
   const [price, setPrice] = useState(editingRoute ? String(editingRoute.price) : "");
-  const [distanceKm, setDistanceKm] = useState(editingRoute ? String(editingRoute.distanceKm) : "");
+  const [distanceKm, setDistanceKm] = useState(editingRoute?.distanceKm !== undefined ? String(editingRoute.distanceKm) : "");
   const [estimatedDuration, setEstimatedDuration] = useState(editingRoute?.estimatedDuration || "");
   const [description, setDescription] = useState(editingRoute?.description || "");
   const [status, setStatus] = useState(editingRoute?.status || "active");
