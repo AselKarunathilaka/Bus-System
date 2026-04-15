@@ -182,7 +182,9 @@ const RouteListScreen = ({ navigation }) => {
                 })
               }
             >
-              <Text style={styles.buttonText}>View Full Stop Details</Text>
+              <Text style={styles.buttonText}>
+                {user?.role === "admin" ? "Manage Stops" : "View Route Stops"}
+              </Text>
             </TouchableOpacity>
 
             {user?.role === "admin" && (
