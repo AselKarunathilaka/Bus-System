@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
@@ -14,9 +15,11 @@ const StopListScreen = ({ route, navigation }) => {
   const { token, user } = useContext(AuthContext);
   const { routeId, routeName } = route.params;
   const [stops, setStops] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const fetchStops = async () => {
+  const fetchStops = useCallback(async () => {
     try {
+      setLoading(true);
       const response = await api.get(`/stops/route/${routeId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,8 +31,10 @@ const StopListScreen = ({ route, navigation }) => {
         "Error",
         error?.response?.data?.message || "Failed to fetch stops"
       );
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [routeId, token]);
 
   const handleDeleteStop = async (stopId) => {
     Alert.alert("Confirm Delete", "Are you sure you want to delete this stop?", [
@@ -60,7 +65,16 @@ const StopListScreen = ({ route, navigation }) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", fetchStops);
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, fetchStops]);
+
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" />
+        <Text style={styles.loaderText}>Loading stops...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -69,7 +83,7 @@ const StopListScreen = ({ route, navigation }) => {
       {user?.role === "admin" && (
         <TouchableOpacity
           style={styles.addButton}
-          onPress={() => navigation.navigate("AddStop", { routeId })}
+          onPress={() => navigation.navigate("StopForm", { routeId })}
         >
           <Text style={styles.buttonText}>Add Stop</Text>
         </TouchableOpacity>
@@ -81,17 +95,30 @@ const StopListScreen = ({ route, navigation }) => {
         ListEmptyComponent={<Text style={styles.emptyText}>No stops found</Text>}
         renderItem={({ item }) => (
           <View style={styles.card}>
-            <Text style={styles.stopName}>{item.stopName}</Text>
+            <Text style={styles.stopName}>{item.order}. {item.stopName}</Text>
             <Text style={styles.text}>Location: {item.location}</Text>
-            <Text style={styles.text}>Order: {item.order}</Text>
 
             {user?.role === "admin" && (
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => handleDeleteStop(item._id)}
-              >
-                <Text style={styles.buttonText}>Delete Stop</Text>
-              </TouchableOpacity>
+              <>
+                <TouchableOpacity
+                  style={styles.editButton}
+                  onPress={() =>
+                    navigation.navigate("StopForm", {
+                      routeId,
+                      stopData: item,
+                    })
+                  }
+                >
+                  <Text style={styles.buttonText}>Edit Stop</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => handleDeleteStop(item._id)}
+                >
+                  <Text style={styles.buttonText}>Delete Stop</Text>
+                </TouchableOpacity>
+              </>
             )}
           </View>
         )}
@@ -106,46 +133,66 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#eef4ff",
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#eef4ff",
+  },
+  loaderText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: "#475569",
   },
   title: {
     fontSize: 26,
-    fontWeight: "700",
+    fontWeight: "800",
     textAlign: "center",
     marginBottom: 16,
+    color: "#0f172a",
   },
   addButton: {
     backgroundColor: "#2563eb",
     padding: 14,
-    borderRadius: 10,
+    borderRadius: 12,
     marginBottom: 16,
+  },
+  editButton: {
+    backgroundColor: "#f59e0b",
+    padding: 12,
+    borderRadius: 12,
+    marginTop: 10,
   },
   deleteButton: {
     backgroundColor: "#dc2626",
     padding: 12,
-    borderRadius: 10,
+    borderRadius: 12,
     marginTop: 10,
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
-    fontWeight: "600",
+    fontWeight: "700",
   },
   card: {
-    borderWidth: 1,
-    borderColor: "#ddd",
+    backgroundColor: "#fff",
     padding: 14,
-    borderRadius: 12,
+    borderRadius: 16,
     marginBottom: 14,
+    elevation: 3,
   },
   stopName: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: "800",
     marginBottom: 6,
+    color: "#0f172a",
   },
   text: {
     fontSize: 15,
     marginBottom: 4,
+    color: "#475569",
   },
   emptyText: {
     textAlign: "center",

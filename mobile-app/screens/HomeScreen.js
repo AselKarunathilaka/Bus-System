@@ -23,7 +23,7 @@ const HomeScreen = ({ navigation }) => {
         style={[styles.button, styles.routeButton]}
         onPress={() => navigation.navigate("Routes")}
       >
-        <Text style={styles.buttonText}>Manage Routes</Text>
+        <Text style={styles.buttonText}>{user?.role === "admin" ? "Manage Routes" : "Browse Routes"}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity

@@ -22,6 +22,21 @@ const routeSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+    distanceKm: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+    estimatedDuration: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+      default: "",
+    },
     status: {
       type: String,
       enum: ["active", "inactive"],
