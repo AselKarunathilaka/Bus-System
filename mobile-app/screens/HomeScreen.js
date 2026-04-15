@@ -1,111 +1,65 @@
-import React, { useContext, useState } from "react";
-import {
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Alert,
-  StyleSheet,
-} from "react-native";
+import React, { useContext } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 
-const LoginScreen = ({ navigation }) => {
-  const { login } = useContext(AuthContext);
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please enter email and password");
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await login(email, password);
-    } catch (error) {
-      Alert.alert(
-        "Login Failed",
-        error?.response?.data?.message || "Something went wrong"
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+const HomeScreen = ({ navigation }) => {
+  const { user, logout } = useContext(AuthContext);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Welcome</Text>
+      <Text style={styles.text}>Name: {user?.fullName}</Text>
+      <Text style={styles.text}>Email: {user?.email}</Text>
+      <Text style={styles.text}>Role: {user?.role}</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>
-          {loading ? "Logging in..." : "Login"}
-        </Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Profile")}
+      >
+        <Text style={styles.buttonText}>Go to Profile</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-        <Text style={styles.link}>Do not have an account? Register</Text>
+      <TouchableOpacity
+        style={[styles.button, styles.logoutButton]}
+        onPress={logout}
+      >
+        <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
   );
 };
 
-export default LoginScreen;
+export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     justifyContent: "center",
     padding: 24,
     backgroundColor: "#fff",
   },
   title: {
-    fontSize: 28,
+    fontSize: 30,
     fontWeight: "700",
     marginBottom: 24,
     textAlign: "center",
   },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 14,
-    borderRadius: 10,
-    marginBottom: 14,
+  text: {
+    fontSize: 16,
+    marginBottom: 10,
   },
   button: {
-    backgroundColor: "#16a34a",
+    backgroundColor: "#2563eb",
     padding: 14,
     borderRadius: 10,
-    marginTop: 8,
-    marginBottom: 16,
+    marginTop: 16,
+  },
+  logoutButton: {
+    backgroundColor: "#dc2626",
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
-    fontWeight: "600",
-  },
-  link: {
-    textAlign: "center",
-    color: "#2563eb",
     fontWeight: "600",
   },
 });
