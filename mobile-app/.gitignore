@@ -41,3 +41,15 @@ app-example
 # generated native folders
 /ios
 /android
+
+# Environment variables (VERY IMPORTANT)
+.env
+.env.local
+.env.development
+.env.production
+
+# Backend env
+backend/.env
+
+# Mobile env (if used)
+mobile-app/.env
