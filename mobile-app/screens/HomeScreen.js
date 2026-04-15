@@ -20,6 +20,13 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
+        style={[styles.button, styles.routeButton]}
+        onPress={() => navigation.navigate("Routes")}
+      >
+        <Text style={styles.buttonText}>Manage Routes</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
         style={[styles.button, styles.logoutButton]}
         onPress={logout}
       >
@@ -53,6 +60,9 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 10,
     marginTop: 16,
+  },
+  routeButton: {
+    backgroundColor: "#16a34a",
   },
   logoutButton: {
     backgroundColor: "#dc2626",
