@@ -1,11 +1,14 @@
 import React, { useContext, useState } from "react";
 import {
-  ScrollView,
+  View,
   Text,
   TextInput,
   TouchableOpacity,
   Alert,
   StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 
@@ -17,18 +20,23 @@ const LoginScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please enter email and password");
+    if (!email.trim() || !password.trim()) {
+      Alert.alert("Validation Error", "Please enter both email and password.");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      Alert.alert("Validation Error", "Please enter a valid email address.");
       return;
     }
 
     try {
       setLoading(true);
-      await login(email, password);
+      await login(email.trim(), password);
     } catch (error) {
       Alert.alert(
         "Login Failed",
-        error?.response?.data?.message || "Something went wrong"
+        error?.response?.data?.message || error?.message || "Something went wrong"
       );
     } finally {
       setLoading(false);
@@ -36,76 +44,113 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Login</Text>
+    <KeyboardAvoidingView
+      style={styles.keyboardContainer}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={90}
+    >
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.title}>Login</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#888"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          returnKeyType="next"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#888"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          returnKeyType="done"
+        />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>
-          {loading ? "Logging in..." : "Login"}
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, loading && styles.buttonDisabled]}
+          onPress={handleLogin}
+          disabled={loading}
+        >
+          <Text style={styles.buttonText}>
+            {loading ? "Logging in..." : "Login"}
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-        <Text style={styles.link}>Do not have an account? Register</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+          <Text style={styles.linkText}>Do not have an account? Register</Text>
+        </TouchableOpacity>
+
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
+  keyboardContainer: {
+    flex: 1,
+    backgroundColor: "#f8fafc",
+  },
   container: {
     flexGrow: 1,
     justifyContent: "center",
     padding: 24,
-    backgroundColor: "#fff",
+    paddingBottom: 120,
+    backgroundColor: "#f8fafc",
   },
   title: {
-    fontSize: 28,
-    fontWeight: "700",
-    marginBottom: 24,
+    fontSize: 30,
+    fontWeight: "800",
     textAlign: "center",
+    marginBottom: 28,
+    color: "#0f172a",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 14,
-    borderRadius: 10,
-    marginBottom: 14,
+    borderColor: "#cbd5e1",
+    backgroundColor: "#fff",
+    padding: 16,
+    borderRadius: 14,
+    marginBottom: 16,
+    fontSize: 16,
+    color: "#0f172a",
   },
   button: {
     backgroundColor: "#16a34a",
-    padding: 14,
-    borderRadius: 10,
-    marginTop: 8,
-    marginBottom: 16,
+    padding: 16,
+    borderRadius: 14,
+    marginTop: 4,
+    marginBottom: 18,
+  },
+  buttonDisabled: {
+    opacity: 0.7,
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
-    fontWeight: "600",
+    fontWeight: "800",
+    fontSize: 16,
   },
-  link: {
+  linkText: {
     textAlign: "center",
     color: "#2563eb",
+    fontSize: 15,
     fontWeight: "600",
+  },
+  bottomSpacer: {
+    height: 40,
   },
 });

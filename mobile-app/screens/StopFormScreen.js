@@ -8,8 +8,6 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   View,
 } from "react-native";
 import api from "../services/api";
@@ -85,58 +83,56 @@ const StopFormScreen = ({ route, navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={90}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView
-          contentContainerStyle={styles.container}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.title}>{stopData ? "Edit Stop" : "Add Stop"}</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Stop Name"
+          value={stopName}
+          onChangeText={setStopName}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Location"
+          value={location}
+          onChangeText={setLocation}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Order"
+          value={order}
+          onChangeText={setOrder}
+          keyboardType="numeric"
+          returnKeyType="done"
+        />
+
+        <TouchableOpacity
+          style={[styles.button, loading && styles.buttonDisabled]}
+          onPress={handleSubmit}
+          disabled={loading}
         >
-          <Text style={styles.title}>{stopData ? "Edit Stop" : "Add Stop"}</Text>
+          <Text style={styles.buttonText}>
+            {loading
+              ? stopData
+                ? "Updating..."
+                : "Creating..."
+              : stopData
+              ? "Update Stop"
+              : "Create Stop"}
+          </Text>
+        </TouchableOpacity>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Stop Name"
-            value={stopName}
-            onChangeText={setStopName}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Location"
-            value={location}
-            onChangeText={setLocation}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Order"
-            value={order}
-            onChangeText={setOrder}
-            keyboardType="numeric"
-            returnKeyType="done"
-          />
-
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleSubmit}
-            disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading
-                ? stopData
-                  ? "Updating..."
-                  : "Creating..."
-                : stopData
-                ? "Update Stop"
-                : "Create Stop"}
-            </Text>
-          </TouchableOpacity>
-
-          <View style={styles.bottomSpacer} />
-        </ScrollView>
-      </TouchableWithoutFeedback>
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

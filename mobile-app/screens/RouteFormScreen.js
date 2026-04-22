@@ -8,8 +8,6 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   View,
 } from "react-native";
 import api from "../services/api";
@@ -114,103 +112,101 @@ const RouteFormScreen = ({ route, navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={90}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView
-          contentContainerStyle={styles.container}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.title}>
+          {editingRoute ? "Edit Route" : "Add Route"}
+        </Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Route Name"
+          value={routeName}
+          onChangeText={setRouteName}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Start Location"
+          value={startLocation}
+          onChangeText={setStartLocation}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="End Location"
+          value={endLocation}
+          onChangeText={setEndLocation}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Price (LKR)"
+          value={price}
+          onChangeText={setPrice}
+          keyboardType="numeric"
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Distance in KM"
+          value={distanceKm}
+          onChangeText={setDistanceKm}
+          keyboardType="numeric"
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Estimated Duration (e.g. 3h 30m)"
+          value={estimatedDuration}
+          onChangeText={setEstimatedDuration}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="Description"
+          value={description}
+          onChangeText={setDescription}
+          multiline
+          textAlignVertical="top"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Status (active/inactive)"
+          value={status}
+          onChangeText={setStatus}
+          autoCapitalize="none"
+          returnKeyType="done"
+        />
+
+        <TouchableOpacity
+          style={[styles.button, loading && styles.buttonDisabled]}
+          onPress={handleSubmit}
+          disabled={loading}
         >
-          <Text style={styles.title}>
-            {editingRoute ? "Edit Route" : "Add Route"}
+          <Text style={styles.buttonText}>
+            {loading
+              ? editingRoute
+                ? "Updating..."
+                : "Creating..."
+              : editingRoute
+              ? "Update Route"
+              : "Create Route"}
           </Text>
+        </TouchableOpacity>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Route Name"
-            value={routeName}
-            onChangeText={setRouteName}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Start Location"
-            value={startLocation}
-            onChangeText={setStartLocation}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="End Location"
-            value={endLocation}
-            onChangeText={setEndLocation}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Price (LKR)"
-            value={price}
-            onChangeText={setPrice}
-            keyboardType="numeric"
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Distance in KM"
-            value={distanceKm}
-            onChangeText={setDistanceKm}
-            keyboardType="numeric"
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Estimated Duration (e.g. 3h 30m)"
-            value={estimatedDuration}
-            onChangeText={setEstimatedDuration}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            placeholder="Description"
-            value={description}
-            onChangeText={setDescription}
-            multiline
-            textAlignVertical="top"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Status (active/inactive)"
-            value={status}
-            onChangeText={setStatus}
-            autoCapitalize="none"
-            returnKeyType="done"
-          />
-
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleSubmit}
-            disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading
-                ? editingRoute
-                  ? "Updating..."
-                  : "Creating..."
-                : editingRoute
-                ? "Update Route"
-                : "Create Route"}
-            </Text>
-          </TouchableOpacity>
-
-          <View style={styles.bottomSpacer} />
-        </ScrollView>
-      </TouchableWithoutFeedback>
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
