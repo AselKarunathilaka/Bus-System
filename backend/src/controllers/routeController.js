@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const mongoose = require("mongoose");
 const Route = require("../models/Route");
 const Stop = require("../models/Stop");
@@ -7,10 +8,25 @@ const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 exports.createRoute = async (req, res) => {
   try {
     const {
+=======
+const Route = require("../models/Route");
+const Stop = require("../models/Stop");
+
+exports.createRoute = async (req, res) => {
+  try {
+    const { routeName, startLocation, endLocation, price, status } = req.body;
+
+    if (!routeName || !startLocation || !endLocation || price === undefined) {
+      return res.status(400).json({ message: "All required fields must be provided" });
+    }
+
+    const route = await Route.create({
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
       routeName,
       startLocation,
       endLocation,
       price,
+<<<<<<< HEAD
       distanceKm,
       estimatedDuration,
       description,
@@ -46,6 +62,8 @@ exports.createRoute = async (req, res) => {
       distanceKm: Number(distanceKm),
       estimatedDuration: estimatedDuration.trim(),
       description: description?.trim() || "",
+=======
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
       status: status || "active",
       createdBy: req.user._id,
     });
@@ -63,6 +81,7 @@ exports.getAllRoutes = async (req, res) => {
   try {
     const routes = await Route.find()
       .populate("createdBy", "fullName email role")
+<<<<<<< HEAD
       .sort({ createdAt: -1 })
       .lean();
 
@@ -86,6 +105,11 @@ exports.getAllRoutes = async (req, res) => {
     }));
 
     return res.status(200).json(routesWithStops);
+=======
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json(routes);
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -93,6 +117,7 @@ exports.getAllRoutes = async (req, res) => {
 
 exports.getRouteById = async (req, res) => {
   try {
+<<<<<<< HEAD
     const { id } = req.params;
 
     if (!isValidObjectId(id)) {
@@ -102,11 +127,18 @@ exports.getRouteById = async (req, res) => {
     const route = await Route.findById(id)
       .populate("createdBy", "fullName email role")
       .lean();
+=======
+    const route = await Route.findById(req.params.id).populate(
+      "createdBy",
+      "fullName email role"
+    );
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
 
     if (!route) {
       return res.status(404).json({ message: "Route not found" });
     }
 
+<<<<<<< HEAD
     const stops = await Stop.find({ routeId: id }).sort({ order: 1 }).lean();
 
     return res.status(200).json({
@@ -114,6 +146,9 @@ exports.getRouteById = async (req, res) => {
       stops,
       stopCount: stops.length,
     });
+=======
+    return res.status(200).json(route);
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -121,6 +156,7 @@ exports.getRouteById = async (req, res) => {
 
 exports.updateRoute = async (req, res) => {
   try {
+<<<<<<< HEAD
     const { id } = req.params;
 
     if (!isValidObjectId(id)) {
@@ -139,11 +175,17 @@ exports.updateRoute = async (req, res) => {
     } = req.body;
 
     const route = await Route.findById(id);
+=======
+    const { routeName, startLocation, endLocation, price, status } = req.body;
+
+    const route = await Route.findById(req.params.id);
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
 
     if (!route) {
       return res.status(404).json({ message: "Route not found" });
     }
 
+<<<<<<< HEAD
     if (price !== undefined && Number(price) < 0) {
       return res.status(400).json({ message: "Price must be 0 or greater" });
     }
@@ -159,6 +201,12 @@ exports.updateRoute = async (req, res) => {
     route.distanceKm = distanceKm !== undefined ? Number(distanceKm) : route.distanceKm;
     route.estimatedDuration = estimatedDuration?.trim() ?? route.estimatedDuration;
     route.description = description !== undefined ? description.trim() : route.description;
+=======
+    route.routeName = routeName ?? route.routeName;
+    route.startLocation = startLocation ?? route.startLocation;
+    route.endLocation = endLocation ?? route.endLocation;
+    route.price = price ?? route.price;
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
     route.status = status ?? route.status;
 
     await route.save();
@@ -174,6 +222,7 @@ exports.updateRoute = async (req, res) => {
 
 exports.deleteRoute = async (req, res) => {
   try {
+<<<<<<< HEAD
     const { id } = req.params;
 
     if (!isValidObjectId(id)) {
@@ -181,13 +230,20 @@ exports.deleteRoute = async (req, res) => {
     }
 
     const route = await Route.findById(id);
+=======
+    const route = await Route.findById(req.params.id);
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
 
     if (!route) {
       return res.status(404).json({ message: "Route not found" });
     }
 
     await Stop.deleteMany({ routeId: route._id });
+<<<<<<< HEAD
     await Route.findByIdAndDelete(id);
+=======
+    await Route.findByIdAndDelete(req.params.id);
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
 
     return res.status(200).json({
       message: "Route and related stops deleted successfully",

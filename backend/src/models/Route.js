@@ -22,6 +22,7 @@ const routeSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
+<<<<<<< HEAD
     distanceKm: {
       type: Number,
       required: true,
@@ -37,6 +38,8 @@ const routeSchema = new mongoose.Schema(
       trim: true,
       default: "",
     },
+=======
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
     status: {
       type: String,
       enum: ["active", "inactive"],

@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+<<<<<<< HEAD
 import {
   View,
   Text,
@@ -6,11 +7,15 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+=======
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
 import { AuthContext } from "../context/AuthContext";
 
 const HomeScreen = ({ navigation }) => {
   const { user, logout } = useContext(AuthContext);
 
+<<<<<<< HEAD
   const isAdmin = user?.role === "admin";
 
   return (
@@ -106,12 +111,24 @@ const HomeScreen = ({ navigation }) => {
 
       <TouchableOpacity
         style={[styles.actionButton, styles.profileButton]}
+=======
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Welcome</Text>
+      <Text style={styles.text}>Name: {user?.fullName}</Text>
+      <Text style={styles.text}>Email: {user?.email}</Text>
+      <Text style={styles.text}>Role: {user?.role}</Text>
+
+      <TouchableOpacity
+        style={styles.button}
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
         onPress={() => navigation.navigate("Profile")}
       >
         <Text style={styles.buttonText}>Go to Profile</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
+<<<<<<< HEAD
         style={[styles.actionButton, styles.routeButton]}
         onPress={() => navigation.navigate("Routes")}
       >
@@ -122,11 +139,25 @@ const HomeScreen = ({ navigation }) => {
 
       <TouchableOpacity
         style={[styles.actionButton, styles.logoutButton]}
+=======
+        style={[styles.button, styles.routeButton]}
+        onPress={() => navigation.navigate("Routes")}
+      >
+        <Text style={styles.buttonText}>Manage Routes</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.button, styles.logoutButton]}
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
         onPress={logout}
       >
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
+<<<<<<< HEAD
     </ScrollView>
+=======
+    </View>
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   );
 };
 
@@ -134,6 +165,7 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
+<<<<<<< HEAD
     flexGrow: 1,
     padding: 20,
     backgroundColor: "#eef4ff",
@@ -256,11 +288,43 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: "#ea2424",
+=======
+    flex: 1,
+    justifyContent: "center",
+    padding: 24,
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: "700",
+    marginBottom: 24,
+    textAlign: "center",
+  },
+  text: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: "#2563eb",
+    padding: 14,
+    borderRadius: 10,
+    marginTop: 16,
+  },
+  routeButton: {
+    backgroundColor: "#16a34a",
+  },
+  logoutButton: {
+    backgroundColor: "#dc2626",
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
+<<<<<<< HEAD
     fontWeight: "800",
     fontSize: 17,
+=======
+    fontWeight: "600",
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   },
 });

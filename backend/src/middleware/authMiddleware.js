@@ -22,9 +22,13 @@ module.exports = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+<<<<<<< HEAD
     return res.status(401).json({
       message: "Invalid or expired token",
       error: error.message,
     });
+=======
+    return res.status(401).json({ message: "Unauthorized" });
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   }
 };

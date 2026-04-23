@@ -1,14 +1,21 @@
 import React, { useContext, useState } from "react";
 import {
+<<<<<<< HEAD
+=======
+  ScrollView,
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   Text,
   TextInput,
   TouchableOpacity,
   Alert,
   StyleSheet,
+<<<<<<< HEAD
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   View,
+=======
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 
@@ -20,6 +27,7 @@ const LoginScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+<<<<<<< HEAD
     if (!email.trim() || !password.trim()) {
       Alert.alert("Validation Error", "Please enter both email and password.");
       return;
@@ -27,16 +35,28 @@ const LoginScreen = ({ navigation }) => {
 
     if (!email.includes("@")) {
       Alert.alert("Validation Error", "Please enter a valid email address.");
+=======
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter email and password");
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
       return;
     }
 
     try {
       setLoading(true);
+<<<<<<< HEAD
       await login(email.trim(), password);
     } catch (error) {
       Alert.alert(
         "Login Failed",
         error?.response?.data?.message || error?.message || "Something went wrong"
+=======
+      await login(email, password);
+    } catch (error) {
+      Alert.alert(
+        "Login Failed",
+        error?.response?.data?.message || "Something went wrong"
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
       );
     } finally {
       setLoading(false);
@@ -44,6 +64,7 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
+<<<<<<< HEAD
     <KeyboardAvoidingView
       style={styles.keyboardContainer}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -109,12 +130,45 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.bottomSpacer} />
       </ScrollView>
     </KeyboardAvoidingView>
+=======
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Login</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>
+          {loading ? "Logging in..." : "Login"}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+        <Text style={styles.link}>Do not have an account? Register</Text>
+      </TouchableOpacity>
+    </ScrollView>
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   );
 };
 
 export default LoginScreen;
 
 const styles = StyleSheet.create({
+<<<<<<< HEAD
   keyboardContainer: {
     flex: 1,
     backgroundColor: "#eef4ff",
@@ -201,10 +255,38 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     opacity: 0.7,
+=======
+  container: {
+    flexGrow: 1,
+    justifyContent: "center",
+    padding: 24,
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 28,
+    fontWeight: "700",
+    marginBottom: 24,
+    textAlign: "center",
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 14,
+    borderRadius: 10,
+    marginBottom: 14,
+  },
+  button: {
+    backgroundColor: "#16a34a",
+    padding: 14,
+    borderRadius: 10,
+    marginTop: 8,
+    marginBottom: 16,
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
+<<<<<<< HEAD
     fontWeight: "800",
     fontSize: 16,
   },
@@ -216,5 +298,13 @@ const styles = StyleSheet.create({
   },
   bottomSpacer: {
     height: 30,
+=======
+    fontWeight: "600",
+  },
+  link: {
+    textAlign: "center",
+    color: "#2563eb",
+    fontWeight: "600",
+>>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   },
 });
