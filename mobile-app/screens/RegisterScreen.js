@@ -21,39 +21,78 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleRegister = async () => {
+  const sanitizeNameField = (text) => {
+    return text.replace(/[^A-Za-z\s.'-]/g, "");
+  };
+
+  const sanitizePhoneField = (text) => {
+    return text.replace(/[^0-9]/g, "");
+  };
+
+  const validateForm = () => {
     if (!fullName.trim() || !email.trim() || !phone.trim() || !password.trim()) {
       Alert.alert("Validation Error", "Please fill all fields.");
-      return;
+      return false;
     }
 
-    if (!email.includes("@")) {
+    if (!/^[A-Za-z\s.'-]+$/.test(fullName.trim())) {
+      Alert.alert(
+        "Validation Error",
+        "Full name can only contain letters, spaces, and simple punctuation."
+      );
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
       Alert.alert("Validation Error", "Please enter a valid email address.");
-      return;
+      return false;
+    }
+
+    if (!/^\d+$/.test(phone.trim())) {
+      Alert.alert("Validation Error", "Phone number must contain numbers only.");
+      return false;
+    }
+
+    if (phone.trim().length < 10 || phone.trim().length > 12) {
+      Alert.alert(
+        "Validation Error",
+        "Phone number should be between 10 and 12 digits."
+      );
+      return false;
     }
 
     if (password.length < 6) {
-      Alert.alert("Validation Error", "Password must be at least 6 characters long.");
-      return;
+      Alert.alert(
+        "Validation Error",
+        "Password must be at least 6 characters long."
+      );
+      return false;
     }
+
+    return true;
+  };
+
+  const handleRegister = async () => {
+    if (!validateForm()) return;
 
     try {
       setLoading(true);
 
       await register({
         fullName: fullName.trim(),
-        email: email.trim(),
+        email: email.trim().toLowerCase(),
         phone: phone.trim(),
         password,
         role: "user",
       });
 
-      Alert.alert("Success", "Registration successful");
+      Alert.alert("Success", "Registration successful.");
       navigation.navigate("Login");
     } catch (error) {
       Alert.alert(
         "Registration Failed",
-        error?.response?.data?.message || error?.message || "Something went wrong"
+        error?.response?.data?.message || error?.message || "Something went wrong."
       );
     } finally {
       setLoading(false);
@@ -90,7 +129,7 @@ const RegisterScreen = ({ navigation }) => {
             placeholder="Full Name"
             placeholderTextColor="#888"
             value={fullName}
-            onChangeText={setFullName}
+            onChangeText={(text) => setFullName(sanitizeNameField(text))}
             returnKeyType="next"
           />
 
@@ -110,7 +149,7 @@ const RegisterScreen = ({ navigation }) => {
             placeholder="Phone Number"
             placeholderTextColor="#888"
             value={phone}
-            onChangeText={setPhone}
+            onChangeText={(text) => setPhone(sanitizePhoneField(text))}
             keyboardType="phone-pad"
             returnKeyType="next"
           />
