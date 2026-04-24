@@ -27,14 +27,43 @@ const StopFormScreen = ({ route, navigation }) => {
   );
   const [loading, setLoading] = useState(false);
 
+  const sanitizeNameField = (text) => {
+    return text.replace(/[^A-Za-z\s.'\-()/]/g, "");
+  };
+
+  const sanitizeNumericField = (text) => {
+    return text.replace(/[^0-9]/g, "");
+  };
+
   const validateForm = () => {
     if (!stopName.trim() || !location.trim() || !order.trim()) {
-      Alert.alert("Validation Error", "Please fill all fields");
+      Alert.alert("Validation Error", "Please fill all fields.");
+      return false;
+    }
+
+    if (!/^[A-Za-z\s.'\-()/]+$/.test(stopName.trim())) {
+      Alert.alert(
+        "Validation Error",
+        "Stop name can only contain letters, spaces, and simple punctuation."
+      );
+      return false;
+    }
+
+    if (!/^[A-Za-z\s.'\-()/]+$/.test(location.trim())) {
+      Alert.alert(
+        "Validation Error",
+        "Location can only contain letters, spaces, and simple punctuation."
+      );
+      return false;
+    }
+
+    if (!/^\d+$/.test(order.trim())) {
+      Alert.alert("Validation Error", "Stop order must contain numbers only.");
       return false;
     }
 
     if (Number(order) <= 0) {
-      Alert.alert("Validation Error", "Order must be greater than 0");
+      Alert.alert("Validation Error", "Stop order must be greater than 0.");
       return false;
     }
 
@@ -58,19 +87,19 @@ const StopFormScreen = ({ route, navigation }) => {
         await api.put(`/stops/${stopData._id}`, payload, {
           headers: { Authorization: `Bearer ${authToken}` },
         });
-        Alert.alert("Success", "Stop updated successfully");
+        Alert.alert("Success", "Stop updated successfully.");
       } else {
         await api.post("/stops", payload, {
           headers: { Authorization: `Bearer ${authToken}` },
         });
-        Alert.alert("Success", "Stop created successfully");
+        Alert.alert("Success", "Stop created successfully.");
       }
 
       navigation.goBack();
     } catch (error) {
       Alert.alert(
         "Error",
-        error?.response?.data?.message || "Failed to save stop"
+        error?.response?.data?.message || "Failed to save stop."
       );
     } finally {
       setLoading(false);
@@ -94,7 +123,7 @@ const StopFormScreen = ({ route, navigation }) => {
           style={styles.input}
           placeholder="Stop Name"
           value={stopName}
-          onChangeText={setStopName}
+          onChangeText={(text) => setStopName(sanitizeNameField(text))}
           returnKeyType="next"
         />
 
@@ -102,7 +131,7 @@ const StopFormScreen = ({ route, navigation }) => {
           style={styles.input}
           placeholder="Location"
           value={location}
-          onChangeText={setLocation}
+          onChangeText={(text) => setLocation(sanitizeNameField(text))}
           returnKeyType="next"
         />
 
@@ -110,7 +139,7 @@ const StopFormScreen = ({ route, navigation }) => {
           style={styles.input}
           placeholder="Order"
           value={order}
-          onChangeText={setOrder}
+          onChangeText={(text) => setOrder(sanitizeNumericField(text))}
           keyboardType="numeric"
           returnKeyType="done"
         />
