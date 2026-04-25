@@ -1,65 +1,32 @@
 const express = require("express");
+
+const {
+  createBus,
+  getAllBuses,
+  getAvailableBuses,
+  getBusById,
+  updateBus,
+  deleteBus,
+} = require("../controllers/busController");
+
 const router = express.Router();
 
-const busController = require("../controllers/busController");
-const authMiddleware = require("../middleware/authMiddleware");
-const roleMiddleware = require("../middleware/roleMiddleware");
+// Create bus
+router.post("/", createBus);
 
-// ======================
-// CREATE BUS (Admin only)
-// ======================
-router.post(
-  "/",
-  authMiddleware,
-  roleMiddleware("admin"),
-  busController.createBus
-);
+// Get all buses
+router.get("/", getAllBuses);
 
-// ======================
-// GET ALL BUSES
-// ======================
-router.get(
-  "/",
-  authMiddleware,
-  busController.getAllBuses
-);
+// Get available buses
+router.get("/available/list", getAvailableBuses);
 
-// ======================
-// GET AVAILABLE BUSES
-// ======================
-router.get(
-  "/available/list",
-  authMiddleware,
-  busController.getAvailableBuses
-);
+// Get single bus by ID
+router.get("/:id", getBusById);
 
-// ======================
-// GET BUS BY ID
-// ======================
-router.get(
-  "/:id",
-  authMiddleware,
-  busController.getBusById
-);
+// Update bus
+router.put("/:id", updateBus);
 
-// ======================
-// UPDATE BUS (Admin only)
-// ======================
-router.put(
-  "/:id",
-  authMiddleware,
-  roleMiddleware("admin"),
-  busController.updateBus
-);
-
-// ======================
-// DELETE BUS (Admin only)
-// ======================
-router.delete(
-  "/:id",
-  authMiddleware,
-  roleMiddleware("admin"),
-  busController.deleteBus
-);
+// Delete bus
+router.delete("/:id", deleteBus);
 
 module.exports = router;

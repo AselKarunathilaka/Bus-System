@@ -1,8 +1,10 @@
-<<<<<<< HEAD
-import React, { useContext, useEffect, useMemo, useState, useCallback } from "react";
-=======
-import React, { useContext, useEffect, useState } from "react";
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  useCallback,
+} from "react";
 import {
   View,
   Text,
@@ -10,16 +12,12 @@ import {
   TouchableOpacity,
   Alert,
   StyleSheet,
-<<<<<<< HEAD
   ActivityIndicator,
   Platform,
-=======
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 
-<<<<<<< HEAD
 const PRICE_OPTIONS = [
   { label: "All prices", value: "all" },
   { label: "Less than LKR 500", value: "lt500" },
@@ -66,26 +64,10 @@ const RouteListScreen = ({ navigation }) => {
       setRoutes(response.data);
     } catch (error) {
       console.log("Fetch routes error:", error?.response?.data || error.message);
-=======
-const RouteListScreen = ({ navigation }) => {
-  const { token, user } = useContext(AuthContext);
-  const [routes, setRoutes] = useState([]);
-
-  const fetchRoutes = async () => {
-    try {
-      const response = await api.get("/routes", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setRoutes(response.data);
-    } catch (error) {
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
       Alert.alert(
         "Error",
         error?.response?.data?.message || "Failed to fetch routes"
       );
-<<<<<<< HEAD
     } finally {
       setLoading(false);
     }
@@ -114,54 +96,18 @@ const RouteListScreen = ({ navigation }) => {
       const confirmed = window.confirm(
         "Are you sure you want to delete this route?"
       );
-      if (confirmed) {
-        await doDelete();
-      }
+      if (confirmed) await doDelete();
     } else {
       Alert.alert("Confirm Delete", "Are you sure you want to delete this route?", [
         { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: doDelete,
-        },
+        { text: "Delete", style: "destructive", onPress: doDelete },
       ]);
     }
-=======
-    }
-  };
-
-  const handleDeleteRoute = async (routeId) => {
-    Alert.alert("Confirm Delete", "Are you sure you want to delete this route?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await api.delete(`/routes/${routeId}`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            Alert.alert("Success", "Route deleted successfully");
-            fetchRoutes();
-          } catch (error) {
-            Alert.alert(
-              "Error",
-              error?.response?.data?.message || "Failed to delete route"
-            );
-          }
-        },
-      },
-    ]);
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   };
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", fetchRoutes);
     return unsubscribe;
-<<<<<<< HEAD
   }, [navigation, fetchRoutes]);
 
   const startLocationOptions = useMemo(() => {
@@ -345,27 +291,15 @@ const RouteListScreen = ({ navigation }) => {
           setDraftDistance
         )}
       </View>
-=======
-  }, [navigation]);
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Routes</Text>
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
 
       {user?.role === "admin" && (
         <TouchableOpacity
           style={styles.addButton}
-<<<<<<< HEAD
           onPress={() => navigation.navigate("RouteForm")}
-=======
-          onPress={() => navigation.navigate("AddRoute")}
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
         >
           <Text style={styles.buttonText}>Add Route</Text>
         </TouchableOpacity>
       )}
-<<<<<<< HEAD
     </>
   );
 
@@ -469,54 +403,17 @@ const RouteListScreen = ({ navigation }) => {
                 <Text style={styles.buttonText}>Edit Route</Text>
               </TouchableOpacity>
 
-=======
-
-      <FlatList
-        data={routes}
-        keyExtractor={(item) => item._id}
-        ListEmptyComponent={<Text style={styles.emptyText}>No routes found</Text>}
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.routeName}>{item.routeName}</Text>
-            <Text style={styles.text}>
-              {item.startLocation} → {item.endLocation}
-            </Text>
-            <Text style={styles.text}>Price: LKR {item.price}</Text>
-            <Text style={styles.text}>Status: {item.status}</Text>
-
-            <TouchableOpacity
-              style={styles.stopButton}
-              onPress={() =>
-                navigation.navigate("StopList", {
-                  routeId: item._id,
-                  routeName: item.routeName,
-                })
-              }
-            >
-              <Text style={styles.buttonText}>View Stops</Text>
-            </TouchableOpacity>
-
-            {user?.role === "admin" && (
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
               <TouchableOpacity
                 style={styles.deleteButton}
                 onPress={() => handleDeleteRoute(item._id)}
               >
                 <Text style={styles.buttonText}>Delete Route</Text>
               </TouchableOpacity>
-<<<<<<< HEAD
             </>
           )}
         </View>
       )}
     />
-=======
-            )}
-          </View>
-        )}
-      />
-    </View>
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   );
 };
 
@@ -525,7 +422,6 @@ export default RouteListScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-<<<<<<< HEAD
     backgroundColor: "#eef4ff",
   },
   listContent: {
@@ -537,10 +433,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 18,
     marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
     elevation: 4,
   },
   badge: {
@@ -571,10 +463,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     padding: 16,
     marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
   filterHeaderRow: {
@@ -661,10 +549,6 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 16,
     marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
     elevation: 2,
   },
   loaderContainer: {
@@ -683,10 +567,6 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 22,
     marginBottom: 18,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
     elevation: 3,
   },
   topRow: {
@@ -805,60 +685,12 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 14,
     marginTop: 12,
-=======
-    padding: 16,
-    backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  addButton: {
-    backgroundColor: "#2563eb",
-    padding: 14,
-    borderRadius: 10,
-    marginBottom: 16,
-  },
-  stopButton: {
-    backgroundColor: "#16a34a",
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 12,
-  },
-  deleteButton: {
-    backgroundColor: "#dc2626",
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 10,
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
-<<<<<<< HEAD
     fontWeight: "800",
     fontSize: 16,
-=======
-    fontWeight: "600",
-  },
-  card: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    padding: 14,
-    borderRadius: 12,
-    marginBottom: 14,
-  },
-  routeName: {
-    fontSize: 18,
-    fontWeight: "700",
-    marginBottom: 6,
-  },
-  text: {
-    fontSize: 15,
-    marginBottom: 4,
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   },
   emptyText: {
     textAlign: "center",

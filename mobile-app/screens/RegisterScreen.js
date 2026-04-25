@@ -1,21 +1,14 @@
 import React, { useContext, useState } from "react";
 import {
-<<<<<<< HEAD
-=======
-  ScrollView,
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
-  Text,
-  TextInput,
-  TouchableOpacity,
   Alert,
-  StyleSheet,
-<<<<<<< HEAD
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
   View,
-=======
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 
@@ -29,7 +22,6 @@ const RegisterScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
-<<<<<<< HEAD
     if (!fullName.trim() || !email.trim() || !phone.trim() || !password.trim()) {
       Alert.alert("Validation Error", "Please fill all fields.");
       return;
@@ -41,11 +33,10 @@ const RegisterScreen = ({ navigation }) => {
     }
 
     if (password.length < 6) {
-      Alert.alert("Validation Error", "Password must be at least 6 characters long.");
-=======
-    if (!fullName || !email || !phone || !password) {
-      Alert.alert("Error", "Please fill all fields");
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
+      Alert.alert(
+        "Validation Error",
+        "Password must be at least 6 characters long."
+      );
       return;
     }
 
@@ -53,15 +44,9 @@ const RegisterScreen = ({ navigation }) => {
       setLoading(true);
 
       await register({
-<<<<<<< HEAD
         fullName: fullName.trim(),
         email: email.trim(),
         phone: phone.trim(),
-=======
-        fullName,
-        email,
-        phone,
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
         password,
         role: "user",
       });
@@ -71,11 +56,7 @@ const RegisterScreen = ({ navigation }) => {
     } catch (error) {
       Alert.alert(
         "Registration Failed",
-<<<<<<< HEAD
         error?.response?.data?.message || error?.message || "Something went wrong"
-=======
-        error?.response?.data?.message || "Something went wrong"
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
       );
     } finally {
       setLoading(false);
@@ -83,7 +64,6 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   return (
-<<<<<<< HEAD
     <KeyboardAvoidingView
       style={styles.keyboardContainer}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -95,10 +75,13 @@ const RegisterScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.heroCard}>
-          <Text style={styles.badge}>QuickBus (Highway Bus Reservation System)</Text>
+          <Text style={styles.badge}>
+            QuickBus (Highway Bus Reservation System)
+          </Text>
           <Text style={styles.heroTitle}>Create Your Account</Text>
           <Text style={styles.heroSubtitle}>
-            Register to browse highway routes, view stops, and use the QuickBus system.
+            Register to browse highway routes, view stops, and use the QuickBus
+            system.
           </Text>
         </View>
 
@@ -166,60 +149,12 @@ const RegisterScreen = ({ navigation }) => {
         <View style={styles.bottomSpacer} />
       </ScrollView>
     </KeyboardAvoidingView>
-=======
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Create Account</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Full Name"
-        value={fullName}
-        onChangeText={setFullName}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Phone Number"
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>
-          {loading ? "Registering..." : "Register"}
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-        <Text style={styles.link}>Already have an account? Login</Text>
-      </TouchableOpacity>
-    </ScrollView>
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   );
 };
 
 export default RegisterScreen;
 
 const styles = StyleSheet.create({
-<<<<<<< HEAD
   keyboardContainer: {
     flex: 1,
     backgroundColor: "#eef4ff",
@@ -306,38 +241,10 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     opacity: 0.7,
-=======
-  container: {
-    flexGrow: 1,
-    justifyContent: "center",
-    padding: 24,
-    backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    marginBottom: 24,
-    textAlign: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 14,
-    borderRadius: 10,
-    marginBottom: 14,
-  },
-  button: {
-    backgroundColor: "#2563eb",
-    padding: 14,
-    borderRadius: 10,
-    marginTop: 8,
-    marginBottom: 16,
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
-<<<<<<< HEAD
     fontWeight: "800",
     fontSize: 16,
   },
@@ -349,13 +256,5 @@ const styles = StyleSheet.create({
   },
   bottomSpacer: {
     height: 30,
-=======
-    fontWeight: "600",
-  },
-  link: {
-    textAlign: "center",
-    color: "#2563eb",
-    fontWeight: "600",
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
   },
 });

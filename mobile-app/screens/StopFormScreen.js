@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   Text,
@@ -11,14 +11,10 @@ import {
   View,
 } from "react-native";
 import api from "../services/api";
-import { AuthContext } from "../context/AuthContext";
 
 const StopFormScreen = ({ route, navigation }) => {
-  const { token, userToken } = useContext(AuthContext);
-  const authToken = token || userToken;
-
-  const routeId = route.params?.routeId;
-  const stopData = route.params?.stopData;
+  const routeId = route?.params?.routeId;
+  const stopData = route?.params?.stopData;
 
   const [stopName, setStopName] = useState(stopData?.stopName || "");
   const [location, setLocation] = useState(stopData?.location || "");
@@ -30,6 +26,11 @@ const StopFormScreen = ({ route, navigation }) => {
   const validateForm = () => {
     if (!stopName.trim() || !location.trim() || !order.trim()) {
       Alert.alert("Validation Error", "Please fill all fields");
+      return false;
+    }
+
+    if (!routeId) {
+      Alert.alert("Validation Error", "Route ID is missing");
       return false;
     }
 
@@ -54,20 +55,18 @@ const StopFormScreen = ({ route, navigation }) => {
     try {
       setLoading(true);
 
-      if (stopData) {
-        await api.put(`/stops/${stopData._id}`, payload, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+      if (stopData && stopData._id) {
+        await api.put(`/stops/${stopData._id}`, payload);
         Alert.alert("Success", "Stop updated successfully");
       } else {
-        await api.post("/stops", payload, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+        await api.post("/stops", payload);
         Alert.alert("Success", "Stop created successfully");
       }
 
       navigation.goBack();
     } catch (error) {
+      console.log("Stop error:", error?.response?.data || error.message);
+
       Alert.alert(
         "Error",
         error?.response?.data?.message || "Failed to save stop"
@@ -95,7 +94,6 @@ const StopFormScreen = ({ route, navigation }) => {
           placeholder="Stop Name"
           value={stopName}
           onChangeText={setStopName}
-          returnKeyType="next"
         />
 
         <TextInput
@@ -103,7 +101,6 @@ const StopFormScreen = ({ route, navigation }) => {
           placeholder="Location"
           value={location}
           onChangeText={setLocation}
-          returnKeyType="next"
         />
 
         <TextInput
@@ -112,7 +109,6 @@ const StopFormScreen = ({ route, navigation }) => {
           value={order}
           onChangeText={setOrder}
           keyboardType="numeric"
-          returnKeyType="done"
         />
 
         <TouchableOpacity

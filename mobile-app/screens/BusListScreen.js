@@ -1,23 +1,22 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   FlatList,
   TouchableOpacity,
   Alert,
+  StyleSheet,
   ActivityIndicator,
+  Platform,
 } from "react-native";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import api from "../services/api";
 
-export default function BusListScreen() {
-  const navigation = useNavigation();
+const BusListScreen = ({ navigation }) => {
   const [buses, setBuses] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("ALL");
 
-  const fetchBuses = async () => {
+  const fetchBuses = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -26,78 +25,54 @@ export default function BusListScreen() {
           ? await api.get("/buses/available/list")
           : await api.get("/buses");
 
-      setBuses(response.data || []);
+      setBuses(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.log("Fetch buses error:", error?.response?.data || error.message);
-      Alert.alert("Error", "Failed to load buses");
+      Alert.alert(
+        "Error",
+        error?.response?.data?.message || "Failed to load buses"
+      );
     } finally {
       setLoading(false);
     }
+  }, [filter]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", fetchBuses);
+    return unsubscribe;
+  }, [navigation, fetchBuses]);
+
+  const handleDelete = async (id) => {
+    const deleteBus = async () => {
+      try {
+        await api.delete(`/buses/${id}`);
+        Alert.alert("Success", "Bus deleted successfully");
+        fetchBuses();
+      } catch (error) {
+        console.log("Delete bus error:", error?.response?.data || error.message);
+        Alert.alert(
+          "Error",
+          error?.response?.data?.message || "Failed to delete bus"
+        );
+      }
+    };
+
+    if (Platform.OS === "web") {
+      const confirmed = window.confirm("Are you sure you want to delete this bus?");
+      if (confirmed) deleteBus();
+    } else {
+      Alert.alert("Confirm Delete", "Are you sure you want to delete this bus?", [
+        { text: "Cancel", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: deleteBus },
+      ]);
+    }
   };
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchBuses();
-    }, [filter])
-  );
-
-  const handleDelete = (id) => {
-    Alert.alert("Delete Bus", "Are you sure you want to delete this bus?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await api.delete(`/buses/${id}`);
-            Alert.alert("Success", "Bus deleted successfully");
-            fetchBuses();
-          } catch (error) {
-            console.log("Delete bus error:", error?.response?.data || error.message);
-            Alert.alert("Error", "Failed to delete bus");
-          }
-        },
-      },
-    ]);
-  };
-
-  const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <Text style={styles.busName}>{item.busName}</Text>
-      <Text style={styles.text}>License No: {item.licenseNumber}</Text>
-      <Text style={styles.text}>Bus Type: {item.busType}</Text>
-      <Text style={styles.text}>Seats: {item.totalSeats}</Text>
-      <Text style={styles.text}>Driver: {item.driverName}</Text>
-      <Text style={styles.text}>Conductor: {item.conductorName}</Text>
-      <Text style={styles.text}>Status: {item.status}</Text>
-      {item.assignedRoute && (
-        <Text style={styles.text}>
-          Assigned Route: {item.assignedRoute.routeName || item.assignedRoute._id}
-        </Text>
-      )}
-
-      <View style={styles.buttonRow}>
-        <TouchableOpacity
-          style={[styles.actionBtn, styles.editBtn]}
-          onPress={() => navigation.navigate("BusForm", { bus: item })}
-        >
-          <Text style={styles.btnText}>Edit</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.actionBtn, styles.deleteBtn]}
-          onPress={() => handleDelete(item._id)}
-        >
-          <Text style={styles.btnText}>Delete</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color="#4f46e5" />
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" />
+        <Text>Loading buses...</Text>
       </View>
     );
   }
@@ -108,28 +83,20 @@ export default function BusListScreen() {
 
       <View style={styles.filterRow}>
         <TouchableOpacity
-          style={[styles.filterBtn, filter === "ALL" && styles.activeFilter]}
+          style={[styles.filterButton, filter === "ALL" && styles.activeFilter]}
           onPress={() => setFilter("ALL")}
         >
-          <Text
-            style={[styles.filterText, filter === "ALL" && styles.activeFilterText]}
-          >
-            All Buses
-          </Text>
+          <Text style={styles.buttonText}>All Buses</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={[styles.filterBtn, filter === "AVAILABLE" && styles.activeFilter]}
+          style={[
+            styles.filterButton,
+            filter === "AVAILABLE" && styles.activeFilter,
+          ]}
           onPress={() => setFilter("AVAILABLE")}
         >
-          <Text
-            style={[
-              styles.filterText,
-              filter === "AVAILABLE" && styles.activeFilterText,
-            ]}
-          >
-            Available
-          </Text>
+          <Text style={styles.buttonText}>Available</Text>
         </TouchableOpacity>
       </View>
 
@@ -137,112 +104,113 @@ export default function BusListScreen() {
         style={styles.addButton}
         onPress={() => navigation.navigate("BusForm")}
       >
-        <Text style={styles.addButtonText}>+ Add New Bus</Text>
+        <Text style={styles.buttonText}>Add Bus</Text>
       </TouchableOpacity>
 
       <FlatList
         data={buses}
         keyExtractor={(item) => item._id}
-        renderItem={renderItem}
-        contentContainerStyle={{ paddingBottom: 20 }}
-        ListEmptyComponent={
-          <View style={styles.center}>
-            <Text>No buses found</Text>
+        ListEmptyComponent={<Text style={styles.emptyText}>No buses found</Text>}
+        renderItem={({ item }) => (
+          <View style={styles.card}>
+            <Text style={styles.busName}>{item.busName}</Text>
+            <Text>License No: {item.licenseNumber}</Text>
+            <Text>Type: {item.busType}</Text>
+            <Text>Total Seats: {item.totalSeats}</Text>
+            <Text>Driver: {item.driverName}</Text>
+            <Text>Conductor: {item.conductorName}</Text>
+            <Text>Status: {item.status}</Text>
+
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => navigation.navigate("BusForm", { busData: item })}
+            >
+              <Text style={styles.buttonText}>Edit Bus</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => handleDelete(item._id)}
+            >
+              <Text style={styles.buttonText}>Delete Bus</Text>
+            </TouchableOpacity>
           </View>
-        }
+        )}
       />
     </View>
   );
-}
+};
+
+export default BusListScreen;
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#f8fafc",
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: "#eef4ff",
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 26,
+    fontWeight: "800",
+    textAlign: "center",
     marginBottom: 16,
-    color: "#1e293b",
   },
   filterRow: {
     flexDirection: "row",
-    marginBottom: 12,
     gap: 10,
+    marginBottom: 12,
   },
-  filterBtn: {
+  filterButton: {
     flex: 1,
-    backgroundColor: "#e2e8f0",
-    paddingVertical: 10,
+    backgroundColor: "#64748b",
+    padding: 12,
     borderRadius: 10,
-    alignItems: "center",
   },
   activeFilter: {
-    backgroundColor: "#4f46e5",
-  },
-  filterText: {
-    color: "#1e293b",
-    fontWeight: "600",
-  },
-  activeFilterText: {
-    color: "#fff",
+    backgroundColor: "#2563eb",
   },
   addButton: {
     backgroundColor: "#16a34a",
     padding: 14,
     borderRadius: 10,
-    alignItems: "center",
     marginBottom: 16,
-  },
-  addButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
   },
   card: {
     backgroundColor: "#fff",
     padding: 14,
     borderRadius: 12,
-    marginBottom: 12,
-    elevation: 2,
+    marginBottom: 14,
   },
   busName: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "800",
     marginBottom: 6,
-    color: "#0f172a",
   },
-  text: {
-    fontSize: 14,
-    marginBottom: 3,
-    color: "#334155",
-  },
-  buttonRow: {
-    flexDirection: "row",
-    marginTop: 12,
-    gap: 10,
-  },
-  actionBtn: {
-    flex: 1,
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  editBtn: {
+  editButton: {
     backgroundColor: "#f59e0b",
+    padding: 12,
+    borderRadius: 10,
+    marginTop: 10,
   },
-  deleteBtn: {
+  deleteButton: {
     backgroundColor: "#dc2626",
+    padding: 12,
+    borderRadius: 10,
+    marginTop: 10,
   },
-  btnText: {
+  buttonText: {
     color: "#fff",
-    fontWeight: "bold",
+    textAlign: "center",
+    fontWeight: "700",
+  },
+  emptyText: {
+    textAlign: "center",
+    marginTop: 20,
+    color: "#666",
+  },
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

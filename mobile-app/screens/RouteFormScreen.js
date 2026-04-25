@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   Text,
@@ -11,22 +11,18 @@ import {
   View,
 } from "react-native";
 import api from "../services/api";
-import { AuthContext } from "../context/AuthContext";
 
 const RouteFormScreen = ({ route, navigation }) => {
-  const { token, userToken } = useContext(AuthContext);
-  const authToken = token || userToken;
-
-  const editingRoute = route.params?.routeData;
+  const editingRoute = route?.params?.routeData;
 
   const [routeName, setRouteName] = useState(editingRoute?.routeName || "");
   const [startLocation, setStartLocation] = useState(editingRoute?.startLocation || "");
   const [endLocation, setEndLocation] = useState(editingRoute?.endLocation || "");
   const [price, setPrice] = useState(
-    editingRoute?.price !== undefined ? String(editingRoute.price) : ""
+    editingRoute?.price ? String(editingRoute.price) : ""
   );
   const [distanceKm, setDistanceKm] = useState(
-    editingRoute?.distanceKm !== undefined ? String(editingRoute.distanceKm) : ""
+    editingRoute?.distanceKm ? String(editingRoute.distanceKm) : ""
   );
   const [estimatedDuration, setEstimatedDuration] = useState(
     editingRoute?.estimatedDuration || ""
@@ -35,6 +31,9 @@ const RouteFormScreen = ({ route, navigation }) => {
   const [status, setStatus] = useState(editingRoute?.status || "active");
   const [loading, setLoading] = useState(false);
 
+  // ======================
+  // VALIDATION
+  // ======================
   const validateForm = () => {
     if (
       !routeName.trim() ||
@@ -66,6 +65,9 @@ const RouteFormScreen = ({ route, navigation }) => {
     return true;
   };
 
+  // ======================
+  // SUBMIT FUNCTION
+  // ======================
   const handleSubmit = async () => {
     if (!validateForm()) return;
 
@@ -83,20 +85,18 @@ const RouteFormScreen = ({ route, navigation }) => {
     try {
       setLoading(true);
 
-      if (editingRoute) {
-        await api.put(`/routes/${editingRoute._id}`, payload, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+      if (editingRoute && editingRoute._id) {
+        await api.put(`/routes/${editingRoute._id}`, payload);
         Alert.alert("Success", "Route updated successfully");
       } else {
-        await api.post("/routes", payload, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+        await api.post("/routes", payload);
         Alert.alert("Success", "Route created successfully");
       }
 
       navigation.goBack();
     } catch (error) {
+      console.log("Route error:", error?.response?.data || error.message);
+
       Alert.alert(
         "Error",
         error?.response?.data?.message || "Failed to save route"
@@ -110,12 +110,10 @@ const RouteFormScreen = ({ route, navigation }) => {
     <KeyboardAvoidingView
       style={styles.keyboardContainer}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={90}
     >
       <ScrollView
         contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
       >
         <Text style={styles.title}>
           {editingRoute ? "Edit Route" : "Add Route"}
@@ -126,7 +124,6 @@ const RouteFormScreen = ({ route, navigation }) => {
           placeholder="Route Name"
           value={routeName}
           onChangeText={setRouteName}
-          returnKeyType="next"
         />
 
         <TextInput
@@ -134,7 +131,6 @@ const RouteFormScreen = ({ route, navigation }) => {
           placeholder="Start Location"
           value={startLocation}
           onChangeText={setStartLocation}
-          returnKeyType="next"
         />
 
         <TextInput
@@ -142,7 +138,6 @@ const RouteFormScreen = ({ route, navigation }) => {
           placeholder="End Location"
           value={endLocation}
           onChangeText={setEndLocation}
-          returnKeyType="next"
         />
 
         <TextInput
@@ -151,7 +146,6 @@ const RouteFormScreen = ({ route, navigation }) => {
           value={price}
           onChangeText={setPrice}
           keyboardType="numeric"
-          returnKeyType="next"
         />
 
         <TextInput
@@ -160,7 +154,6 @@ const RouteFormScreen = ({ route, navigation }) => {
           value={distanceKm}
           onChangeText={setDistanceKm}
           keyboardType="numeric"
-          returnKeyType="next"
         />
 
         <TextInput
@@ -168,7 +161,6 @@ const RouteFormScreen = ({ route, navigation }) => {
           placeholder="Estimated Duration (e.g. 3h 30m)"
           value={estimatedDuration}
           onChangeText={setEstimatedDuration}
-          returnKeyType="next"
         />
 
         <TextInput
@@ -177,7 +169,6 @@ const RouteFormScreen = ({ route, navigation }) => {
           value={description}
           onChangeText={setDescription}
           multiline
-          textAlignVertical="top"
         />
 
         <TextInput
@@ -185,12 +176,10 @@ const RouteFormScreen = ({ route, navigation }) => {
           placeholder="Status (active/inactive)"
           value={status}
           onChangeText={setStatus}
-          autoCapitalize="none"
-          returnKeyType="done"
         />
 
         <TouchableOpacity
-          style={[styles.button, loading && styles.buttonDisabled]}
+          style={[styles.button, loading && { opacity: 0.6 }]}
           onPress={handleSubmit}
           disabled={loading}
         >
@@ -205,7 +194,7 @@ const RouteFormScreen = ({ route, navigation }) => {
           </Text>
         </TouchableOpacity>
 
-        <View style={styles.bottomSpacer} />
+        <View style={{ height: 40 }} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -213,6 +202,9 @@ const RouteFormScreen = ({ route, navigation }) => {
 
 export default RouteFormScreen;
 
+// ======================
+// STYLES
+// ======================
 const styles = StyleSheet.create({
   keyboardContainer: {
     flex: 1,
@@ -221,24 +213,21 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 24,
-    paddingBottom: 120,
     backgroundColor: "#f8fafc",
   },
   title: {
-    fontSize: 28,
-    fontWeight: "700",
+    fontSize: 26,
+    fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 24,
-    color: "#0f172a",
+    marginBottom: 20,
   },
   input: {
     borderWidth: 1,
-    borderColor: "#cbd5e1",
+    borderColor: "#ccc",
     backgroundColor: "#fff",
     padding: 14,
-    borderRadius: 12,
-    marginBottom: 14,
-    fontSize: 16,
+    borderRadius: 10,
+    marginBottom: 12,
   },
   textArea: {
     minHeight: 100,
@@ -246,19 +235,12 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#2563eb",
     padding: 14,
-    borderRadius: 12,
+    borderRadius: 10,
     marginTop: 10,
-  },
-  buttonDisabled: {
-    opacity: 0.7,
   },
   buttonText: {
     color: "#fff",
     textAlign: "center",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  bottomSpacer: {
-    height: 40,
+    fontWeight: "bold",
   },
 });

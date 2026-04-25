@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   Text,
@@ -8,11 +8,8 @@ import {
   StyleSheet,
 } from "react-native";
 import api from "../services/api";
-import { AuthContext } from "../context/AuthContext";
 
 const AddRouteScreen = ({ navigation }) => {
-  const { token } = useContext(AuthContext);
-
   const [routeName, setRouteName] = useState("");
   const [startLocation, setStartLocation] = useState("");
   const [endLocation, setEndLocation] = useState("");
@@ -26,25 +23,19 @@ const AddRouteScreen = ({ navigation }) => {
     }
 
     try {
-      await api.post(
-        "/routes",
-        {
-          routeName,
-          startLocation,
-          endLocation,
-          price: Number(price),
-          status,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await api.post("/routes", {
+        routeName,
+        startLocation,
+        endLocation,
+        price: Number(price),
+        status,
+      });
 
       Alert.alert("Success", "Route created successfully");
       navigation.goBack();
     } catch (error) {
+      console.log("Create route error:", error?.response?.data || error.message);
+
       Alert.alert(
         "Error",
         error?.response?.data?.message || "Failed to create route"

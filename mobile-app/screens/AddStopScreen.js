@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   ScrollView,
   Text,
@@ -8,10 +8,8 @@ import {
   StyleSheet,
 } from "react-native";
 import api from "../services/api";
-import { AuthContext } from "../context/AuthContext";
 
 const AddStopScreen = ({ route, navigation }) => {
-  const { token } = useContext(AuthContext);
   const { routeId } = route.params;
 
   const [stopName, setStopName] = useState("");
@@ -25,24 +23,18 @@ const AddStopScreen = ({ route, navigation }) => {
     }
 
     try {
-      await api.post(
-        "/stops",
-        {
-          stopName,
-          location,
-          order: Number(order),
-          routeId,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await api.post("/stops", {
+        stopName,
+        location,
+        order: Number(order),
+        routeId,
+      });
 
       Alert.alert("Success", "Stop created successfully");
       navigation.goBack();
     } catch (error) {
+      console.log("Create stop error:", error?.response?.data || error.message);
+
       Alert.alert(
         "Error",
         error?.response?.data?.message || "Failed to create stop"

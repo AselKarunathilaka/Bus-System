@@ -16,6 +16,12 @@ const ProfileScreen = () => {
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Load profile
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  // Set user data safely
   useEffect(() => {
     if (user) {
       setFullName(user.fullName || "");
@@ -23,16 +29,24 @@ const ProfileScreen = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    getProfile();
-  }, []);
-
   const handleUpdate = async () => {
+    if (!user) {
+      Alert.alert("Error", "User not loaded yet");
+      return;
+    }
+
     try {
       setLoading(true);
-      await updateProfile(user._id || user.id, { fullName, phone });
+
+      await updateProfile(user._id || user.id, {
+        fullName,
+        phone,
+      });
+
       Alert.alert("Success", "Profile updated successfully");
     } catch (error) {
+      console.log("Update error:", error?.response?.data || error.message);
+
       Alert.alert(
         "Update Failed",
         error?.response?.data?.message || "Something went wrong"
@@ -47,10 +61,18 @@ const ProfileScreen = () => {
       <Text style={styles.title}>My Profile</Text>
 
       <Text style={styles.label}>Full Name</Text>
-      <TextInput style={styles.input} value={fullName} onChangeText={setFullName} />
+      <TextInput
+        style={styles.input}
+        value={fullName}
+        onChangeText={setFullName}
+      />
 
       <Text style={styles.label}>Email</Text>
-      <TextInput style={styles.input} value={user?.email || ""} editable={false} />
+      <TextInput
+        style={styles.input}
+        value={user?.email || ""}
+        editable={false}
+      />
 
       <Text style={styles.label}>Phone</Text>
       <TextInput
@@ -61,9 +83,17 @@ const ProfileScreen = () => {
       />
 
       <Text style={styles.label}>Role</Text>
-      <TextInput style={styles.input} value={user?.role || ""} editable={false} />
+      <TextInput
+        style={styles.input}
+        value={user?.role || ""}
+        editable={false}
+      />
 
-      <TouchableOpacity style={styles.button} onPress={handleUpdate}>
+      <TouchableOpacity
+        style={[styles.button, loading && { opacity: 0.6 }]}
+        onPress={handleUpdate}
+        disabled={loading}
+      >
         <Text style={styles.buttonText}>
           {loading ? "Updating..." : "Update Profile"}
         </Text>

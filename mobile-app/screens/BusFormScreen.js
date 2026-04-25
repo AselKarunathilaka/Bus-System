@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import api from "../services/api";
@@ -13,7 +13,8 @@ import api from "../services/api";
 export default function BusFormScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const bus = route.params?.bus;
+
+  const bus = route.params?.busData || null;
 
   const [busName, setBusName] = useState("");
   const [licenseNumber, setLicenseNumber] = useState("");
@@ -22,7 +23,6 @@ export default function BusFormScreen() {
   const [driverName, setDriverName] = useState("");
   const [conductorName, setConductorName] = useState("");
   const [status, setStatus] = useState("Available");
-  const [assignedRoute, setAssignedRoute] = useState("");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -30,40 +30,34 @@ export default function BusFormScreen() {
       setBusName(bus.busName || "");
       setLicenseNumber(bus.licenseNumber || "");
       setBusType(bus.busType || "");
-      setTotalSeats(bus.totalSeats ? String(bus.totalSeats) : "");
+      setTotalSeats(String(bus.totalSeats || ""));
       setDriverName(bus.driverName || "");
       setConductorName(bus.conductorName || "");
       setStatus(bus.status || "Available");
-      setAssignedRoute(
-        typeof bus.assignedRoute === "object"
-          ? bus.assignedRoute?._id || ""
-          : bus.assignedRoute || ""
-      );
     }
   }, [bus]);
 
   const handleSubmit = async () => {
     if (
-      !busName ||
-      !licenseNumber ||
-      !busType ||
-      !totalSeats ||
-      !driverName ||
-      !conductorName
+      !busName.trim() ||
+      !licenseNumber.trim() ||
+      !busType.trim() ||
+      !totalSeats.trim() ||
+      !driverName.trim() ||
+      !conductorName.trim()
     ) {
-      Alert.alert("Validation Error", "Please fill all required fields");
+      Alert.alert("Error", "Please fill all fields");
       return;
     }
 
     const payload = {
-      busName,
-      licenseNumber,
-      busType,
+      busName: busName.trim(),
+      licenseNumber: licenseNumber.trim(),
+      busType: busType.trim(),
       totalSeats: Number(totalSeats),
-      driverName,
-      conductorName,
-      status,
-      assignedRoute: assignedRoute || null,
+      driverName: driverName.trim(),
+      conductorName: conductorName.trim(),
+      status: status.trim() || "Available",
     };
 
     try {
@@ -77,10 +71,13 @@ export default function BusFormScreen() {
         Alert.alert("Success", "Bus created successfully");
       }
 
-      navigation.goBack();
+      navigation.navigate("BusList");
     } catch (error) {
-      console.log("Save bus error:", error?.response?.data || error.message);
-      Alert.alert("Error", error?.response?.data?.message || "Failed to save bus");
+      console.log("Bus save error:", error?.response?.data || error.message);
+      Alert.alert(
+        "Error",
+        error?.response?.data?.message || "Failed to save bus"
+      );
     } finally {
       setLoading(false);
     }
@@ -90,70 +87,21 @@ export default function BusFormScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>{bus ? "Update Bus" : "Add New Bus"}</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Bus Name"
-        value={busName}
-        onChangeText={setBusName}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="License Number"
-        value={licenseNumber}
-        onChangeText={setLicenseNumber}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Bus Type"
-        value={busType}
-        onChangeText={setBusType}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Total Seats"
-        value={totalSeats}
-        onChangeText={setTotalSeats}
-        keyboardType="numeric"
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Driver Name"
-        value={driverName}
-        onChangeText={setDriverName}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Conductor Name"
-        value={conductorName}
-        onChangeText={setConductorName}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Status (Available / Assigned / Unavailable)"
-        value={status}
-        onChangeText={setStatus}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Assigned Route ID (optional)"
-        value={assignedRoute}
-        onChangeText={setAssignedRoute}
-      />
+      <TextInput style={styles.input} placeholder="Bus Name" value={busName} onChangeText={setBusName} />
+      <TextInput style={styles.input} placeholder="License Number" value={licenseNumber} onChangeText={setLicenseNumber} />
+      <TextInput style={styles.input} placeholder="Bus Type" value={busType} onChangeText={setBusType} />
+      <TextInput style={styles.input} placeholder="Total Seats" value={totalSeats} onChangeText={setTotalSeats} keyboardType="numeric" />
+      <TextInput style={styles.input} placeholder="Driver Name" value={driverName} onChangeText={setDriverName} />
+      <TextInput style={styles.input} placeholder="Conductor Name" value={conductorName} onChangeText={setConductorName} />
+      <TextInput style={styles.input} placeholder="Status" value={status} onChangeText={setStatus} />
 
       <TouchableOpacity
-        style={[styles.button, loading && { opacity: 0.7 }]}
+        style={[styles.button, loading && { opacity: 0.6 }]}
         onPress={handleSubmit}
         disabled={loading}
       >
         <Text style={styles.buttonText}>
-          {loading ? "Please wait..." : bus ? "Update Bus" : "Create Bus"}
+          {loading ? "Saving..." : bus ? "Update Bus" : "Create Bus"}
         </Text>
       </TouchableOpacity>
     </ScrollView>
@@ -167,18 +115,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontSize: 26,
+    fontWeight: "800",
     marginBottom: 20,
-    color: "#1e293b",
+    color: "#0f172a",
   },
   input: {
     backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
     borderRadius: 10,
     padding: 14,
     marginBottom: 14,
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
   },
   button: {
     backgroundColor: "#4f46e5",
@@ -189,7 +137,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
-    fontWeight: "bold",
+    fontWeight: "800",
     fontSize: 16,
   },
 });

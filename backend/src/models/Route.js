@@ -22,7 +22,6 @@ const routeSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-<<<<<<< HEAD
     distanceKm: {
       type: Number,
       required: true,
@@ -35,20 +34,13 @@ const routeSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      trim: true,
       default: "",
+      trim: true,
     },
-=======
->>>>>>> af0d9688e2512a5cbc3b499567371b80a653ca94
     status: {
       type: String,
       enum: ["active", "inactive"],
       default: "active",
-    },
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
     },
   },
   { timestamps: true }
