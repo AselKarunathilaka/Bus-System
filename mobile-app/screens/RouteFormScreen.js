@@ -8,8 +8,6 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   View,
 } from "react-native";
 import api from "../services/api";
@@ -37,6 +35,18 @@ const RouteFormScreen = ({ route, navigation }) => {
   const [status, setStatus] = useState(editingRoute?.status || "active");
   const [loading, setLoading] = useState(false);
 
+  const sanitizeNameField = (text) => {
+    return text.replace(/[^A-Za-z\s.'\-()/]/g, "");
+  };
+
+  const sanitizeNumericField = (text) => {
+    return text.replace(/[^0-9]/g, "");
+  };
+
+  const sanitizeDurationField = (text) => {
+    return text.replace(/[^0-9A-Za-z\s]/g, "");
+  };
+
   const validateForm = () => {
     if (
       !routeName.trim() ||
@@ -46,22 +56,64 @@ const RouteFormScreen = ({ route, navigation }) => {
       !distanceKm.trim() ||
       !estimatedDuration.trim()
     ) {
-      Alert.alert("Validation Error", "Please fill all required fields");
+      Alert.alert("Validation Error", "Please fill all required fields.");
       return false;
     }
 
-    if (Number(price) < 0) {
-      Alert.alert("Validation Error", "Price must be 0 or greater");
+    if (!/^[A-Za-z\s.'\-()/]+$/.test(routeName.trim())) {
+      Alert.alert(
+        "Validation Error",
+        "Route name can only contain letters, spaces, and simple punctuation."
+      );
+      return false;
+    }
+
+    if (!/^[A-Za-z\s.'\-()/]+$/.test(startLocation.trim())) {
+      Alert.alert(
+        "Validation Error",
+        "Start location can only contain letters, spaces, and simple punctuation."
+      );
+      return false;
+    }
+
+    if (!/^[A-Za-z\s.'\-()/]+$/.test(endLocation.trim())) {
+      Alert.alert(
+        "Validation Error",
+        "End location can only contain letters, spaces, and simple punctuation."
+      );
+      return false;
+    }
+
+    if (!/^\d+$/.test(price.trim())) {
+      Alert.alert("Validation Error", "Price must contain numbers only.");
+      return false;
+    }
+
+    if (!/^\d+$/.test(distanceKm.trim())) {
+      Alert.alert("Validation Error", "Distance must contain numbers only.");
+      return false;
+    }
+
+    if (Number(price) <= 0) {
+      Alert.alert("Validation Error", "Price must be greater than 0.");
       return false;
     }
 
     if (Number(distanceKm) <= 0) {
-      Alert.alert("Validation Error", "Distance must be greater than 0");
+      Alert.alert("Validation Error", "Distance must be greater than 0.");
+      return false;
+    }
+
+    if (!/^[0-9A-Za-z\s]+$/.test(estimatedDuration.trim())) {
+      Alert.alert(
+        "Validation Error",
+        "Estimated duration should only contain letters, numbers, and spaces."
+      );
       return false;
     }
 
     if (!["active", "inactive"].includes(status.toLowerCase().trim())) {
-      Alert.alert("Validation Error", "Status must be active or inactive");
+      Alert.alert("Validation Error", "Status must be active or inactive.");
       return false;
     }
 
@@ -89,19 +141,19 @@ const RouteFormScreen = ({ route, navigation }) => {
         await api.put(`/routes/${editingRoute._id}`, payload, {
           headers: { Authorization: `Bearer ${authToken}` },
         });
-        Alert.alert("Success", "Route updated successfully");
+        Alert.alert("Success", "Route updated successfully.");
       } else {
         await api.post("/routes", payload, {
           headers: { Authorization: `Bearer ${authToken}` },
         });
-        Alert.alert("Success", "Route created successfully");
+        Alert.alert("Success", "Route created successfully.");
       }
 
       navigation.goBack();
     } catch (error) {
       Alert.alert(
         "Error",
-        error?.response?.data?.message || "Failed to save route"
+        error?.response?.data?.message || "Failed to save route."
       );
     } finally {
       setLoading(false);
@@ -114,103 +166,101 @@ const RouteFormScreen = ({ route, navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={90}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView
-          contentContainerStyle={styles.container}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+      <ScrollView
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.title}>
+          {editingRoute ? "Edit Route" : "Add Route"}
+        </Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Route Name"
+          value={routeName}
+          onChangeText={(text) => setRouteName(sanitizeNameField(text))}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Start Location"
+          value={startLocation}
+          onChangeText={(text) => setStartLocation(sanitizeNameField(text))}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="End Location"
+          value={endLocation}
+          onChangeText={(text) => setEndLocation(sanitizeNameField(text))}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Price (LKR)"
+          value={price}
+          onChangeText={(text) => setPrice(sanitizeNumericField(text))}
+          keyboardType="numeric"
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Distance in KM"
+          value={distanceKm}
+          onChangeText={(text) => setDistanceKm(sanitizeNumericField(text))}
+          keyboardType="numeric"
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Estimated Duration (e.g. 3h 30m)"
+          value={estimatedDuration}
+          onChangeText={(text) => setEstimatedDuration(sanitizeDurationField(text))}
+          returnKeyType="next"
+        />
+
+        <TextInput
+          style={[styles.input, styles.textArea]}
+          placeholder="Description"
+          value={description}
+          onChangeText={setDescription}
+          multiline
+          textAlignVertical="top"
+        />
+
+        <TextInput
+          style={styles.input}
+          placeholder="Status (active/inactive)"
+          value={status}
+          onChangeText={setStatus}
+          autoCapitalize="none"
+          returnKeyType="done"
+        />
+
+        <TouchableOpacity
+          style={[styles.button, loading && styles.buttonDisabled]}
+          onPress={handleSubmit}
+          disabled={loading}
         >
-          <Text style={styles.title}>
-            {editingRoute ? "Edit Route" : "Add Route"}
+          <Text style={styles.buttonText}>
+            {loading
+              ? editingRoute
+                ? "Updating..."
+                : "Creating..."
+              : editingRoute
+              ? "Update Route"
+              : "Create Route"}
           </Text>
+        </TouchableOpacity>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Route Name"
-            value={routeName}
-            onChangeText={setRouteName}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Start Location"
-            value={startLocation}
-            onChangeText={setStartLocation}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="End Location"
-            value={endLocation}
-            onChangeText={setEndLocation}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Price (LKR)"
-            value={price}
-            onChangeText={setPrice}
-            keyboardType="numeric"
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Distance in KM"
-            value={distanceKm}
-            onChangeText={setDistanceKm}
-            keyboardType="numeric"
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Estimated Duration (e.g. 3h 30m)"
-            value={estimatedDuration}
-            onChangeText={setEstimatedDuration}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            placeholder="Description"
-            value={description}
-            onChangeText={setDescription}
-            multiline
-            textAlignVertical="top"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Status (active/inactive)"
-            value={status}
-            onChangeText={setStatus}
-            autoCapitalize="none"
-            returnKeyType="done"
-          />
-
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleSubmit}
-            disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading
-                ? editingRoute
-                  ? "Updating..."
-                  : "Creating..."
-                : editingRoute
-                ? "Update Route"
-                : "Create Route"}
-            </Text>
-          </TouchableOpacity>
-
-          <View style={styles.bottomSpacer} />
-        </ScrollView>
-      </TouchableWithoutFeedback>
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };
