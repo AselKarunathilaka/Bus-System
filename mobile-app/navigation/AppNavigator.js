@@ -12,6 +12,9 @@ import RouteFormScreen from "../screens/RouteFormScreen";
 import StopListScreen from "../screens/StopListScreen";
 import StopFormScreen from "../screens/StopFormScreen";
 
+// 1. Import your new screen
+import ScheduleListScreen from "../screens/ScheduleListScreen";
+
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
@@ -29,6 +32,12 @@ const AppNavigator = () => {
             <Stack.Screen name="RouteForm" component={RouteFormScreen} />
             <Stack.Screen name="StopList" component={StopListScreen} />
             <Stack.Screen name="StopForm" component={StopFormScreen} />
+            
+            <Stack.Screen 
+              name="ScheduleList" 
+              component={ScheduleListScreen} 
+              options={{ title: 'Manage Schedules' }} 
+            />
           </>
         ) : (
           <>

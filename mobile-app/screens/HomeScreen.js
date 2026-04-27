@@ -27,6 +27,13 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
+        style={[styles.button, styles.scheduleButton]}
+        onPress={() => navigation.navigate("ScheduleList")}
+      >
+        <Text style={styles.buttonText}>{user?.role === "admin" ? "Manage Schedules" : "View Schedules"}</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
         style={[styles.button, styles.logoutButton]}
         onPress={logout}
       >
@@ -63,6 +70,9 @@ const styles = StyleSheet.create({
   },
   routeButton: {
     backgroundColor: "#16a34a",
+  },
+  scheduleButton: {
+    backgroundColor: "#ea580c", 
   },
   logoutButton: {
     backgroundColor: "#dc2626",
