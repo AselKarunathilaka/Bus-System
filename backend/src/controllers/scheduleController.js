@@ -6,10 +6,32 @@ const schedulePopulates = [
   { path: "routeId", model: "Route" },
   { path: "busId", model: "Bus" },
 ];
+const ALLOWED_STATUS = ["Scheduled", "In Transit", "Completed", "Cancelled"];
+
+const normalizePayload = (body = {}) => ({
+  routeId: body.routeId,
+  busId: body.busId,
+  departureDate: body.departureDate,
+  departureTime: body.departureTime?.trim(),
+  status: body.status?.trim() || "Scheduled",
+});
 
 const createSchedule = async (req, res) => {
     try {
-        const { routeId, busId, departureDate, departureTime, status } = req.body;
+        const { routeId, busId, departureDate, departureTime, status } =
+          normalizePayload(req.body);
+
+        if (!routeId || !busId || !departureDate || !departureTime || !status) {
+            return res.status(400).json({
+                message: "routeId, busId, departureDate, departureTime and status are required",
+            });
+        }
+
+        if (!ALLOWED_STATUS.includes(status)) {
+            return res.status(400).json({
+                message: `Invalid status. Allowed values: ${ALLOWED_STATUS.join(", ")}`,
+            });
+        }
         
         const newSchedule = new Schedule({
             routeId,
@@ -23,7 +45,8 @@ const createSchedule = async (req, res) => {
         res.status(201).json(savedSchedule);
     } catch (error) {
         console.error("CRASH DETAILS (createSchedule):", error);
-        res.status(500).json({ message: 'Error creating schedule', error: error.message });
+        const statusCode = error.name === "ValidationError" ? 400 : 500;
+        res.status(statusCode).json({ message: error.message });
     }
 };
 
@@ -55,9 +78,23 @@ const getScheduleById = async (req, res) => {
 
 const updateSchedule = async (req, res) => {
     try {
+        const payload = normalizePayload(req.body);
+
+        if (!payload.routeId || !payload.busId || !payload.departureDate || !payload.departureTime || !payload.status) {
+            return res.status(400).json({
+                message: "routeId, busId, departureDate, departureTime and status are required",
+            });
+        }
+
+        if (!ALLOWED_STATUS.includes(payload.status)) {
+            return res.status(400).json({
+                message: `Invalid status. Allowed values: ${ALLOWED_STATUS.join(", ")}`,
+            });
+        }
+
         const updatedSchedule = await Schedule.findByIdAndUpdate(
             req.params.id,
-            req.body,
+            payload,
             { new: true, runValidators: true }
         ).populate(schedulePopulates);
 
@@ -67,7 +104,8 @@ const updateSchedule = async (req, res) => {
         res.status(200).json(updatedSchedule);
     } catch (error) {
         console.error("CRASH DETAILS (updateSchedule):", error);
-        res.status(500).json({ message: 'Error updating schedule', error: error.message });
+        const statusCode = error.name === "ValidationError" ? 400 : 500;
+        res.status(statusCode).json({ message: error.message });
     }
 };
 

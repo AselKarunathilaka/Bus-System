@@ -21,7 +21,7 @@ const scheduleSchema = new mongoose.Schema({
   },
   status: { 
     type: String, 
-    enum: ['Scheduled', 'In Progress', 'Completed', 'Cancelled'], 
+    enum: ["Scheduled", "In Transit", "Completed", "Cancelled"], 
     default: 'Scheduled' 
   }
 }, { timestamps: true });
