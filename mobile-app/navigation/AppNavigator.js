@@ -11,6 +11,8 @@ import RouteListScreen from "../screens/RouteListScreen";
 import AddRouteScreen from "../screens/AddRouteScreen";
 import StopListScreen from "../screens/StopListScreen";
 import AddStopScreen from "../screens/AddStopScreen";
+import UserManagementScreen from "../screens/UserManagementScreen";
+import UserAnalyticsScreen from "../screens/UserAnalyticsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +37,16 @@ const AppNavigator = () => {
           <Stack.Screen name="AddRoute" component={AddRouteScreen} />
           <Stack.Screen name="StopList" component={StopListScreen} />
           <Stack.Screen name="AddStop" component={AddStopScreen} />
+          <Stack.Screen
+            name="UserManagement"
+            component={UserManagementScreen}
+            options={{ title: "User Management" }}
+          />
+          <Stack.Screen
+            name="UserAnalytics"
+            component={UserAnalyticsScreen}
+            options={{ title: "User Analytics" }}
+          />
         </>
       ) : (
         <>

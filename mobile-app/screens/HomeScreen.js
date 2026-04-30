@@ -27,6 +27,20 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
+        style={[styles.button, styles.userButton]}
+        onPress={() => navigation.navigate("UserManagement")}
+      >
+        <Text style={styles.buttonText}>User Management</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={[styles.button, styles.analyticsButton]}
+        onPress={() => navigation.navigate("UserAnalytics")}
+      >
+        <Text style={styles.buttonText}>User Analytics</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
         style={[styles.button, styles.logoutButton]}
         onPress={logout}
       >
@@ -63,6 +77,12 @@ const styles = StyleSheet.create({
   },
   routeButton: {
     backgroundColor: "#16a34a",
+  },
+  userButton: {
+    backgroundColor: "#0ea5e9",
+  },
+  analyticsButton: {
+    backgroundColor: "#7c3aed",
   },
   logoutButton: {
     backgroundColor: "#dc2626",

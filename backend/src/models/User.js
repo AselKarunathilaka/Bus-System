@@ -25,8 +25,12 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ["passenger", "admin"],
+      default: "passenger",
+    },
+    registeredAt: {
+      type: Date,
+      default: Date.now,
     },
     isActive: {
       type: Boolean,

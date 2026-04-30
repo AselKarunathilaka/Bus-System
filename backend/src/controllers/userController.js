@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
-exports.getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res) => {
   try {
     const users = await User.find().select("-password").sort({ createdAt: -1 });
     return res.status(200).json(users);
@@ -10,7 +10,55 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
-exports.getUserById = async (req, res) => {
+const createUser = async (req, res) => {
+  try {
+    const { fullName, email, phone, password, role, isActive } = req.body;
+
+    if (!fullName || !email || !phone || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const normalizedEmail = email.toLowerCase();
+    const existingUser = await User.findOne({ email: normalizedEmail });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 6 characters" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
+      fullName,
+      email: normalizedEmail,
+      phone,
+      password: hashedPassword,
+      role,
+      isActive,
+    });
+
+    return res.status(201).json({
+      message: "User created successfully",
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        isActive: user.isActive,
+        registeredAt: user.registeredAt,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+const getUserById = async (req, res) => {
   try {
     const requestedUserId = req.params.id;
 
@@ -33,7 +81,7 @@ exports.getUserById = async (req, res) => {
   }
 };
 
-exports.updateUser = async (req, res) => {
+const updateUser = async (req, res) => {
   try {
     const requestedUserId = req.params.id;
 
@@ -82,7 +130,7 @@ exports.updateUser = async (req, res) => {
   }
 };
 
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const requestedUserId = req.params.id;
 
@@ -96,4 +144,61 @@ exports.deleteUser = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
+};
+
+const getUserAnalytics = async (req, res) => {
+  try {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const analytics = await User.aggregate([
+      {
+        $facet: {
+          totalUsers: [{ $count: "count" }],
+          usersByRole: [
+            {
+              $group: {
+                _id: "$role",
+                count: { $sum: 1 },
+              },
+            },
+          ],
+          newUsersLast30Days: [
+            {
+              $match: {
+                registeredAt: { $gte: thirtyDaysAgo },
+              },
+            },
+            { $count: "count" },
+          ],
+        },
+      },
+    ]);
+
+    const data = analytics[0] || {};
+    const roleCounts = (data.usersByRole || []).reduce(
+      (acc, item) => {
+        acc[item._id] = item.count;
+        return acc;
+      },
+      { admin: 0, passenger: 0 }
+    );
+
+    return res.status(200).json({
+      totalUsers: data.totalUsers?.[0]?.count || 0,
+      usersByRole: roleCounts,
+      newUsersLast30Days: data.newUsersLast30Days?.[0]?.count || 0,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = {
+  getAllUsers,
+  createUser,
+  getUserById,
+  updateUser,
+  deleteUser,
+  getUserAnalytics,
 };
