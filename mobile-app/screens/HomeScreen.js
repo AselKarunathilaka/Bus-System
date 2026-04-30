@@ -14,52 +14,42 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* HERO SECTION */}
       <View style={styles.heroCard}>
         <Text style={styles.badge}>
-          QuickBus (Highway Bus Reservation System)
+          QuickBus Highway Bus Reservation System
         </Text>
         <Text style={styles.title}>Welcome Back</Text>
         <Text style={styles.subtitle}>
-          QuickBus helps you view highway bus routes, see stop details, and
-          check prices and travel distances in one simple place.
+          QuickBus helps you view highway bus routes, stop details, bus details,
+          prices, and travel distances in one simple place.
         </Text>
       </View>
 
-      {/* USER PROFILE */}
       <View style={styles.profileCard}>
         <Text style={styles.sectionTitle}>User Overview</Text>
 
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Name</Text>
-          <Text style={styles.infoValue}>
-            {user?.fullName || "N/A"}
-          </Text>
+          <Text style={styles.infoValue}>{user?.fullName || "N/A"}</Text>
         </View>
 
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Email</Text>
-          <Text style={styles.infoValue}>
-            {user?.email || "N/A"}
-          </Text>
+          <Text style={styles.infoValue}>{user?.email || "N/A"}</Text>
         </View>
 
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Role</Text>
-          <Text style={styles.infoValue}>
-            {user?.role || "N/A"}
-          </Text>
+          <Text style={styles.infoValue}>{user?.role || "N/A"}</Text>
         </View>
       </View>
 
-      {/* ABOUT / ADMIN SECTION */}
       {!isAdmin ? (
         <View style={styles.aboutCard}>
           <Text style={styles.sectionTitle}>About QuickBus</Text>
           <Text style={styles.aboutText}>
-            QuickBus is a highway bus route app that helps you quickly explore
-            available routes, starting points, destinations, prices, travel
-            distance, and stop information.
+            QuickBus helps users browse available highway bus routes, stops, bus
+            details, starting points, destinations, prices, and travel distance.
           </Text>
         </View>
       ) : (
@@ -67,33 +57,23 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.sectionTitle}>Admin Instructions</Text>
 
           <Text style={styles.aboutText}>
-            As an admin, you manage route data shown to users.
+            As an admin, you can manage route, stop, and bus data shown to
+            users.
           </Text>
 
           <View style={styles.roleBlock}>
             <Text style={styles.roleTitle}>What you can do</Text>
             <Text style={styles.roleText}>
-              • Add routes{"\n"}
-              • Edit routes{"\n"}
-              • Delete routes{"\n"}
-              • Manage stops{"\n"}
-              • Filter routes
-            </Text>
-          </View>
-
-          <View style={styles.roleBlock}>
-            <Text style={styles.roleTitle}>Admin Flow</Text>
-            <Text style={styles.roleText}>
-              1. Open Manage Routes{"\n"}
-              2. Add / Edit Routes{"\n"}
-              3. Manage Stops{"\n"}
-              4. Delete if needed
+              • Add, edit, and delete routes{"\n"}
+              • Manage route stops{"\n"}
+              • Add, edit, and delete buses{"\n"}
+              • Assign buses to routes{"\n"}
+              • View bus status details
             </Text>
           </View>
         </View>
       )}
 
-      {/* BUTTONS */}
       <TouchableOpacity
         style={[styles.actionButton, styles.profileButton]}
         onPress={() => navigation.navigate("Profile")}
@@ -147,33 +127,36 @@ const styles = StyleSheet.create({
 
   badge: {
     backgroundColor: "#1e3a8a",
-    color: "#fff",
+    color: "#ffffff",
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 999,
     marginBottom: 10,
+    alignSelf: "flex-start",
+    fontWeight: "700",
   },
 
   title: {
     fontSize: 28,
     fontWeight: "800",
-    color: "#fff",
+    color: "#ffffff",
   },
 
   subtitle: {
     color: "#cbd5e1",
     marginTop: 8,
+    lineHeight: 21,
   },
 
   profileCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     borderRadius: 20,
     padding: 18,
     marginBottom: 16,
   },
 
   aboutCard: {
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     borderRadius: 20,
     padding: 18,
     marginBottom: 16,
@@ -183,6 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "800",
     marginBottom: 10,
+    color: "#0f172a",
   },
 
   infoRow: {
@@ -197,11 +181,14 @@ const styles = StyleSheet.create({
   infoValue: {
     fontSize: 16,
     fontWeight: "600",
+    color: "#0f172a",
   },
 
   aboutText: {
     fontSize: 14,
     marginBottom: 10,
+    color: "#334155",
+    lineHeight: 21,
   },
 
   roleBlock: {
@@ -213,10 +200,14 @@ const styles = StyleSheet.create({
 
   roleTitle: {
     fontWeight: "800",
+    color: "#0f172a",
+    marginBottom: 5,
   },
 
   roleText: {
     fontSize: 13,
+    color: "#334155",
+    lineHeight: 20,
   },
 
   actionButton: {
@@ -242,7 +233,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    color: "#fff",
+    color: "#ffffff",
     textAlign: "center",
     fontWeight: "700",
   },

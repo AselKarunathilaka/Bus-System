@@ -24,11 +24,17 @@ const BusFormScreen = ({ route, navigation }) => {
   const editingBus = route.params?.busData;
 
   const [busName, setBusName] = useState(editingBus?.busName || "");
-  const [licenseNumber, setLicenseNumber] = useState(editingBus?.licenseNumber || "");
+  const [licenseNumber, setLicenseNumber] = useState(
+    editingBus?.licenseNumber || ""
+  );
   const [driverName, setDriverName] = useState(editingBus?.driverName || "");
   const [driverNIC, setDriverNIC] = useState(editingBus?.driverNIC || "");
-  const [conductorName, setConductorName] = useState(editingBus?.conductorName || "");
-  const [conductorNIC, setConductorNIC] = useState(editingBus?.conductorNIC || "");
+  const [conductorName, setConductorName] = useState(
+    editingBus?.conductorName || ""
+  );
+  const [conductorNIC, setConductorNIC] = useState(
+    editingBus?.conductorNIC || ""
+  );
   const [busContactNumber, setBusContactNumber] = useState(
     editingBus?.busContactNumber || ""
   );
@@ -51,8 +57,10 @@ const BusFormScreen = ({ route, navigation }) => {
   const [openRoute, setOpenRoute] = useState(false);
 
   const sanitizeTextOnly = (text) => text.replace(/[^A-Za-z\s.'-]/g, "");
-  const sanitizeLicense = (text) => text.replace(/[^A-Za-z0-9-\s]/g, "").toUpperCase();
-  const sanitizeNIC = (text) => text.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
+  const sanitizeLicense = (text) =>
+    text.replace(/[^A-Za-z0-9-\s]/g, "").toUpperCase();
+  const sanitizeNIC = (text) =>
+    text.replace(/[^A-Za-z0-9]/g, "").toUpperCase();
   const sanitizePhone = (text) => text.replace(/[^0-9+]/g, "");
   const sanitizeNumber = (text) => text.replace(/[^0-9]/g, "");
 
@@ -68,7 +76,10 @@ const BusFormScreen = ({ route, navigation }) => {
 
       setRoutes(response.data);
     } catch (error) {
-      Alert.alert("Error", error?.response?.data?.message || "Failed to load routes");
+      Alert.alert(
+        "Error",
+        error?.response?.data?.message || "Failed to load routes"
+      );
     } finally {
       setLoadingRoutes(false);
     }
@@ -100,7 +111,10 @@ const BusFormScreen = ({ route, navigation }) => {
     }
 
     if (busContactNumber.length < 9) {
-      Alert.alert("Validation Error", "Please enter a valid bus contact number.");
+      Alert.alert(
+        "Validation Error",
+        "Please enter a valid bus contact number."
+      );
       return false;
     }
 
@@ -157,7 +171,10 @@ const BusFormScreen = ({ route, navigation }) => {
 
       navigation.goBack();
     } catch (error) {
-      Alert.alert("Error", error?.response?.data?.message || "Failed to save bus.");
+      Alert.alert(
+        "Error",
+        error?.response?.data?.message || "Failed to save bus."
+      );
     } finally {
       setSaving(false);
     }
@@ -178,7 +195,10 @@ const BusFormScreen = ({ route, navigation }) => {
       {items.map((item) => (
         <TouchableOpacity
           key={item}
-          style={[styles.optionItem, selectedValue === item && styles.selectedOption]}
+          style={[
+            styles.optionItem,
+            selectedValue === item && styles.selectedOption,
+          ]}
           onPress={() => onSelect(item)}
         >
           <Text style={styles.optionText}>{item}</Text>
@@ -202,7 +222,10 @@ const BusFormScreen = ({ route, navigation }) => {
       {routes.map((item) => (
         <TouchableOpacity
           key={item._id}
-          style={[styles.optionItem, assignedRoute === item._id && styles.selectedOption]}
+          style={[
+            styles.optionItem,
+            assignedRoute === item._id && styles.selectedOption,
+          ]}
           onPress={() => {
             setAssignedRoute(item._id);
             setOpenRoute(false);
@@ -228,6 +251,7 @@ const BusFormScreen = ({ route, navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.title}>{editingBus ? "Edit Bus" : "Add Bus"}</Text>
+
         <Text style={styles.subtitle}>
           Add bus details, assign a route, and set the bus status separately.
         </Text>
@@ -294,6 +318,7 @@ const BusFormScreen = ({ route, navigation }) => {
         />
 
         <Text style={styles.label}>Bus Type</Text>
+
         <TouchableOpacity
           style={styles.selectButton}
           onPress={() => setOpenBusType(!openBusType)}
@@ -328,6 +353,7 @@ const BusFormScreen = ({ route, navigation }) => {
         )}
 
         <Text style={styles.label}>Bus Status</Text>
+
         <TouchableOpacity
           style={styles.selectButton}
           onPress={() => setOpenStatus(!openStatus)}
@@ -362,23 +388,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#eef4ff",
   },
+
   container: {
     flexGrow: 1,
     padding: 20,
     backgroundColor: "#eef4ff",
   },
+
   title: {
     fontSize: 28,
     fontWeight: "800",
     color: "#0f172a",
     marginBottom: 6,
   },
+
   subtitle: {
     fontSize: 15,
     color: "#64748b",
     lineHeight: 22,
     marginBottom: 18,
   },
+
   input: {
     backgroundColor: "#ffffff",
     borderRadius: 14,
@@ -390,6 +420,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#dbeafe",
   },
+
   label: {
     color: "#0f172a",
     fontSize: 15,
@@ -397,6 +428,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     marginTop: 4,
   },
+
   selectButton: {
     backgroundColor: "#ffffff",
     borderRadius: 14,
@@ -406,11 +438,13 @@ const styles = StyleSheet.create({
     borderColor: "#dbeafe",
     marginBottom: 12,
   },
+
   selectText: {
     color: "#0f172a",
     fontSize: 15,
     fontWeight: "700",
   },
+
   optionList: {
     backgroundColor: "#ffffff",
     borderRadius: 14,
@@ -419,19 +453,23 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     overflow: "hidden",
   },
+
   optionItem: {
     padding: 14,
     borderBottomWidth: 1,
     borderBottomColor: "#e2e8f0",
   },
+
   selectedOption: {
     backgroundColor: "#dbeafe",
   },
+
   optionText: {
     color: "#0f172a",
     fontSize: 14,
     fontWeight: "700",
   },
+
   loadingRoutes: {
     backgroundColor: "#ffffff",
     borderRadius: 14,
@@ -439,11 +477,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     alignItems: "center",
   },
+
   loadingRoutesText: {
     marginTop: 8,
     color: "#64748b",
     fontWeight: "700",
   },
+
   saveButton: {
     backgroundColor: "#2563eb",
     borderRadius: 14,
@@ -452,9 +492,11 @@ const styles = StyleSheet.create({
     marginTop: 12,
     marginBottom: 30,
   },
+
   disabledButton: {
     opacity: 0.7,
   },
+
   saveButtonText: {
     color: "#ffffff",
     fontSize: 16,

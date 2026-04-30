@@ -221,7 +221,11 @@ exports.updateBus = async (req, res) => {
       });
     }
 
-    if (assignedRoute !== undefined && assignedRoute !== null && assignedRoute !== "") {
+    if (
+      assignedRoute !== undefined &&
+      assignedRoute !== null &&
+      assignedRoute !== ""
+    ) {
       if (!isValidObjectId(assignedRoute)) {
         return res.status(400).json({ message: "Invalid route ID" });
       }
@@ -233,7 +237,10 @@ exports.updateBus = async (req, res) => {
       }
     }
 
-    if (licenseNumber && licenseNumber.trim().toUpperCase() !== bus.licenseNumber) {
+    if (
+      licenseNumber &&
+      licenseNumber.trim().toUpperCase() !== bus.licenseNumber
+    ) {
       const existingBus = await Bus.findOne({
         licenseNumber: licenseNumber.trim().toUpperCase(),
       });
@@ -246,13 +253,16 @@ exports.updateBus = async (req, res) => {
     }
 
     bus.busName = busName?.trim() ?? bus.busName;
-    bus.licenseNumber = licenseNumber?.trim().toUpperCase() ?? bus.licenseNumber;
+    bus.licenseNumber =
+      licenseNumber?.trim().toUpperCase() ?? bus.licenseNumber;
     bus.driverName = driverName?.trim() ?? bus.driverName;
     bus.driverNIC = driverNIC?.trim() ?? bus.driverNIC;
     bus.conductorName = conductorName?.trim() ?? bus.conductorName;
     bus.conductorNIC = conductorNIC?.trim() ?? bus.conductorNIC;
-    bus.busContactNumber = busContactNumber?.trim() ?? bus.busContactNumber;
-    bus.seatCount = seatCount !== undefined ? Number(seatCount) : bus.seatCount;
+    bus.busContactNumber =
+      busContactNumber?.trim() ?? bus.busContactNumber;
+    bus.seatCount =
+      seatCount !== undefined ? Number(seatCount) : bus.seatCount;
     bus.busType = busType ?? bus.busType;
     bus.status = status ?? bus.status;
 

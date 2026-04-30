@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   View,
   Text,
@@ -32,8 +38,10 @@ const BusListScreen = ({ navigation }) => {
 
       setBuses(response.data);
     } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "Failed to fetch buses");
+      Alert.alert(
+        "Error",
+        error?.response?.data?.message || "Failed to fetch buses"
+      );
     } finally {
       setLoading(false);
     }
@@ -45,38 +53,53 @@ const BusListScreen = ({ navigation }) => {
   }, [navigation, fetchBuses]);
 
   const handleDeleteBus = async (id) => {
-    try {
-      await api.delete(`/buses/${id}`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+    Alert.alert("Delete Bus", "Are you sure you want to delete this bus?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        style: "destructive",
+        onPress: async () => {
+          try {
+            await api.delete(`/buses/${id}`, {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
+            });
 
-      fetchBuses();
-    } catch (error) {
-      Alert.alert("Error", "Delete failed");
-    }
+            fetchBuses();
+          } catch (error) {
+            Alert.alert(
+              "Error",
+              error?.response?.data?.message || "Delete failed"
+            );
+          }
+        },
+      },
+    ]);
   };
 
   const totalBuses = buses.length;
 
   const assignedCount = useMemo(
-    () => buses.filter((b) => b.assignedRoute).length,
+    () => buses.filter((bus) => bus.assignedRoute).length,
     [buses]
   );
 
   const activeCount = useMemo(
-    () => buses.filter((b) => b.status === "Available").length,
+    () => buses.filter((bus) => bus.status === "Available").length,
     [buses]
   );
 
   const maintenanceCount = useMemo(
-    () => buses.filter((b) => b.status === "Maintenance").length,
+    () => buses.filter((bus) => bus.status === "Maintenance").length,
     [buses]
   );
 
   const inactiveCount = useMemo(
-    () => buses.filter((b) => b.status === "Inactive").length,
+    () => buses.filter((bus) => bus.status === "Inactive").length,
     [buses]
   );
 
@@ -103,14 +126,20 @@ const BusListScreen = ({ navigation }) => {
       <View style={styles.detailsBox}>
         <Text style={styles.detailText}>Bus Type: {item.busType}</Text>
         <Text style={styles.detailText}>Seats: {item.seatCount}</Text>
-        <Text style={styles.detailText}>Contact: {item.busContactNumber}</Text>
+        <Text style={styles.detailText}>
+          Contact: {item.busContactNumber}
+        </Text>
       </View>
 
       <View style={styles.detailsBox}>
         <Text style={styles.detailText}>Driver: {item.driverName}</Text>
         <Text style={styles.detailText}>Driver NIC: {item.driverNIC}</Text>
-        <Text style={styles.detailText}>Conductor: {item.conductorName}</Text>
-        <Text style={styles.detailText}>Conductor NIC: {item.conductorNIC}</Text>
+        <Text style={styles.detailText}>
+          Conductor: {item.conductorName}
+        </Text>
+        <Text style={styles.detailText}>
+          Conductor NIC: {item.conductorNIC}
+        </Text>
       </View>
 
       <View style={styles.routeBox}>
