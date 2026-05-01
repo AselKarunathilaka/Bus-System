@@ -16,7 +16,7 @@ const createToken = (user) => {
 
 exports.register = async (req, res) => {
   try {
-    const { fullName, email, phone, password, role } = req.body;
+    const { fullName, email, phone, password } = req.body;
 
     if (!fullName || !email || !phone || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -29,6 +29,7 @@ exports.register = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });
+
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
@@ -40,7 +41,11 @@ exports.register = async (req, res) => {
       email: email.toLowerCase(),
       phone,
       password: hashedPassword,
-      role: role || "user",
+
+      // SECURITY FIX:
+      // Public registration should never accept role from req.body.
+      // Every newly registered account must start as a normal user.
+      role: "user",
     });
 
     const token = createToken(user);
@@ -72,11 +77,13 @@ exports.login = async (req, res) => {
     }
 
     const user = await User.findOne({ email: email.toLowerCase() });
+
     if (!user || !user.isActive) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }

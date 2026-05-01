@@ -44,6 +44,7 @@ const RegisterScreen = ({ navigation }) => {
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!emailRegex.test(email.trim())) {
       Alert.alert("Validation Error", "Please enter a valid email address.");
       return false;
@@ -84,7 +85,6 @@ const RegisterScreen = ({ navigation }) => {
         email: email.trim().toLowerCase(),
         phone: phone.trim(),
         password,
-        role: "user",
       });
 
       Alert.alert("Success", "Registration successful.");
