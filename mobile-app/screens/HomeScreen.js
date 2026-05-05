@@ -91,6 +91,15 @@ const HomeScreen = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
+        style={[styles.actionButton, styles.scheduleButton]}
+        onPress={() => navigation.navigate("ScheduleList")}
+      >
+        <Text style={styles.buttonText}>
+          {isAdmin ? "Manage Schedules" : "View Schedules"}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
         style={[styles.actionButton, styles.busButton]}
         onPress={() => navigation.navigate("Buses")}
       >
@@ -222,6 +231,10 @@ const styles = StyleSheet.create({
 
   routeButton: {
     backgroundColor: "#1cab4c",
+  },
+
+  scheduleButton: {
+    backgroundColor: "#ea580c", 
   },
 
   busButton: {

@@ -13,6 +13,7 @@ import StopListScreen from "../screens/StopListScreen";
 import StopFormScreen from "../screens/StopFormScreen";
 import BusListScreen from "../screens/BusListScreen";
 import BusFormScreen from "../screens/BusFormScreen";
+import ScheduleListScreen from "../screens/ScheduleListScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,12 @@ const AppNavigator = () => {
             <Stack.Screen name="RouteForm" component={RouteFormScreen} />
             <Stack.Screen name="StopList" component={StopListScreen} />
             <Stack.Screen name="StopForm" component={StopFormScreen} />
+            
+            <Stack.Screen 
+              name="ScheduleList" 
+              component={ScheduleListScreen} 
+              options={{ title: 'Manage Schedules' }} 
+            />
             <Stack.Screen name="Buses" component={BusListScreen} />
             <Stack.Screen name="BusForm" component={BusFormScreen} />
           </>
