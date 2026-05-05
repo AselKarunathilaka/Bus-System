@@ -110,6 +110,56 @@ const BusListScreen = ({ navigation }) => {
     return styles.neutralBadge;
   };
 
+  const renderDashboardHeader = () => (
+    <View style={styles.topPanel}>
+      <Text style={styles.panelTitle}>
+        {isAdmin ? "Bus Dashboard" : "Available Buses"}
+      </Text>
+
+      <Text style={styles.panelSubtitle}>
+        {isAdmin
+          ? "View total buses, assigned buses, active buses, maintenance buses, and inactive buses."
+          : "These are the buses available in the system."}
+      </Text>
+
+      <View style={styles.statsGrid}>
+        <View style={styles.statCard}>
+          <Text style={styles.statNumber}>{totalBuses}</Text>
+          <Text style={styles.statLabel}>Total Buses</Text>
+        </View>
+
+        <View style={styles.statCard}>
+          <Text style={styles.statNumber}>{assignedCount}</Text>
+          <Text style={styles.statLabel}>Assigned</Text>
+        </View>
+
+        <View style={styles.statCard}>
+          <Text style={styles.statNumber}>{activeCount}</Text>
+          <Text style={styles.statLabel}>Active</Text>
+        </View>
+
+        <View style={styles.statCard}>
+          <Text style={styles.statNumber}>{maintenanceCount}</Text>
+          <Text style={styles.statLabel}>Maintenance</Text>
+        </View>
+
+        <View style={styles.statCard}>
+          <Text style={styles.statNumber}>{inactiveCount}</Text>
+          <Text style={styles.statLabel}>Inactive</Text>
+        </View>
+      </View>
+
+      {isAdmin && (
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => navigation.navigate("BusForm")}
+        >
+          <Text style={styles.addButtonText}>+ Add Bus</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+
   const renderBus = ({ item }) => (
     <View style={styles.busCard}>
       <View style={styles.cardHeader}>
@@ -181,59 +231,13 @@ const BusListScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.topPanel}>
-        <Text style={styles.panelTitle}>
-          {isAdmin ? "Bus Dashboard" : "Available Buses"}
-        </Text>
-
-        <Text style={styles.panelSubtitle}>
-          {isAdmin
-            ? "View total buses, assigned buses, active buses, maintenance buses, and inactive buses."
-            : "These are the buses available in the system."}
-        </Text>
-
-        <View style={styles.statsGrid}>
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{totalBuses}</Text>
-            <Text style={styles.statLabel}>Total Buses</Text>
-          </View>
-
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{assignedCount}</Text>
-            <Text style={styles.statLabel}>Assigned</Text>
-          </View>
-
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{activeCount}</Text>
-            <Text style={styles.statLabel}>Active</Text>
-          </View>
-
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{maintenanceCount}</Text>
-            <Text style={styles.statLabel}>Maintenance</Text>
-          </View>
-
-          <View style={styles.statCard}>
-            <Text style={styles.statNumber}>{inactiveCount}</Text>
-            <Text style={styles.statLabel}>Inactive</Text>
-          </View>
-        </View>
-
-        {isAdmin && (
-          <TouchableOpacity
-            style={styles.addButton}
-            onPress={() => navigation.navigate("BusForm")}
-          >
-            <Text style={styles.addButtonText}>+ Add Bus</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-
       <FlatList
         data={buses}
         keyExtractor={(item) => item._id}
         renderItem={renderBus}
+        ListHeaderComponent={renderDashboardHeader}
         contentContainerStyle={styles.listContent}
+        showsVerticalScrollIndicator={true}
         ListEmptyComponent={
           <Text style={styles.emptyText}>No buses found.</Text>
         }
@@ -264,7 +268,9 @@ const styles = StyleSheet.create({
 
   topPanel: {
     backgroundColor: "#0f172a",
-    margin: 12,
+    marginHorizontal: 12,
+    marginTop: 12,
+    marginBottom: 14,
     padding: 16,
     borderRadius: 16,
   },
@@ -327,13 +333,13 @@ const styles = StyleSheet.create({
   },
 
   listContent: {
-    paddingHorizontal: 12,
-    paddingBottom: 20,
+    paddingBottom: 24,
   },
 
   busCard: {
     backgroundColor: "#ffffff",
     padding: 16,
+    marginHorizontal: 12,
     marginBottom: 12,
     borderRadius: 16,
   },
