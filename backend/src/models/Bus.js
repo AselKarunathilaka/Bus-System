@@ -2,25 +2,78 @@ const mongoose = require("mongoose");
 
 const busSchema = new mongoose.Schema(
   {
-    busNumber: {
+    busName: {
       type: String,
       required: true,
       trim: true,
     },
-    capacity: {
-      type: Number,
-      min: 1,
-      default: 50,
-    },
-    type: {
+
+    licenseNumber: {
       type: String,
+      required: true,
+      unique: true,
+      uppercase: true,
       trim: true,
-      default: "Standard",
     },
+
+    driverName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    driverNIC: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    conductorName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    conductorNIC: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    busContactNumber: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    seatCount: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 100,
+    },
+
+    busType: {
+      type: String,
+      enum: ["Normal", "Semi Luxury", "Luxury", "Super Luxury"],
+      required: true,
+    },
+
+    assignedRoute: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Route",
+      default: null,
+    },
+
     status: {
       type: String,
-      enum: ["active", "inactive", "maintenance"],
-      default: "active",
+      enum: ["Available", "Maintenance", "Inactive"],
+      default: "Available",
+    },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
   },
   { timestamps: true }
