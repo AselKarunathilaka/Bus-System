@@ -66,16 +66,21 @@ const ScheduleFormScreen = ({ route, navigation }) => {
         await api.put(`/schedules/${existingSchedule._id}`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        Alert.alert("Success", "Schedule updated successfully");
+        if (Platform.OS === "web") window.alert("Schedule updated successfully");
+        else Alert.alert("Success", "Schedule updated successfully");
       } else {
         await api.post("/schedules", payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        Alert.alert("Success", "Schedule created successfully");
+        if (Platform.OS === "web") window.alert("Schedule created successfully");
+        else Alert.alert("Success", "Schedule created successfully");
       }
       navigation.goBack();
     } catch (error) {
-      Alert.alert("Error", error.response?.data?.message || "Failed to save schedule");
+      console.error(error);
+      const msg = error.response?.data?.message || "Failed to save schedule";
+      if (Platform.OS === "web") window.alert(msg);
+      else Alert.alert("Error", msg);
     }
   };
 
@@ -87,72 +92,124 @@ const ScheduleFormScreen = ({ route, navigation }) => {
 
       <Text style={styles.label}>Select Route</Text>
       <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={routeId}
-          onValueChange={(itemValue) => setRouteId(itemValue)}
-        >
-          <Picker.Item label="-- Select a Route --" value="" />
-          {routesList.map((r) => (
-            <Picker.Item
-              key={r._id}
-              label={`${r.startLocation} to ${r.endLocation}`}
-              value={r._id}
-            />
-          ))}
-        </Picker>
+        {Platform.OS === 'web' ? (
+          <select
+            value={routeId}
+            onChange={(e) => setRouteId(e.target.value)}
+            style={styles.webSelect}
+          >
+            <option value="">-- Select a Route --</option>
+            {routesList.map((r) => (
+              <option key={r._id} value={r._id}>
+                {r.startLocation} to {r.endLocation}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <Picker selectedValue={routeId} onValueChange={(v) => setRouteId(v)}>
+            <Picker.Item label="-- Select a Route --" value="" />
+            {routesList.map((r) => (
+              <Picker.Item key={r._id} label={`${r.startLocation} to ${r.endLocation}`} value={r._id} />
+            ))}
+          </Picker>
+        )}
       </View>
 
       <Text style={styles.label}>Select Bus</Text>
       <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={busId}
-          onValueChange={(itemValue) => setBusId(itemValue)}
-        >
-          <Picker.Item label="-- Select a Bus --" value="" />
-          {busesList.map((b) => (
-            <Picker.Item
-              key={b._id}
-              label={`${b.busName} (${b.licenseNumber})`}
-              value={b._id}
-            />
-          ))}
-        </Picker>
+        {Platform.OS === 'web' ? (
+          <select
+            value={busId}
+            onChange={(e) => setBusId(e.target.value)}
+            style={styles.webSelect}
+          >
+            <option value="">-- Select a Bus --</option>
+            {busesList.map((b) => (
+              <option key={b._id} value={b._id}>
+                {b.busName} ({b.licenseNumber})
+              </option>
+            ))}
+          </select>
+        ) : (
+          <Picker selectedValue={busId} onValueChange={(v) => setBusId(v)}>
+            <Picker.Item label="-- Select a Bus --" value="" />
+            {busesList.map((b) => (
+              <Picker.Item key={b._id} label={`${b.busName} (${b.licenseNumber})`} value={b._id} />
+            ))}
+          </Picker>
+        )}
       </View>
 
-      <Text style={styles.label}>Departure Date (YYYY-MM-DD)</Text>
-      <TextInput
-        style={styles.input}
-        value={departureDate}
-        onChangeText={setDepartureDate}
-        placeholder="YYYY-MM-DD"
-      />
+      <Text style={styles.label}>Departure Date</Text>
+      {Platform.OS === 'web' ? (
+        <input
+          type="date"
+          value={departureDate}
+          onChange={(e) => setDepartureDate(e.target.value)}
+          style={styles.webInput}
+        />
+      ) : (
+        <TextInput
+          style={styles.input}
+          value={departureDate}
+          onChangeText={setDepartureDate}
+          placeholder="YYYY-MM-DD"
+        />
+      )}
 
-      <Text style={styles.label}>Departure Time (e.g. 08:00 AM)</Text>
-      <TextInput
-        style={styles.input}
-        value={departureTime}
-        onChangeText={setDepartureTime}
-        placeholder="08:00 AM"
-      />
+      <Text style={styles.label}>Departure Time</Text>
+      {Platform.OS === 'web' ? (
+        <input
+          type="time"
+          value={departureTime}
+          onChange={(e) => setDepartureTime(e.target.value)}
+          style={styles.webInput}
+        />
+      ) : (
+        <TextInput
+          style={styles.input}
+          value={departureTime}
+          onChangeText={setDepartureTime}
+          placeholder="08:00 AM"
+        />
+      )}
 
-      <Text style={styles.label}>Arrival Time (e.g. 12:30 PM)</Text>
-      <TextInput
-        style={styles.input}
-        value={arrivalTime}
-        onChangeText={setArrivalTime}
-        placeholder="12:30 PM"
-      />
+      <Text style={styles.label}>Arrival Time</Text>
+      {Platform.OS === 'web' ? (
+        <input
+          type="time"
+          value={arrivalTime}
+          onChange={(e) => setArrivalTime(e.target.value)}
+          style={styles.webInput}
+        />
+      ) : (
+        <TextInput
+          style={styles.input}
+          value={arrivalTime}
+          onChangeText={setArrivalTime}
+          placeholder="12:30 PM"
+        />
+      )}
 
       <Text style={styles.label}>Status</Text>
       <View style={styles.pickerContainer}>
-        <Picker
-          selectedValue={status}
-          onValueChange={(itemValue) => setStatus(itemValue)}
-        >
-          <Picker.Item label="Scheduled" value="Scheduled" />
-          <Picker.Item label="Completed" value="Completed" />
-          <Picker.Item label="Cancelled" value="Cancelled" />
-        </Picker>
+        {Platform.OS === 'web' ? (
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            style={styles.webSelect}
+          >
+            <option value="Scheduled">Scheduled</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        ) : (
+          <Picker selectedValue={status} onValueChange={(v) => setStatus(v)}>
+            <Picker.Item label="Scheduled" value="Scheduled" />
+            <Picker.Item label="Completed" value="Completed" />
+            <Picker.Item label="Cancelled" value="Cancelled" />
+          </Picker>
+        )}
       </View>
 
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
@@ -165,31 +222,71 @@ const ScheduleFormScreen = ({ route, navigation }) => {
 export default ScheduleFormScreen;
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, padding: 20, backgroundColor: "#eef4ff" },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 20 },
-  label: { fontSize: 14, fontWeight: "600", marginBottom: 5, color: "#334155" },
+  container: { flexGrow: 1, padding: 30, backgroundColor: "#f8fafc" },
+  title: { fontSize: 28, fontWeight: "800", marginBottom: 25, color: "#0f172a" },
+  label: { fontSize: 15, fontWeight: "700", marginBottom: 8, color: "#334155" },
   input: {
     backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: "#cbd5e1",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 15,
+    borderColor: "#e2e8f0",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 20,
+    fontSize: 16,
+    color: "#0f172a",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
   },
   pickerContainer: {
     backgroundColor: "#fff",
     borderWidth: 1,
-    borderColor: "#cbd5e1",
-    borderRadius: 8,
-    marginBottom: 15,
+    borderColor: "#e2e8f0",
+    borderRadius: 12,
+    marginBottom: 20,
     overflow: "hidden",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  webSelect: {
+    width: "100%",
+    padding: 16,
+    fontSize: 16,
+    borderWidth: 0,
+    backgroundColor: "transparent",
+    color: "#0f172a",
+    outlineWidth: 0,
+    cursor: "pointer",
+  },
+  webInput: {
+    width: "100%",
+    padding: 16,
+    fontSize: 16,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+    borderRadius: 12,
+    backgroundColor: "#fff",
+    marginBottom: 20,
+    color: "#0f172a",
+    outlineWidth: 0,
+    boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
   },
   saveButton: {
     backgroundColor: "#3567e0",
-    padding: 15,
-    borderRadius: 8,
+    padding: 18,
+    borderRadius: 12,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 15,
+    shadowColor: "#3567e0",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
   },
-  saveButtonText: { color: "#fff", fontSize: 16, fontWeight: "bold" },
+  saveButtonText: { color: "#fff", fontSize: 18, fontWeight: "bold", letterSpacing: 0.5 },
 });
