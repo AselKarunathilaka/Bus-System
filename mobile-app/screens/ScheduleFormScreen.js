@@ -7,7 +7,9 @@ import {
   StyleSheet,
   Alert,
   ScrollView,
+  Platform,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
 
@@ -83,21 +85,39 @@ const ScheduleFormScreen = ({ route, navigation }) => {
         {existingSchedule ? "Edit Schedule" : "Add Schedule"}
       </Text>
 
-      <Text style={styles.label}>Route ID (Paste from Routes List for now)</Text>
-      <TextInput
-        style={styles.input}
-        value={routeId}
-        onChangeText={setRouteId}
-        placeholder="Enter Route ID"
-      />
+      <Text style={styles.label}>Select Route</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={routeId}
+          onValueChange={(itemValue) => setRouteId(itemValue)}
+        >
+          <Picker.Item label="-- Select a Route --" value="" />
+          {routesList.map((r) => (
+            <Picker.Item
+              key={r._id}
+              label={`${r.startLocation} to ${r.endLocation}`}
+              value={r._id}
+            />
+          ))}
+        </Picker>
+      </View>
 
-      <Text style={styles.label}>Bus ID (Paste from Buses List for now)</Text>
-      <TextInput
-        style={styles.input}
-        value={busId}
-        onChangeText={setBusId}
-        placeholder="Enter Bus ID"
-      />
+      <Text style={styles.label}>Select Bus</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={busId}
+          onValueChange={(itemValue) => setBusId(itemValue)}
+        >
+          <Picker.Item label="-- Select a Bus --" value="" />
+          {busesList.map((b) => (
+            <Picker.Item
+              key={b._id}
+              label={`${b.busName} (${b.licenseNumber})`}
+              value={b._id}
+            />
+          ))}
+        </Picker>
+      </View>
 
       <Text style={styles.label}>Departure Date (YYYY-MM-DD)</Text>
       <TextInput
@@ -123,13 +143,17 @@ const ScheduleFormScreen = ({ route, navigation }) => {
         placeholder="12:30 PM"
       />
 
-      <Text style={styles.label}>Status (Scheduled / Completed / Cancelled)</Text>
-      <TextInput
-        style={styles.input}
-        value={status}
-        onChangeText={setStatus}
-        placeholder="Status"
-      />
+      <Text style={styles.label}>Status</Text>
+      <View style={styles.pickerContainer}>
+        <Picker
+          selectedValue={status}
+          onValueChange={(itemValue) => setStatus(itemValue)}
+        >
+          <Picker.Item label="Scheduled" value="Scheduled" />
+          <Picker.Item label="Completed" value="Completed" />
+          <Picker.Item label="Cancelled" value="Cancelled" />
+        </Picker>
+      </View>
 
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Save Schedule</Text>
@@ -151,6 +175,14 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 15,
+  },
+  pickerContainer: {
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    borderRadius: 8,
+    marginBottom: 15,
+    overflow: "hidden",
   },
   saveButton: {
     backgroundColor: "#3567e0",

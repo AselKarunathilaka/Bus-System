@@ -99,13 +99,20 @@ const HomeScreen = ({ navigation }) => {
         </Text>
       </TouchableOpacity>
 
+      {isAdmin && (
+        <TouchableOpacity
+          style={[styles.actionButton, styles.scheduleButton]}
+          onPress={() => navigation.navigate("ScheduleList")}
+        >
+          <Text style={styles.buttonText}>Manage Schedules</Text>
+        </TouchableOpacity>
+      )}
+
       <TouchableOpacity
-        style={[styles.actionButton, styles.scheduleButton]}
-        onPress={() => navigation.navigate(isAdmin ? "ScheduleList" : "UserScheduleList")}
+        style={[styles.actionButton, styles.bookTicketButton]}
+        onPress={() => navigation.navigate("UserScheduleList")}
       >
-        <Text style={styles.buttonText}>
-          {isAdmin ? "Manage Schedules" : "Book a Ticket"}
-        </Text>
+        <Text style={styles.buttonText}>Book a Ticket</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
@@ -248,6 +255,10 @@ const styles = StyleSheet.create({
 
   scheduleButton: {
     backgroundColor: "#f59e0b",
+  },
+
+  bookTicketButton: {
+    backgroundColor: "#0ea5e9",
   },
 
   bookingButton: {

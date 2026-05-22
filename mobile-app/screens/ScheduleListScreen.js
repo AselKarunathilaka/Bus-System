@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
@@ -37,24 +38,42 @@ const ScheduleListScreen = ({ navigation }) => {
   }, [navigation]);
 
   const handleDelete = async (id) => {
-    Alert.alert("Confirm Delete", "Are you sure you want to delete this schedule?", [
-      { text: "Cancel", style: "cancel" },
-      {
-        text: "Delete",
-        style: "destructive",
-        onPress: async () => {
-          try {
-            await api.delete(`/schedules/${id}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            });
-            Alert.alert("Success", "Schedule deleted successfully");
-            fetchSchedules();
-          } catch (error) {
-            Alert.alert("Error", error.response?.data?.message || "Failed to delete schedule");
-          }
+    const executeDelete = async () => {
+      try {
+        await api.delete(`/schedules/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (Platform.OS !== "web") {
+          Alert.alert("Success", "Schedule deleted successfully");
+        } else {
+          window.alert("Schedule deleted successfully");
+        }
+        fetchSchedules();
+      } catch (error) {
+        const msg = error.response?.data?.message || "Failed to delete schedule";
+        if (Platform.OS !== "web") {
+          Alert.alert("Error", msg);
+        } else {
+          window.alert(msg);
+        }
+      }
+    };
+
+    if (Platform.OS === "web") {
+      const confirmed = window.confirm("Are you sure you want to delete this schedule?");
+      if (confirmed) {
+        executeDelete();
+      }
+    } else {
+      Alert.alert("Confirm Delete", "Are you sure you want to delete this schedule?", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          style: "destructive",
+          onPress: executeDelete,
         },
-      },
-    ]);
+      ]);
+    }
   };
 
   const renderItem = ({ item }) => (
