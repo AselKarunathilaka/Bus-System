@@ -14,6 +14,14 @@ import StopFormScreen from "../screens/StopFormScreen";
 import BusListScreen from "../screens/BusListScreen";
 import BusFormScreen from "../screens/BusFormScreen";
 
+import ScheduleListScreen from "../screens/ScheduleListScreen";
+import ScheduleFormScreen from "../screens/ScheduleFormScreen";
+import UserScheduleListScreen from "../screens/UserScheduleListScreen";
+import SeatSelectionScreen from "../screens/SeatSelectionScreen";
+import BookingConfirmationScreen from "../screens/BookingConfirmationScreen";
+import MyBookingsScreen from "../screens/MyBookingsScreen";
+import AdminBookingListScreen from "../screens/AdminBookingListScreen";
+
 const Stack = createNativeStackNavigator();
 
 const AppNavigator = () => {
@@ -33,6 +41,14 @@ const AppNavigator = () => {
             <Stack.Screen name="StopForm" component={StopFormScreen} />
             <Stack.Screen name="Buses" component={BusListScreen} />
             <Stack.Screen name="BusForm" component={BusFormScreen} />
+            
+            <Stack.Screen name="ScheduleList" component={ScheduleListScreen} />
+            <Stack.Screen name="ScheduleForm" component={ScheduleFormScreen} />
+            <Stack.Screen name="UserScheduleList" component={UserScheduleListScreen} />
+            <Stack.Screen name="SeatSelection" component={SeatSelectionScreen} />
+            <Stack.Screen name="BookingConfirmation" component={BookingConfirmationScreen} />
+            <Stack.Screen name="MyBookings" component={MyBookingsScreen} />
+            <Stack.Screen name="AdminBookingList" component={AdminBookingListScreen} />
           </>
         ) : (
           <>
