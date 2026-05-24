@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   ScrollView,
   TextInput,
+  Platform,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
@@ -52,12 +53,17 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      Alert.alert("Success", "Booking confirmed successfully!", [
-        {
-          text: "View My Bookings",
-          onPress: () => navigation.navigate("MyBookings"),
-        },
-      ]);
+      if (Platform.OS === "web") {
+        window.alert("Booking confirmed successfully!");
+        navigation.navigate("MyBookings");
+      } else {
+        Alert.alert("Success", "Booking confirmed successfully!", [
+          {
+            text: "View My Bookings",
+            onPress: () => navigation.navigate("MyBookings"),
+          },
+        ]);
+      }
     } catch (error) {
       Alert.alert("Error", error.response?.data?.message || "Failed to confirm booking.");
     } finally {
@@ -102,7 +108,7 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
         <Text style={styles.sectionTitle}>Contact Information</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter Sri Lanka Phone Number (e.g. 0771234567)"
+          placeholder="Enter Phone Number"
           value={contactNumber}
           onChangeText={setContactNumber}
           keyboardType="phone-pad"
@@ -124,7 +130,7 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
-          <Text style={styles.confirmBtnText}>Confirm & Pay</Text>
+          <Text style={styles.confirmBtnText}>Confirm Booking</Text>
         )}
       </TouchableOpacity>
     </ScrollView>
