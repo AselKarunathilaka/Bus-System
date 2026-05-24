@@ -141,6 +141,30 @@ const HomeScreen = ({ navigation }) => {
           </View>
           <Text style={styles.gridCardTitle}>Book a Ticket</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.gridCard}
+          onPress={() => navigation.navigate("BookingsTab")}
+        >
+          <View style={[styles.iconCircle, { backgroundColor: "#fce7f3" }]}>
+            <Ionicons name="receipt" size={28} color="#db2777" />
+          </View>
+          <Text style={styles.gridCardTitle}>
+            {isAdmin ? "All Bookings" : "My Bookings"}
+          </Text>
+        </TouchableOpacity>
+
+        {isAdmin && (
+          <TouchableOpacity
+            style={styles.gridCard}
+            onPress={() => navigation.navigate("AdminDashboard")}
+          >
+            <View style={[styles.iconCircle, { backgroundColor: "#e0e7ff" }]}>
+              <Ionicons name="bar-chart" size={28} color="#4f46e5" />
+            </View>
+            <Text style={styles.gridCardTitle}>Admin Dashboard</Text>
+          </TouchableOpacity>
+        )}
       </View>
 
       <TouchableOpacity

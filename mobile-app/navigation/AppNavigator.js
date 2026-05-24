@@ -24,6 +24,7 @@ import SeatSelectionScreen from "../screens/SeatSelectionScreen";
 import BookingConfirmationScreen from "../screens/BookingConfirmationScreen";
 import MyBookingsScreen from "../screens/MyBookingsScreen";
 import AdminBookingListScreen from "../screens/AdminBookingListScreen";
+import AdminDashboardScreen from "../screens/AdminDashboardScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -105,6 +106,7 @@ const AppNavigator = () => {
         {authToken ? (
           <>
             <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
+            <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: "Admin Dashboard" }} />
             <Stack.Screen name="Routes" component={RouteListScreen} />
             <Stack.Screen name="RouteForm" component={RouteFormScreen} />
             <Stack.Screen name="StopList" component={StopListScreen} />
