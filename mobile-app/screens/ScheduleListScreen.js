@@ -144,6 +144,4 @@ const ScheduleListScreen = ({ navigation }) => {
 
 export default ScheduleListScreen;
 
-export default ScheduleListScreen;
-
 // We've moved styles to Tailwind classes!
