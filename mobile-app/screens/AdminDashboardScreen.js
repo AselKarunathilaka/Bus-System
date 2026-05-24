@@ -166,76 +166,211 @@ const AdminDashboardScreen = ({ navigation }) => {
 
   const generatePDFReport = async () => {
     const htmlContent = `
+      <!DOCTYPE html>
       <html>
         <head>
+          <meta charset="utf-8" />
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
           <style>
-            body { font-family: 'Helvetica', sans-serif; padding: 40px; color: #0f172a; }
-            h1 { color: #1e3a8a; text-align: center; }
-            .header { text-align: center; margin-bottom: 40px; }
-            .date-range { font-size: 14px; color: #64748b; }
-            .metric-grid { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 40px; }
-            .metric-card { width: 45%; background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #e2e8f0; }
-            .metric-label { font-size: 14px; color: #64748b; margin-bottom: 8px; }
-            .metric-value { font-size: 28px; font-weight: bold; color: #0f172a; }
-            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-            th, td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; }
-            th { background-color: #f1f5f9; color: #334155; }
+            body { 
+              font-family: 'Inter', sans-serif; 
+              margin: 0; 
+              padding: 0; 
+              color: #1e293b; 
+              background-color: #f8fafc;
+            }
+            .page {
+              padding: 40px 50px;
+              max-width: 800px;
+              margin: 0 auto;
+              background-color: #ffffff;
+              box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+            .header-banner {
+              background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+              color: #ffffff;
+              padding: 30px;
+              border-radius: 16px;
+              margin-bottom: 30px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            }
+            .header-title {
+              margin: 0;
+              font-size: 28px;
+              font-weight: 800;
+              letter-spacing: -0.5px;
+            }
+            .header-subtitle {
+              margin-top: 5px;
+              font-size: 14px;
+              color: #bfdbfe;
+            }
+            .timestamp {
+              text-align: right;
+              font-size: 12px;
+              color: #dbeafe;
+            }
+            .section-title {
+              font-size: 18px;
+              font-weight: 800;
+              color: #0f172a;
+              margin-bottom: 15px;
+              padding-bottom: 8px;
+              border-bottom: 2px solid #e2e8f0;
+            }
+            .metric-grid { 
+              display: flex; 
+              flex-wrap: wrap; 
+              gap: 20px; 
+              margin-bottom: 40px; 
+            }
+            .metric-card { 
+              flex: 1 1 calc(50% - 20px); 
+              background: #ffffff; 
+              padding: 24px; 
+              border-radius: 16px; 
+              border: 1px solid #e2e8f0;
+              box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+              position: relative;
+              overflow: hidden;
+            }
+            .metric-card::before {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 4px;
+              height: 100%;
+            }
+            .metric-card.revenue::before { background-color: #10b981; }
+            .metric-card.bookings::before { background-color: #3b82f6; }
+            .metric-card.routes::before { background-color: #f59e0b; }
+            .metric-card.buses::before { background-color: #8b5cf6; }
+            
+            .metric-label { 
+              font-size: 13px; 
+              color: #64748b; 
+              font-weight: 600;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              margin-bottom: 8px; 
+            }
+            .metric-value { 
+              font-size: 32px; 
+              font-weight: 800; 
+              color: #0f172a; 
+            }
+            .metric-subtext {
+              font-size: 12px;
+              color: #94a3b8;
+              margin-top: 4px;
+            }
+            table { 
+              width: 100%; 
+              border-collapse: separate; 
+              border-spacing: 0;
+              margin-top: 10px; 
+              border-radius: 12px;
+              overflow: hidden;
+              border: 1px solid #e2e8f0;
+            }
+            th, td { 
+              padding: 16px; 
+              text-align: left; 
+              border-bottom: 1px solid #e2e8f0;
+            }
+            th { 
+              background-color: #f8fafc; 
+              color: #475569; 
+              font-weight: 600;
+              font-size: 13px;
+              text-transform: uppercase;
+            }
+            tr:last-child td { border-bottom: none; }
+            tr:nth-child(even) { background-color: #f8fafc; }
+            .count-badge {
+              background: #eff6ff;
+              color: #2563eb;
+              padding: 4px 12px;
+              border-radius: 99px;
+              font-weight: 600;
+              font-size: 14px;
+            }
           </style>
         </head>
         <body>
-          <div class="header">
-            <h1>QuickBus Executive Report</h1>
-            <div class="date-range">
-              ${startDate && endDate ? `Report Period: ${startDate} to ${endDate}` : 'Report Period: All Time'}
+          <div class="page">
+            <div class="header-banner">
+              <div>
+                <h1 class="header-title">QuickBus Analytics</h1>
+                <div class="header-subtitle">
+                  ${startDate && endDate ? `Data Range: ${startDate} to ${endDate}` : 'Lifetime Executive Report'}
+                </div>
+              </div>
+              <div class="timestamp">
+                Generated On<br/>
+                <strong>${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</strong>
+              </div>
             </div>
-            <div class="date-range">Generated on: ${new Date().toLocaleString()}</div>
-          </div>
-          
-          <div class="metric-grid">
-            <div class="metric-card">
-              <div class="metric-label">Total Revenue (LKR)</div>
-              <div class="metric-value">${metrics.totalRevenue.toLocaleString()}</div>
+            
+            <h2 class="section-title">Key Performance Indicators</h2>
+            <div class="metric-grid">
+              <div class="metric-card revenue">
+                <div class="metric-label">Total Revenue</div>
+                <div class="metric-value">LKR ${metrics.totalRevenue.toLocaleString()}</div>
+                <div class="metric-subtext">Confirmed bookings only</div>
+              </div>
+              <div class="metric-card bookings">
+                <div class="metric-label">Ticket Volume</div>
+                <div class="metric-value">${metrics.totalBookings}</div>
+                <div class="metric-subtext">Total tickets processed</div>
+              </div>
+              <div class="metric-card routes">
+                <div class="metric-label">Active Routes</div>
+                <div class="metric-value">${metrics.activeRoutes}</div>
+                <div class="metric-subtext">Currently operational</div>
+              </div>
+              <div class="metric-card buses">
+                <div class="metric-label">Fleet Size</div>
+                <div class="metric-value">${metrics.totalBuses}</div>
+                <div class="metric-subtext">${metrics.availableBuses} Available • ${metrics.maintenanceBuses} Maintenance</div>
+              </div>
             </div>
-            <div class="metric-card">
-              <div class="metric-label">Total Bookings</div>
-              <div class="metric-value">${metrics.totalBookings}</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Active Routes</div>
-              <div class="metric-value">${metrics.activeRoutes}</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Total Buses</div>
-              <div class="metric-value">${metrics.totalBuses} (Available: ${metrics.availableBuses})</div>
-            </div>
-          </div>
 
-          <h2>Recent Booking Trends (Last 7 Days in Range)</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Bookings Count</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${chartData.map(d => `<tr><td>${d.dateString} (${d.dayLabel})</td><td>${d.count}</td></tr>`).join('')}
-            </tbody>
-          </table>
+            <h2 class="section-title">Recent Daily Volume (7-Day Trend)</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Day</th>
+                  <th>Tickets Booked</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${chartData.map(d => `
+                  <tr>
+                    <td><strong>${d.dateString}</strong></td>
+                    <td>${d.dayLabel}</td>
+                    <td><span class="count-badge">${d.count}</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
         </body>
       </html>
     `;
 
     try {
-      const { uri } = await Print.printToFileAsync({
-        html: htmlContent,
-        base64: false
-      });
-
       if (Platform.OS === "web") {
-        // On web, expo-print handles printing/saving dialog automatically
-        Print.printAsync({ html: htmlContent });
+        await Print.printAsync({ html: htmlContent });
       } else {
+        const { uri } = await Print.printToFileAsync({
+          html: htmlContent,
+          base64: false
+        });
         const canShare = await Sharing.isAvailableAsync();
         if (canShare) {
           await Sharing.shareAsync(uri);
