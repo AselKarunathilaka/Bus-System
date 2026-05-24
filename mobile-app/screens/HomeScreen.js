@@ -1,13 +1,9 @@
 import React, { useContext } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
+import SkeuCard from "../components/SkeuCard";
+import SkeuButton from "../components/SkeuButton";
 
 const HomeScreen = ({ navigation }) => {
   const { user, logout } = useContext(AuthContext);
@@ -16,14 +12,14 @@ const HomeScreen = ({ navigation }) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <View style={{ flexDirection: "row", marginRight: 15 }}>
-          <TouchableOpacity onPress={() => navigation.navigate("Routes")} style={{ marginLeft: 15 }}>
+        <View className="flex-row mr-4 space-x-4">
+          <TouchableOpacity onPress={() => navigation.navigate("Routes")}>
             <Ionicons name="map-outline" size={24} color="#3567e0" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate(isAdmin ? "ScheduleList" : "UserScheduleList")} style={{ marginLeft: 15 }}>
+          <TouchableOpacity onPress={() => navigation.navigate(isAdmin ? "ScheduleList" : "UserScheduleList")}>
             <Ionicons name="calendar-outline" size={24} color="#3567e0" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Buses")} style={{ marginLeft: 15 }}>
+          <TouchableOpacity onPress={() => navigation.navigate("Buses")}>
             <Ionicons name="bus-outline" size={24} color="#3567e0" />
           </TouchableOpacity>
         </View>
@@ -32,312 +28,137 @@ const HomeScreen = ({ navigation }) => {
   }, [navigation, isAdmin]);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.heroCard}>
-        <Text style={styles.badge}>
-          QuickBus Highway Bus Reservation System
-        </Text>
-        <Text style={styles.title}>Welcome Back</Text>
-        <Text style={styles.subtitle}>
-          QuickBus helps you view highway bus routes, stop details, bus details,
-          prices, and travel distances in one simple place.
-        </Text>
-      </View>
-
-      <View style={styles.profileCard}>
-        <Text style={styles.sectionTitle}>User Overview</Text>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Name</Text>
-          <Text style={styles.infoValue}>{user?.fullName || "N/A"}</Text>
-        </View>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Email</Text>
-          <Text style={styles.infoValue}>{user?.email || "N/A"}</Text>
-        </View>
-
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Role</Text>
-          <Text style={styles.infoValue}>{user?.role || "N/A"}</Text>
-        </View>
-      </View>
-
-      {!isAdmin ? (
-        <View style={styles.aboutCard}>
-          <Text style={styles.sectionTitle}>About QuickBus</Text>
-          <Text style={styles.aboutText}>
-            QuickBus helps users browse available highway bus routes, stops, bus
-            details, starting points, destinations, prices, and travel distance.
-          </Text>
-        </View>
-      ) : (
-        <View style={styles.aboutCard}>
-          <Text style={styles.sectionTitle}>Admin Instructions</Text>
-
-          <Text style={styles.aboutText}>
-            As an admin, you can manage route, stop, and bus data shown to
-            users.
-          </Text>
-
-          <View style={styles.roleBlock}>
-            <Text style={styles.roleTitle}>What you can do</Text>
-            <Text style={styles.roleText}>
-              • Add, edit, and delete routes{"\n"}
-              • Manage route stops{"\n"}
-              • Add, edit, and delete buses{"\n"}
-              • Assign buses to routes{"\n"}
-              • View bus status details
-            </Text>
-          </View>
-        </View>
-      )}
-
-      <Text style={styles.gridTitle}>Quick Actions</Text>
+    <ScrollView className="flex-1 bg-background" contentContainerStyle={{ padding: 20 }}>
       
-      <View style={styles.gridContainer}>
-        <TouchableOpacity
-          style={styles.gridCard}
-          onPress={() => navigation.navigate("Routes")}
-        >
-          <View style={[styles.iconCircle, { backgroundColor: "#e0f2fe" }]}>
-            <Ionicons name="map" size={28} color="#0284c7" />
-          </View>
-          <Text style={styles.gridCardTitle}>
-            {isAdmin ? "Manage Routes" : "Browse Routes"}
-          </Text>
-        </TouchableOpacity>
+      {/* Hero Banner (Debossed style) */}
+      <View className="bg-[#a3b1c6] rounded-3xl p-6 mb-6 shadow-neo-inner">
+        <View className="bg-brand self-start px-3 py-1.5 rounded-full mb-3 shadow-neo-light">
+          <Text className="text-white text-xs font-bold">QuickBus Portal</Text>
+        </View>
+        <Text className="text-2xl font-black text-slate-800 mb-2">
+          Welcome Back, {user?.fullName?.split(" ")[0] || "User"}
+        </Text>
+        <Text className="text-sm text-slate-600 font-medium leading-relaxed">
+          The all-new physical interface. Feel the buttons as you navigate through your highway bookings.
+        </Text>
+      </View>
 
-        <TouchableOpacity
-          style={styles.gridCard}
-          onPress={() => navigation.navigate("Buses")}
-        >
-          <View style={[styles.iconCircle, { backgroundColor: "#f3e8ff" }]}>
-            <Ionicons name="bus" size={28} color="#9333ea" />
+      {/* Profile Overview (Embossed SkeuCard) */}
+      <SkeuCard className="mb-6">
+        <Text className="text-lg font-black text-slate-700 mb-4 tracking-tight">
+          System Access
+        </Text>
+        <View className="flex-row items-center mb-3">
+          <View className="bg-background shadow-neo-inner w-10 h-10 rounded-full items-center justify-center mr-4">
+            <Ionicons name="person" size={18} color="#64748b" />
           </View>
-          <Text style={styles.gridCardTitle}>
-            {isAdmin ? "Manage Buses" : "View Buses"}
-          </Text>
-        </TouchableOpacity>
+          <View>
+            <Text className="text-xs text-slate-500 font-bold uppercase tracking-widest">Name</Text>
+            <Text className="text-base text-slate-800 font-extrabold">{user?.fullName || "N/A"}</Text>
+          </View>
+        </View>
+        <View className="flex-row items-center mb-3">
+          <View className="bg-background shadow-neo-inner w-10 h-10 rounded-full items-center justify-center mr-4">
+            <Ionicons name="mail" size={18} color="#64748b" />
+          </View>
+          <View>
+            <Text className="text-xs text-slate-500 font-bold uppercase tracking-widest">Email</Text>
+            <Text className="text-base text-slate-800 font-extrabold">{user?.email || "N/A"}</Text>
+          </View>
+        </View>
+        <View className="flex-row items-center">
+          <View className="bg-background shadow-neo-inner w-10 h-10 rounded-full items-center justify-center mr-4">
+            <Ionicons name="shield-checkmark" size={18} color="#64748b" />
+          </View>
+          <View>
+            <Text className="text-xs text-slate-500 font-bold uppercase tracking-widest">Role</Text>
+            <Text className="text-base text-slate-800 font-extrabold">{user?.role || "N/A"}</Text>
+          </View>
+        </View>
+      </SkeuCard>
+
+      <Text className="text-xl font-black text-slate-700 mb-4 tracking-tight">
+        Control Panel
+      </Text>
+
+      {/* Grid Menu using SkeuButtons */}
+      <View className="flex-row flex-wrap justify-between">
+        
+        <View className="w-[48%] mb-4">
+          <SkeuButton
+            title={isAdmin ? "Routes" : "Routes"}
+            className="flex-col h-32"
+            textClassName="mt-3 text-base"
+            icon={<View className="bg-[#e0f2fe] p-3 rounded-full shadow-neo-inner"><Ionicons name="map" size={28} color="#0284c7" /></View>}
+            onPress={() => navigation.navigate("Routes")}
+          />
+        </View>
+
+        <View className="w-[48%] mb-4">
+          <SkeuButton
+            title={isAdmin ? "Buses" : "Buses"}
+            className="flex-col h-32"
+            textClassName="mt-3 text-base"
+            icon={<View className="bg-[#f3e8ff] p-3 rounded-full shadow-neo-inner"><Ionicons name="bus" size={28} color="#9333ea" /></View>}
+            onPress={() => navigation.navigate("Buses")}
+          />
+        </View>
 
         {isAdmin && (
-          <TouchableOpacity
-            style={styles.gridCard}
-            onPress={() => navigation.navigate("ScheduleList")}
-          >
-            <View style={[styles.iconCircle, { backgroundColor: "#ffedd5" }]}>
-              <Ionicons name="calendar" size={28} color="#ea580c" />
-            </View>
-            <Text style={styles.gridCardTitle}>Manage Schedules</Text>
-          </TouchableOpacity>
+          <View className="w-[48%] mb-4">
+            <SkeuButton
+              title="Schedules"
+              className="flex-col h-32"
+              textClassName="mt-3 text-base"
+              icon={<View className="bg-[#ffedd5] p-3 rounded-full shadow-neo-inner"><Ionicons name="calendar" size={28} color="#ea580c" /></View>}
+              onPress={() => navigation.navigate("ScheduleList")}
+            />
+          </View>
         )}
 
-        <TouchableOpacity
-          style={styles.gridCard}
-          onPress={() => navigation.navigate("UserScheduleList")}
-        >
-          <View style={[styles.iconCircle, { backgroundColor: "#dcfce7" }]}>
-            <Ionicons name="ticket" size={28} color="#16a34a" />
-          </View>
-          <Text style={styles.gridCardTitle}>Book a Ticket</Text>
-        </TouchableOpacity>
+        <View className="w-[48%] mb-4">
+          <SkeuButton
+            title="Book Ticket"
+            className="flex-col h-32"
+            textClassName="mt-3 text-base"
+            icon={<View className="bg-[#dcfce7] p-3 rounded-full shadow-neo-inner"><Ionicons name="ticket" size={28} color="#16a34a" /></View>}
+            onPress={() => navigation.navigate("UserScheduleList")}
+          />
+        </View>
 
-        <TouchableOpacity
-          style={styles.gridCard}
-          onPress={() => navigation.navigate("BookingsTab")}
-        >
-          <View style={[styles.iconCircle, { backgroundColor: "#fce7f3" }]}>
-            <Ionicons name="receipt" size={28} color="#db2777" />
-          </View>
-          <Text style={styles.gridCardTitle}>
-            {isAdmin ? "All Bookings" : "My Bookings"}
-          </Text>
-        </TouchableOpacity>
+        <View className="w-[48%] mb-4">
+          <SkeuButton
+            title={isAdmin ? "Bookings" : "Bookings"}
+            className="flex-col h-32"
+            textClassName="mt-3 text-base"
+            icon={<View className="bg-[#fce7f3] p-3 rounded-full shadow-neo-inner"><Ionicons name="receipt" size={28} color="#db2777" /></View>}
+            onPress={() => navigation.navigate("BookingsTab")}
+          />
+        </View>
 
         {isAdmin && (
-          <TouchableOpacity
-            style={styles.gridCard}
-            onPress={() => navigation.navigate("AdminDashboard")}
-          >
-            <View style={[styles.iconCircle, { backgroundColor: "#e0e7ff" }]}>
-              <Ionicons name="bar-chart" size={28} color="#4f46e5" />
-            </View>
-            <Text style={styles.gridCardTitle}>Admin Dashboard</Text>
-          </TouchableOpacity>
+          <View className="w-[48%] mb-4">
+            <SkeuButton
+              title="Analytics"
+              className="flex-col h-32"
+              textClassName="mt-3 text-base text-center"
+              icon={<View className="bg-[#e0e7ff] p-3 rounded-full shadow-neo-inner"><Ionicons name="bar-chart" size={28} color="#4f46e5" /></View>}
+              onPress={() => navigation.navigate("AdminDashboard")}
+            />
+          </View>
         )}
       </View>
 
       <TouchableOpacity
-        style={styles.subtleLogout}
+        className="flex-row items-center justify-center py-6 mt-4"
         onPress={logout}
       >
-        <Ionicons name="log-out-outline" size={20} color="#ef4444" />
-        <Text style={styles.subtleLogoutText}>Log Out</Text>
+        <Ionicons name="power" size={20} color="#ef4444" />
+        <Text className="text-red-500 font-bold text-base ml-2">Hardware Shutdown</Text>
       </TouchableOpacity>
+
     </ScrollView>
   );
 };
 
 export default HomeScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#eef4ff",
-  },
-
-  heroCard: {
-    backgroundColor: "#0f172a",
-    borderRadius: 22,
-    padding: 22,
-    marginBottom: 18,
-  },
-
-  badge: {
-    backgroundColor: "#1e3a8a",
-    color: "#ffffff",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 999,
-    marginBottom: 10,
-    alignSelf: "flex-start",
-    fontWeight: "700",
-  },
-
-  title: {
-    fontSize: 28,
-    fontWeight: "800",
-    color: "#ffffff",
-  },
-
-  subtitle: {
-    color: "#cbd5e1",
-    marginTop: 8,
-    lineHeight: 21,
-  },
-
-  profileCard: {
-    backgroundColor: "#ffffff",
-    borderRadius: 20,
-    padding: 18,
-    marginBottom: 16,
-  },
-
-  aboutCard: {
-    backgroundColor: "#ffffff",
-    borderRadius: 20,
-    padding: 18,
-    marginBottom: 16,
-  },
-
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "800",
-    marginBottom: 10,
-    color: "#0f172a",
-  },
-
-  infoRow: {
-    marginBottom: 10,
-  },
-
-  infoLabel: {
-    fontSize: 12,
-    color: "#64748b",
-  },
-
-  infoValue: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#0f172a",
-  },
-
-  aboutText: {
-    fontSize: 14,
-    marginBottom: 10,
-    color: "#334155",
-    lineHeight: 21,
-  },
-
-  roleBlock: {
-    backgroundColor: "#f8fafc",
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 10,
-  },
-
-  roleTitle: {
-    fontWeight: "800",
-    color: "#0f172a",
-    marginBottom: 5,
-  },
-
-  roleText: {
-    fontSize: 13,
-    color: "#334155",
-    lineHeight: 20,
-  },
-
-  gridTitle: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: "#0f172a",
-    marginTop: 10,
-    marginBottom: 15,
-  },
-
-  gridContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-  },
-
-  gridCard: {
-    backgroundColor: "#ffffff",
-    width: "48%",
-    padding: 20,
-    borderRadius: 20,
-    marginBottom: 16,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: "#f1f5f9",
-  },
-
-  iconCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 12,
-  },
-
-  gridCardTitle: {
-    fontWeight: "700",
-    color: "#1e293b",
-    fontSize: 14,
-    textAlign: "center",
-  },
-
-  subtleLogout: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 15,
-    marginTop: 20,
-    marginBottom: 20,
-  },
-
-  subtleLogoutText: {
-    color: "#ef4444",
-    fontWeight: "700",
-    fontSize: 16,
-    marginLeft: 8,
-  },
-});
