@@ -30,6 +30,13 @@ const ScheduleFormScreen = ({ route, navigation }) => {
   const [routesList, setRoutesList] = useState([]);
   const [busesList, setBusesList] = useState([]);
 
+  const filteredBuses = routeId
+    ? busesList.filter((b) => {
+        const assignedId = b.assignedRoute?._id || b.assignedRoute;
+        return assignedId === routeId;
+      })
+    : [];
+
   useEffect(() => {
     const fetchDropdownData = async () => {
       try {
@@ -122,18 +129,19 @@ const ScheduleFormScreen = ({ route, navigation }) => {
             value={busId}
             onChange={(e) => setBusId(e.target.value)}
             style={styles.webSelect}
+            disabled={!routeId}
           >
             <option value="">-- Select a Bus --</option>
-            {busesList.map((b) => (
+            {filteredBuses.map((b) => (
               <option key={b._id} value={b._id}>
                 {b.busName} ({b.licenseNumber})
               </option>
             ))}
           </select>
         ) : (
-          <Picker selectedValue={busId} onValueChange={(v) => setBusId(v)}>
+          <Picker selectedValue={busId} onValueChange={(v) => setBusId(v)} enabled={!!routeId}>
             <Picker.Item label="-- Select a Bus --" value="" />
-            {busesList.map((b) => (
+            {filteredBuses.map((b) => (
               <Picker.Item key={b._id} label={`${b.busName} (${b.licenseNumber})`} value={b._id} />
             ))}
           </Picker>
