@@ -9,8 +9,9 @@ import {
   View,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
-import SkeuCard from "../components/SkeuCard";
-import SkeuButton from "../components/SkeuButton";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import LiquidBackground from "../components/LiquidBackground";
 
 const LoginScreen = ({ navigation }) => {
   const { login } = useContext(AuthContext);
@@ -44,75 +45,77 @@ const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      className="flex-1 bg-background"
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={90}
-    >
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+    <LiquidBackground>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={90}
       >
-        <SkeuCard className="mb-6 items-center">
-          <Text className="bg-brand text-white px-4 py-2 rounded-full text-xs font-bold mb-4 overflow-hidden shadow-neo-light">
-            QuickBus Connect
-          </Text>
-          <Text className="text-3xl font-extrabold text-slate-700 mb-2 text-center">
-            Login
-          </Text>
-          <Text className="text-sm text-slate-500 text-center leading-relaxed">
-            Welcome back to the neo-skeuomorphic QuickBus portal. Access your premium booking tools.
-          </Text>
-        </SkeuCard>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <GlassCard className="mb-6 items-center">
+            <View className="bg-white/20 px-4 py-2 rounded-full border border-white/30 mb-4">
+              <Text className="text-white text-xs font-bold">QuickBus Connect</Text>
+            </View>
+            <Text className="text-3xl font-extrabold text-white mb-2 text-center shadow-sm">
+              Login
+            </Text>
+            <Text className="text-sm text-indigo-100 text-center leading-relaxed">
+              Welcome back to the Liquid Glass QuickBus portal.
+            </Text>
+          </GlassCard>
 
-        <SkeuCard className="mb-6">
-          <Text className="text-xl font-bold text-slate-700 mb-6 text-center">
-            Account Access
-          </Text>
+          <GlassCard className="mb-6">
+            <Text className="text-xl font-bold text-white mb-6 text-center shadow-sm">
+              Account Access
+            </Text>
 
-          <View className="bg-background shadow-neo-inner rounded-2xl px-4 mb-4">
-            <TextInput
-              className="py-4 text-base text-slate-700 font-semibold"
-              placeholder="Email Address"
-              placeholderTextColor="#94a3b8"
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize="none"
-              keyboardType="email-address"
-              returnKeyType="next"
+            <View className="bg-white/10 border border-white/20 rounded-2xl px-4 mb-4">
+              <TextInput
+                className="py-4 text-base text-white font-semibold"
+                placeholder="Email Address"
+                placeholderTextColor="#cbd5e1"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                returnKeyType="next"
+              />
+            </View>
+
+            <View className="bg-white/10 border border-white/20 rounded-2xl px-4 mb-6">
+              <TextInput
+                className="py-4 text-base text-white font-semibold"
+                placeholder="Password"
+                placeholderTextColor="#cbd5e1"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                returnKeyType="done"
+              />
+            </View>
+
+            <GlassButton
+              title={loading ? "Authenticating..." : "Login to Dashboard"}
+              onPress={handleLogin}
+              className="mb-6"
+              textClassName="text-white font-extrabold"
             />
-          </View>
 
-          <View className="bg-background shadow-neo-inner rounded-2xl px-4 mb-6">
-            <TextInput
-              className="py-4 text-base text-slate-700 font-semibold"
-              placeholder="Password"
-              placeholderTextColor="#94a3b8"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              returnKeyType="done"
+            <GlassButton
+              title="Create an Account"
+              onPress={() => navigation.navigate("Register")}
+              className="bg-transparent border-white/20"
+              textClassName="text-indigo-200"
             />
-          </View>
+          </GlassCard>
 
-          <SkeuButton
-            title={loading ? "Authenticating..." : "Login to Dashboard"}
-            onPress={handleLogin}
-            className="mb-6"
-            textClassName="text-brand"
-          />
-
-          <SkeuButton
-            title="Create an Account"
-            onPress={() => navigation.navigate("Register")}
-            className="bg-transparent shadow-none border-2 border-slate-300"
-            textClassName="text-slate-500"
-          />
-        </SkeuCard>
-
-      </ScrollView>
-    </KeyboardAvoidingView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </LiquidBackground>
   );
 };
 
