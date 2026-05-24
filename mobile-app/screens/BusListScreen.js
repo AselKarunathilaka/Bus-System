@@ -14,8 +14,11 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
-import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const BusListScreen = ({ navigation }) => {
   const { token, user, userToken } = useContext(AuthContext);
@@ -104,96 +107,111 @@ const BusListScreen = ({ navigation }) => {
   );
 
   const getStatusStyle = (status) => {
-    if (status === "Available") return styles.availableBadge;
-    if (status === "Maintenance") return styles.maintenanceBadge;
-    if (status === "Inactive") return styles.inactiveBadge;
-    return styles.neutralBadge;
+    if (status === "Available") return "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+    if (status === "Maintenance") return "bg-amber-500/20 text-amber-300 border border-amber-500/30";
+    if (status === "Inactive") return "bg-red-500/20 text-red-300 border border-red-500/30";
+    return "bg-slate-500/50 text-slate-300";
   };
 
   const renderDashboardHeader = () => (
-    <View style={styles.topPanel}>
-      <Text style={styles.panelTitle}>
-        {isAdmin ? "Bus Dashboard" : "Available Buses"}
-      </Text>
-
-      <Text style={styles.panelSubtitle}>
-        {isAdmin
-          ? "View total buses, assigned buses, active buses, maintenance buses, and inactive buses."
-          : "These are the buses available in the system."}
-      </Text>
-
-      <View style={styles.statsGrid}>
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{totalBuses}</Text>
-          <Text style={styles.statLabel}>Total Buses</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{assignedCount}</Text>
-          <Text style={styles.statLabel}>Assigned</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{activeCount}</Text>
-          <Text style={styles.statLabel}>Active</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{maintenanceCount}</Text>
-          <Text style={styles.statLabel}>Maintenance</Text>
-        </View>
-
-        <View style={styles.statCard}>
-          <Text style={styles.statNumber}>{inactiveCount}</Text>
-          <Text style={styles.statLabel}>Inactive</Text>
-        </View>
+    <View className="mb-4 mt-2 px-3">
+      <View className="flex-row items-center mb-4">
+        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/20">
+          <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        </TouchableOpacity>
+        <Text className="text-3xl font-black text-white shadow-sm flex-1">
+          {isAdmin ? "Bus Dashboard" : "Available Buses"}
+        </Text>
       </View>
 
-      {isAdmin && (
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate("BusForm")}
-        >
-          <Text style={styles.addButtonText}>+ Add Bus</Text>
-        </TouchableOpacity>
-      )}
+      <GlassCard className="mb-4">
+        <Text className="text-indigo-100 text-sm leading-relaxed mb-4">
+          {isAdmin
+            ? "View total buses, assigned buses, active buses, maintenance buses, and inactive buses."
+            : "These are the buses available in the system."}
+        </Text>
+
+        <View className="flex-row flex-wrap gap-2 justify-between">
+          <View className="w-[31%] bg-white/5 rounded-xl py-3 px-2 items-center border border-white/10">
+            <Text className="text-2xl font-black text-white">{totalBuses}</Text>
+            <Text className="text-xs text-indigo-200 mt-1 text-center font-semibold">Total Buses</Text>
+          </View>
+
+          <View className="w-[31%] bg-white/5 rounded-xl py-3 px-2 items-center border border-white/10">
+            <Text className="text-2xl font-black text-white">{assignedCount}</Text>
+            <Text className="text-xs text-indigo-200 mt-1 text-center font-semibold">Assigned</Text>
+          </View>
+
+          <View className="w-[31%] bg-emerald-500/10 rounded-xl py-3 px-2 items-center border border-emerald-500/20">
+            <Text className="text-2xl font-black text-emerald-300">{activeCount}</Text>
+            <Text className="text-xs text-emerald-200/70 mt-1 text-center font-semibold">Active</Text>
+          </View>
+
+          <View className="w-[31%] bg-amber-500/10 rounded-xl py-3 px-2 items-center border border-amber-500/20">
+            <Text className="text-2xl font-black text-amber-300">{maintenanceCount}</Text>
+            <Text className="text-xs text-amber-200/70 mt-1 text-center font-semibold">Maintenance</Text>
+          </View>
+
+          <View className="w-[31%] bg-red-500/10 rounded-xl py-3 px-2 items-center border border-red-500/20">
+            <Text className="text-2xl font-black text-red-300">{inactiveCount}</Text>
+            <Text className="text-xs text-red-200/70 mt-1 text-center font-semibold">Inactive</Text>
+          </View>
+        </View>
+
+        {isAdmin && (
+          <GlassButton
+            title="+ Add New Bus"
+            onPress={() => navigation.navigate("BusForm")}
+            className="mt-5 border-cyan-400/50"
+            textClassName="text-cyan-300 font-extrabold"
+          />
+        )}
+      </GlassCard>
     </View>
   );
 
   const renderBus = ({ item }) => (
-    <View style={styles.busCard}>
-      <View style={styles.cardHeader}>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.busName}>{item.busName}</Text>
-          <Text style={styles.licenseText}>{item.licenseNumber}</Text>
+    <GlassCard className="mx-3 mb-4">
+      <View className="flex-row items-start justify-between mb-3 border-b border-white/20 pb-3">
+        <View className="flex-1 pr-3">
+          <Text className="text-xl font-extrabold text-white">{item.busName}</Text>
+          <Text className="text-sm font-semibold text-indigo-200 mt-1">{item.licenseNumber}</Text>
         </View>
 
-        <View style={[styles.statusBadge, getStatusStyle(item.status)]}>
-          <Text style={styles.statusText}>{item.status}</Text>
+        <Text className={`px-3 py-1.5 rounded-lg text-xs font-bold overflow-hidden ${getStatusStyle(item.status)}`}>
+          {item.status}
+        </Text>
+      </View>
+
+      <View className="flex-row flex-wrap justify-between mb-3">
+        <View className="w-[48%] mb-2">
+          <Text className="text-xs text-indigo-300 font-semibold mb-1">Type</Text>
+          <Text className="text-sm text-white font-bold">{item.busType}</Text>
+        </View>
+        <View className="w-[48%] mb-2">
+          <Text className="text-xs text-indigo-300 font-semibold mb-1">Seats</Text>
+          <Text className="text-sm text-white font-bold">{item.seatCount}</Text>
+        </View>
+        <View className="w-[100%] mb-2">
+          <Text className="text-xs text-indigo-300 font-semibold mb-1">Contact</Text>
+          <Text className="text-sm text-white font-bold">{item.busContactNumber}</Text>
         </View>
       </View>
 
-      <View style={styles.detailsBox}>
-        <Text style={styles.detailText}>Bus Type: {item.busType}</Text>
-        <Text style={styles.detailText}>Seats: {item.seatCount}</Text>
-        <Text style={styles.detailText}>
-          Contact: {item.busContactNumber}
-        </Text>
+      <View className="bg-white/5 rounded-xl p-3 mb-3 border border-white/10">
+        <Text className="text-xs font-bold text-white mb-2 uppercase">Crew Details</Text>
+        <View className="flex-row justify-between mb-2">
+          <Text className="text-xs text-indigo-200 font-medium">Driver:</Text>
+          <Text className="text-xs text-white font-bold text-right flex-1 ml-2">{item.driverName} ({item.driverNIC})</Text>
+        </View>
+        <View className="flex-row justify-between">
+          <Text className="text-xs text-indigo-200 font-medium">Conductor:</Text>
+          <Text className="text-xs text-white font-bold text-right flex-1 ml-2">{item.conductorName} ({item.conductorNIC})</Text>
+        </View>
       </View>
 
-      <View style={styles.detailsBox}>
-        <Text style={styles.detailText}>Driver: {item.driverName}</Text>
-        <Text style={styles.detailText}>Driver NIC: {item.driverNIC}</Text>
-        <Text style={styles.detailText}>
-          Conductor: {item.conductorName}
-        </Text>
-        <Text style={styles.detailText}>
-          Conductor NIC: {item.conductorNIC}
-        </Text>
-      </View>
-
-      <View style={styles.routeBox}>
-        <Text style={styles.routeText}>
+      <View className="bg-indigo-500/20 rounded-xl p-3 border border-indigo-400/30">
+        <Text className="text-sm text-white font-bold leading-relaxed">
           {item.assignedRoute
             ? `Route: ${item.assignedRoute.routeName}\n${item.assignedRoute.startLocation} → ${item.assignedRoute.endLocation}`
             : "Route: Not Assigned"}
@@ -201,250 +219,54 @@ const BusListScreen = ({ navigation }) => {
       </View>
 
       {isAdmin && (
-        <View style={styles.actionRow}>
+        <View className="flex-row gap-3 mt-4">
           <TouchableOpacity
-            style={styles.editButton}
+            className="bg-amber-500/80 p-3 rounded-xl flex-1 border border-amber-400/50"
             onPress={() => navigation.navigate("BusForm", { busData: item })}
           >
-            <Text style={styles.buttonText}>Edit</Text>
+            <Text className="text-white font-bold text-center">Edit</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.deleteButton}
+            className="bg-red-500/80 p-3 rounded-xl flex-1 border border-red-400/50"
             onPress={() => handleDeleteBus(item._id)}
           >
-            <Text style={styles.buttonText}>Delete</Text>
+            <Text className="text-white font-bold text-center">Delete</Text>
           </TouchableOpacity>
         </View>
       )}
-    </View>
+    </GlassCard>
   );
 
   if (loading) {
     return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" />
-        <Text style={styles.loadingText}>Loading buses...</Text>
-      </View>
+      <LiquidBackground>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#ffffff" />
+          <Text className="mt-3 text-white font-semibold">Loading buses...</Text>
+        </View>
+      </LiquidBackground>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <LiquidBackground>
       <FlatList
+        className="flex-1"
         data={buses}
         keyExtractor={(item) => item._id}
         renderItem={renderBus}
         ListHeaderComponent={renderDashboardHeader}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={true}
+        contentContainerStyle={{ paddingBottom: 24, paddingTop: 12 }}
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>No buses found.</Text>
+          <Text className="text-center text-indigo-200 mt-10 font-bold">No buses found.</Text>
         }
       />
-    </View>
+    </LiquidBackground>
   );
 };
 
 export default BusListScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#eef4ff",
-  },
-
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  loadingText: {
-    marginTop: 10,
-    color: "#475569",
-    fontWeight: "600",
-  },
-
-  topPanel: {
-    backgroundColor: "#0f172a",
-    marginHorizontal: 12,
-    marginTop: 12,
-    marginBottom: 14,
-    padding: 16,
-    borderRadius: 16,
-  },
-
-  panelTitle: {
-    color: "#ffffff",
-    fontSize: 24,
-    fontWeight: "800",
-  },
-
-  panelSubtitle: {
-    color: "#cbd5e1",
-    marginTop: 6,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-
-  statsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: 14,
-    gap: 8,
-  },
-
-  statCard: {
-    backgroundColor: "#1e293b",
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    minWidth: "31%",
-    flexGrow: 1,
-    alignItems: "center",
-  },
-
-  statNumber: {
-    color: "#ffffff",
-    fontSize: 22,
-    fontWeight: "800",
-  },
-
-  statLabel: {
-    color: "#cbd5e1",
-    fontSize: 12,
-    marginTop: 4,
-    textAlign: "center",
-  },
-
-  addButton: {
-    backgroundColor: "#2563eb",
-    padding: 12,
-    borderRadius: 10,
-    marginTop: 14,
-    alignItems: "center",
-  },
-
-  addButtonText: {
-    color: "#ffffff",
-    fontWeight: "800",
-    fontSize: 15,
-  },
-
-  listContent: {
-    paddingBottom: 24,
-  },
-
-  busCard: {
-    backgroundColor: "#ffffff",
-    padding: 16,
-    marginHorizontal: 12,
-    marginBottom: 12,
-    borderRadius: 16,
-  },
-
-  cardHeader: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginBottom: 12,
-  },
-
-  busName: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: "#0f172a",
-  },
-
-  licenseText: {
-    color: "#64748b",
-    fontWeight: "700",
-    marginTop: 3,
-  },
-
-  statusBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 999,
-  },
-
-  statusText: {
-    color: "#0f172a",
-    fontWeight: "800",
-    fontSize: 12,
-  },
-
-  availableBadge: {
-    backgroundColor: "#dcfce7",
-  },
-
-  maintenanceBadge: {
-    backgroundColor: "#ffedd5",
-  },
-
-  inactiveBadge: {
-    backgroundColor: "#fee2e2",
-  },
-
-  neutralBadge: {
-    backgroundColor: "#e2e8f0",
-  },
-
-  detailsBox: {
-    marginTop: 6,
-  },
-
-  detailText: {
-    color: "#334155",
-    fontSize: 14,
-    lineHeight: 22,
-    fontWeight: "600",
-  },
-
-  routeBox: {
-    backgroundColor: "#f1f5f9",
-    padding: 12,
-    borderRadius: 12,
-    marginTop: 12,
-  },
-
-  routeText: {
-    color: "#0f172a",
-    fontWeight: "700",
-    lineHeight: 20,
-  },
-
-  actionRow: {
-    flexDirection: "row",
-    gap: 10,
-    marginTop: 14,
-  },
-
-  editButton: {
-    backgroundColor: "#2563eb",
-    padding: 12,
-    borderRadius: 10,
-    flex: 1,
-    alignItems: "center",
-  },
-
-  deleteButton: {
-    backgroundColor: "#dc2626",
-    padding: 12,
-    borderRadius: 10,
-    flex: 1,
-    alignItems: "center",
-  },
-
-  buttonText: {
-    color: "#ffffff",
-    fontWeight: "800",
-  },
-
-  emptyText: {
-    textAlign: "center",
-    color: "#64748b",
-    marginTop: 20,
-    fontWeight: "700",
-  },
-});
+// We've moved styles to Tailwind classes!

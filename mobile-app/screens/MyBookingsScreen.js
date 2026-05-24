@@ -11,8 +11,11 @@ import {
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import { Ionicons } from "@expo/vector-icons";
 
-const MyBookingsScreen = () => {
+const MyBookingsScreen = ({ navigation }) => {
   const { token } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -84,153 +87,85 @@ const MyBookingsScreen = () => {
     const formattedSeats = item.seatNumbers.map(getSeatLabel).join(", ");
     
     return (
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.routeText}>
+      <GlassCard className="mb-5">
+        <View className="flex-row justify-between items-center mb-4 border-b border-white/20 pb-4">
+          <Text className="text-lg font-extrabold text-white flex-1 pr-3">
             {item.scheduleId?.routeId?.startLocation} to {item.scheduleId?.routeId?.endLocation}
           </Text>
-          <Text style={[styles.statusBadge, item.status === 'Cancelled' && styles.statusCancelled]}>
+          <Text className={`px-3 py-1.5 rounded-lg text-xs font-bold overflow-hidden ${item.status === 'Cancelled' ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}`}>
             {item.status}
           </Text>
         </View>
 
-        <View style={styles.detailsContainer}>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Booking ID:</Text>
-            <Text style={styles.detailValue}>{item.bookingId || "N/A"}</Text>
+        <View className="mb-4">
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-sm text-indigo-200 font-semibold">Booking ID:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{item.bookingId || "N/A"}</Text>
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Bus:</Text>
-            <Text style={styles.detailValue}>{item.scheduleId?.busId?.busName} ({item.scheduleId?.busId?.licenseNumber})</Text>
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-sm text-indigo-200 font-semibold">Bus:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{item.scheduleId?.busId?.busName} ({item.scheduleId?.busId?.licenseNumber})</Text>
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Date:</Text>
-            <Text style={styles.detailValue}>{new Date(item.scheduleId?.departureDate).toLocaleDateString()} at {item.scheduleId?.departureTime}</Text>
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-sm text-indigo-200 font-semibold">Date:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{new Date(item.scheduleId?.departureDate).toLocaleDateString()} at {item.scheduleId?.departureTime}</Text>
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Seats:</Text>
-            <Text style={styles.detailValue}>{formattedSeats} ({item.bookingType})</Text>
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-sm text-indigo-200 font-semibold">Seats:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{formattedSeats} ({item.bookingType})</Text>
           </View>
           {item.contactNumber && (
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Contact:</Text>
-              <Text style={styles.detailValue}>{item.contactNumber}</Text>
+            <View className="flex-row justify-between mb-2">
+              <Text className="text-sm text-indigo-200 font-semibold">Contact:</Text>
+              <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{item.contactNumber}</Text>
             </View>
           )}
         </View>
 
-        <View style={styles.footerRow}>
-          <Text style={styles.priceText}>Total Paid: LKR {item.totalPrice}</Text>
+        <View className="flex-row justify-between items-center border-t border-white/20 pt-4">
+          <Text className="text-xl font-black text-cyan-300">Total: LKR {item.totalPrice}</Text>
           
           {item.status !== "Cancelled" && (
             <TouchableOpacity
-              style={styles.cancelBtn}
+              className="bg-red-500/20 px-3 py-2 rounded-lg ml-2 border border-red-500/30"
               onPress={() => handleCancel(item._id)}
             >
-              <Text style={styles.cancelBtnText}>Cancel Booking</Text>
+              <Text className="text-red-300 font-bold text-xs">Cancel Booking</Text>
             </TouchableOpacity>
           )}
         </View>
-      </View>
+      </GlassCard>
     );
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>My Bookings</Text>
-      {loading ? (
-        <ActivityIndicator size="large" color="#3567e0" style={{ marginTop: 20 }} />
-      ) : bookings.length === 0 ? (
-        <Text style={styles.emptyText}>You haven't made any bookings yet.</Text>
-      ) : (
-        <FlatList
-          data={bookings}
-          keyExtractor={(item) => item._id}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        />
-      )}
-    </View>
+    <LiquidBackground>
+      <View className="flex-1 p-5">
+        <View className="flex-row items-center mb-5">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/20">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+          <Text className="text-3xl font-black text-white shadow-sm flex-1">My Bookings</Text>
+        </View>
+
+        {loading ? (
+          <ActivityIndicator size="large" color="#ffffff" style={{ marginTop: 20 }} />
+        ) : bookings.length === 0 ? (
+          <Text className="text-center text-indigo-200 mt-10 text-base font-semibold">You haven't made any bookings yet.</Text>
+        ) : (
+          <FlatList
+            data={bookings}
+            keyExtractor={(item) => item._id}
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </View>
+    </LiquidBackground>
   );
 };
 
 export default MyBookingsScreen;
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#f8fafc" },
-  title: { fontSize: 28, fontWeight: "900", color: "#0f172a", marginBottom: 20 },
-  card: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 4,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
-    paddingBottom: 15,
-  },
-  routeText: { fontSize: 18, fontWeight: "800", color: "#1e293b", flex: 1 },
-  statusBadge: {
-    backgroundColor: "#dcfce7",
-    color: "#166534",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    fontSize: 12,
-    fontWeight: "bold",
-    overflow: "hidden",
-    marginLeft: 10,
-  },
-  statusCancelled: {
-    backgroundColor: "#fee2e2",
-    color: "#991b1b",
-  },
-  detailsContainer: {
-    marginBottom: 15,
-  },
-  detailRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  detailLabel: {
-    fontSize: 14,
-    color: "#64748b",
-    fontWeight: "600",
-  },
-  detailValue: {
-    fontSize: 14,
-    color: "#334155",
-    fontWeight: "700",
-  },
-  footerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 5,
-    borderTopWidth: 1,
-    borderTopColor: "#f1f5f9",
-    paddingTop: 15,
-  },
-  priceText: { fontSize: 16, fontWeight: "900", color: "#3567e0" },
-  cancelBtn: {
-    backgroundColor: "#fee2e2",
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  cancelBtnText: { color: "#ef4444", fontWeight: "bold", fontSize: 13 },
-  emptyText: { textAlign: "center", color: "#64748b", marginTop: 40, fontSize: 16 },
-});
+// We've moved styles to Tailwind classes!

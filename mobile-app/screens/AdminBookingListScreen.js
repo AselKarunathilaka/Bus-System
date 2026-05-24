@@ -11,8 +11,11 @@ import {
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import { Ionicons } from "@expo/vector-icons";
 
-const AdminBookingListScreen = () => {
+const AdminBookingListScreen = ({ navigation }) => {
   const { token } = useContext(AuthContext);
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -104,169 +107,97 @@ const AdminBookingListScreen = () => {
     const formattedSeats = item.seatNumbers?.map(getSeatLabel).join(", ") || "";
 
     return (
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
+      <GlassCard className="mb-5">
+        <View className="flex-row justify-between items-center mb-4 border-b border-white/20 pb-4">
           <View>
-            <Text style={styles.userName}>{item.userId?.fullName || "Unknown User"}</Text>
-            <Text style={styles.bookingIdText}>ID: {item.bookingId || "N/A"}</Text>
+            <Text className="text-lg font-extrabold text-white">{item.userId?.fullName || "Unknown User"}</Text>
+            <Text className="text-xs text-indigo-200 mt-1 font-semibold">ID: {item.bookingId || "N/A"}</Text>
           </View>
-          <Text style={[styles.statusBadge, item.status === 'Cancelled' && styles.statusCancelled]}>
+          <Text className={`px-3 py-1.5 rounded-lg text-xs font-bold overflow-hidden ${item.status === 'Cancelled' ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'}`}>
             {item.status}
           </Text>
         </View>
 
-        <View style={styles.detailsContainer}>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Route:</Text>
-            <Text style={styles.detailValue}>
+        <View className="mb-4">
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-sm text-indigo-200 font-semibold">Route:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">
               {item.scheduleId?.routeId?.startLocation} to {item.scheduleId?.routeId?.endLocation}
             </Text>
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Bus:</Text>
-            <Text style={styles.detailValue}>
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-sm text-indigo-200 font-semibold">Bus:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">
               {item.scheduleId?.busId?.busName} ({item.scheduleId?.busId?.licenseNumber})
             </Text>
           </View>
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Seats:</Text>
-            <Text style={styles.detailValue}>{formattedSeats} ({item.bookingType})</Text>
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-sm text-indigo-200 font-semibold">Seats:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{formattedSeats} ({item.bookingType})</Text>
           </View>
           {item.contactNumber && (
-            <View style={styles.detailRow}>
-              <Text style={styles.detailLabel}>Contact:</Text>
-              <Text style={styles.detailValue}>{item.contactNumber}</Text>
+            <View className="flex-row justify-between mb-2">
+              <Text className="text-sm text-indigo-200 font-semibold">Contact:</Text>
+              <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{item.contactNumber}</Text>
             </View>
           )}
-          <View style={styles.detailRow}>
-            <Text style={styles.detailLabel}>Booked On:</Text>
-            <Text style={styles.detailValue}>{new Date(item.bookingDate).toLocaleDateString()}</Text>
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-sm text-indigo-200 font-semibold">Booked On:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{new Date(item.bookingDate).toLocaleDateString()}</Text>
           </View>
         </View>
         
-        <View style={styles.footerRow}>
-          <Text style={styles.priceText}>LKR {item.totalPrice}</Text>
-          <View style={styles.actionGroup}>
+        <View className="flex-row justify-between items-center border-t border-white/20 pt-4">
+          <Text className="text-xl font-black text-cyan-300">LKR {item.totalPrice}</Text>
+          <View className="flex-row">
             {item.status !== "Cancelled" && (
               <TouchableOpacity
-                style={[styles.actionBtn, styles.cancelBtn]}
+                className="bg-amber-500/20 px-3 py-2 rounded-lg ml-2 border border-amber-500/30"
                 onPress={() => handleCancel(item._id)}
               >
-                <Text style={[styles.btnText, styles.cancelBtnText]}>Cancel</Text>
+                <Text className="text-amber-300 font-bold text-xs">Cancel</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              style={[styles.actionBtn, styles.deleteBtn]}
+              className="bg-red-500/20 px-3 py-2 rounded-lg ml-2 border border-red-500/30"
               onPress={() => handleDelete(item._id)}
             >
-              <Text style={[styles.btnText, styles.deleteBtnText]}>Delete</Text>
+              <Text className="text-red-300 font-bold text-xs">Delete</Text>
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </GlassCard>
     );
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>All Bookings</Text>
-      {loading ? (
-        <ActivityIndicator size="large" color="#3567e0" style={{ marginTop: 20 }} />
-      ) : bookings.length === 0 ? (
-        <Text style={styles.emptyText}>No bookings found</Text>
-      ) : (
-        <FlatList
-          data={bookings}
-          keyExtractor={(item) => item._id}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        />
-      )}
-    </View>
+    <LiquidBackground>
+      <View className="flex-1 p-5">
+        <View className="flex-row items-center mb-5">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/20">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+          <Text className="text-3xl font-black text-white shadow-sm">All Bookings</Text>
+        </View>
+        
+        {loading ? (
+          <ActivityIndicator size="large" color="#ffffff" style={{ marginTop: 20 }} />
+        ) : bookings.length === 0 ? (
+          <Text className="text-center text-indigo-200 mt-10 text-base font-semibold">No bookings found</Text>
+        ) : (
+          <FlatList
+            data={bookings}
+            keyExtractor={(item) => item._id}
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </View>
+    </LiquidBackground>
   );
 };
 
 export default AdminBookingListScreen;
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#f8fafc" },
-  title: { fontSize: 28, fontWeight: "900", color: "#0f172a", marginBottom: 20 },
-  card: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 10,
-    elevation: 4,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#f1f5f9",
-    paddingBottom: 15,
-  },
-  userName: { fontSize: 18, fontWeight: "800", color: "#1e293b" },
-  bookingIdText: { fontSize: 13, color: "#64748b", marginTop: 4, fontWeight: "600" },
-  statusBadge: {
-    backgroundColor: "#dcfce7",
-    color: "#166534",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
-    fontSize: 12,
-    fontWeight: "bold",
-    overflow: "hidden",
-  },
-  statusCancelled: {
-    backgroundColor: "#fee2e2",
-    color: "#991b1b",
-  },
-  detailsContainer: {
-    marginBottom: 15,
-  },
-  detailRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  detailLabel: {
-    fontSize: 14,
-    color: "#64748b",
-    fontWeight: "600",
-  },
-  detailValue: {
-    fontSize: 14,
-    color: "#334155",
-    fontWeight: "700",
-    textAlign: "right",
-    flex: 1,
-    marginLeft: 10,
-  },
-  footerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderTopColor: "#f1f5f9",
-    paddingTop: 15,
-  },
-  priceText: { fontSize: 18, fontWeight: "900", color: "#3567e0" },
-  actionGroup: {
-    flexDirection: "row",
-  },
-  actionBtn: { paddingVertical: 8, paddingHorizontal: 15, borderRadius: 8, marginLeft: 10 },
-  cancelBtn: { backgroundColor: "#fef3c7" },
-  cancelBtnText: { color: "#d97706" },
-  deleteBtn: { backgroundColor: "#fee2e2" },
-  deleteBtnText: { color: "#ef4444" },
-  btnText: { fontWeight: "bold", fontSize: 13 },
-  emptyText: { textAlign: "center", color: "#64748b", marginTop: 40, fontSize: 16 },
-});
+// We've moved styles to Tailwind classes!

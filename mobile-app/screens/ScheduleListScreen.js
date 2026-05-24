@@ -11,6 +11,10 @@ import {
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const ScheduleListScreen = ({ navigation }) => {
   const { token } = useContext(AuthContext);
@@ -77,107 +81,69 @@ const ScheduleListScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <Text style={styles.routeText}>
+    <GlassCard className="mb-4 p-4">
+      <View className="flex-row justify-between mb-3">
+        <Text className="text-lg font-bold text-white">
           {item.routeId?.startLocation} to {item.routeId?.endLocation}
         </Text>
-        <Text style={styles.statusBadge}>{item.status}</Text>
+        <Text className="bg-cyan-500/20 text-cyan-200 px-2 py-1 rounded border border-cyan-500/30 text-xs font-bold overflow-hidden">
+          {item.status}
+        </Text>
       </View>
-      <Text style={styles.detailText}>Bus: {item.busId?.licenseNumber}</Text>
-      <Text style={styles.detailText}>
+      <Text className="text-sm text-indigo-100 mb-1 font-semibold">Bus: {item.busId?.licenseNumber}</Text>
+      <Text className="text-sm text-indigo-100 mb-1 font-semibold">
         Date: {new Date(item.departureDate).toLocaleDateString()}
       </Text>
-      <Text style={styles.detailText}>
+      <Text className="text-sm text-indigo-100 mb-3 font-semibold">
         Time: {item.departureTime} - {item.arrivalTime}
       </Text>
-      <View style={styles.actionRow}>
+      <View className="flex-row justify-end mt-2">
         <TouchableOpacity
-          style={[styles.actionBtn, styles.editBtn]}
+          className="bg-blue-500/80 px-4 py-2 rounded-lg border border-blue-400/50 mr-3"
           onPress={() => navigation.navigate("ScheduleForm", { schedule: item })}
         >
-          <Text style={styles.btnText}>Edit</Text>
+          <Text className="text-white font-bold text-sm">Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.actionBtn, styles.deleteBtn]}
+          className="bg-red-500/80 px-4 py-2 rounded-lg border border-red-400/50"
           onPress={() => handleDelete(item._id)}
         >
-          <Text style={styles.btnText}>Delete</Text>
+          <Text className="text-white font-bold text-sm">Delete</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </GlassCard>
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Manage Schedules</Text>
-      <TouchableOpacity
-        style={styles.addButton}
-        onPress={() => navigation.navigate("ScheduleForm")}
-      >
-        <Text style={styles.addButtonText}>+ Add New Schedule</Text>
-      </TouchableOpacity>
-      {loading ? (
-        <ActivityIndicator size="large" color="#3567e0" style={{ marginTop: 20 }} />
-      ) : schedules.length === 0 ? (
-        <Text style={styles.emptyText}>No schedules found</Text>
-      ) : (
-        <FlatList
-          data={schedules}
-          keyExtractor={(item) => item._id}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 20 }}
+    <LiquidBackground>
+      <View className="flex-1 p-5">
+        <Text className="text-3xl font-black text-white mb-5 shadow-sm">Manage Schedules</Text>
+        <GlassButton
+          title="+ Add New Schedule"
+          onPress={() => navigation.navigate("ScheduleForm")}
+          className="mb-6 border-emerald-400/50"
+          textClassName="text-emerald-300 font-extrabold"
         />
-      )}
-    </View>
+        {loading ? (
+          <ActivityIndicator size="large" color="#ffffff" style={{ marginTop: 20 }} />
+        ) : schedules.length === 0 ? (
+          <Text className="text-center text-indigo-200 mt-5 font-semibold text-base">No schedules found</Text>
+        ) : (
+          <FlatList
+            data={schedules}
+            keyExtractor={(item) => item._id}
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </View>
+    </LiquidBackground>
   );
 };
 
 export default ScheduleListScreen;
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#eef4ff" },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 15 },
-  addButton: {
-    backgroundColor: "#1cab4c",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  addButtonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  card: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    elevation: 3,
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  routeText: { fontSize: 16, fontWeight: "bold" },
-  statusBadge: {
-    backgroundColor: "#e0e7ff",
-    color: "#3730a3",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 5,
-    fontSize: 12,
-    fontWeight: "bold",
-    overflow: "hidden",
-  },
-  detailText: { fontSize: 14, color: "#475569", marginBottom: 5 },
-  actionRow: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    marginTop: 10,
-  },
-  actionBtn: { padding: 10, borderRadius: 8, marginLeft: 10 },
-  editBtn: { backgroundColor: "#3567e0" },
-  deleteBtn: { backgroundColor: "#ea2424" },
-  btnText: { color: "#fff", fontWeight: "bold" },
-  emptyText: { textAlign: "center", color: "#64748b", marginTop: 20 },
-});
+export default ScheduleListScreen;
+
+// We've moved styles to Tailwind classes!

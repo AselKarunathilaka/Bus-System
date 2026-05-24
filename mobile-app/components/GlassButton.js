@@ -34,8 +34,8 @@ const GlassButton = ({ title, onPress, className = "", textClassName = "", icon 
       className={`rounded-2xl overflow-hidden border border-white/30 ${className}`}
     >
       <BlurView
-        intensity={Platform.OS === "ios" ? 50 : 100}
-        tint={isPressed ? "default" : "light"}
+        intensity={Platform.OS === "ios" ? 50 : 50}
+        tint="default"
         style={StyleSheet.absoluteFillObject}
         className={isPressed ? "bg-white/30" : "bg-white/10"}
       />
@@ -55,11 +55,11 @@ export default GlassButton;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: "transparent",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
+    shadowOpacity: 0.1,
     shadowRadius: 10,
-    elevation: 3,
+    elevation: 2,
   },
 });

@@ -8,8 +8,12 @@ import {
   StyleSheet,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import { Ionicons } from "@expo/vector-icons";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const { user, getProfile, updateProfile } = useContext(AuthContext);
 
   const [fullName, setFullName] = useState("");
@@ -43,70 +47,59 @@ const ProfileScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>My Profile</Text>
+    <LiquidBackground>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
+        <View className="flex-row items-center mb-6">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/20">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+          <Text className="text-3xl font-black text-white shadow-sm flex-1">My Profile</Text>
+        </View>
 
-      <Text style={styles.label}>Full Name</Text>
-      <TextInput style={styles.input} value={fullName} onChangeText={setFullName} />
+        <GlassCard className="mb-6">
+          <Text className="text-sm font-bold text-indigo-200 mb-2 uppercase">Full Name</Text>
+          <TextInput
+            className="bg-white/10 border border-white/20 text-white p-4 rounded-xl mb-4 font-semibold text-base"
+            value={fullName}
+            onChangeText={setFullName}
+            placeholderTextColor="#94a3b8"
+          />
 
-      <Text style={styles.label}>Email</Text>
-      <TextInput style={styles.input} value={user?.email || ""} editable={false} />
+          <Text className="text-sm font-bold text-indigo-200 mb-2 uppercase">Email</Text>
+          <TextInput
+            className="bg-white/5 border border-white/10 text-slate-300 p-4 rounded-xl mb-4 font-semibold text-base"
+            value={user?.email || ""}
+            editable={false}
+          />
 
-      <Text style={styles.label}>Phone</Text>
-      <TextInput
-        style={styles.input}
-        value={phone}
-        onChangeText={setPhone}
-        keyboardType="phone-pad"
-      />
+          <Text className="text-sm font-bold text-indigo-200 mb-2 uppercase">Phone</Text>
+          <TextInput
+            className="bg-white/10 border border-white/20 text-white p-4 rounded-xl mb-4 font-semibold text-base"
+            value={phone}
+            onChangeText={setPhone}
+            keyboardType="phone-pad"
+            placeholderTextColor="#94a3b8"
+          />
 
-      <Text style={styles.label}>Role</Text>
-      <TextInput style={styles.input} value={user?.role || ""} editable={false} />
+          <Text className="text-sm font-bold text-indigo-200 mb-2 uppercase">Role</Text>
+          <TextInput
+            className="bg-white/5 border border-white/10 text-slate-300 p-4 rounded-xl mb-4 font-semibold text-base uppercase"
+            value={user?.role || ""}
+            editable={false}
+          />
+        </GlassCard>
 
-      <TouchableOpacity style={styles.button} onPress={handleUpdate}>
-        <Text style={styles.buttonText}>
-          {loading ? "Updating..." : "Update Profile"}
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <GlassButton
+          title={loading ? "Updating..." : "Update Profile"}
+          onPress={handleUpdate}
+          className="border-cyan-400/50"
+          textClassName="text-cyan-300 font-extrabold"
+        />
+      </ScrollView>
+    </LiquidBackground>
   );
 };
 
 export default ProfileScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    padding: 24,
-    backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    marginBottom: 24,
-    textAlign: "center",
-  },
-  label: {
-    fontWeight: "600",
-    marginBottom: 6,
-    marginTop: 6,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 14,
-    borderRadius: 10,
-    marginBottom: 12,
-  },
-  button: {
-    backgroundColor: "#2563eb",
-    padding: 14,
-    borderRadius: 10,
-    marginTop: 14,
-  },
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "600",
-  },
-});
+// We've moved styles to Tailwind classes!

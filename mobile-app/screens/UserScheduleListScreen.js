@@ -10,6 +10,9 @@ import {
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import { Ionicons } from "@expo/vector-icons";
 
 const UserScheduleListScreen = ({ navigation }) => {
   const { token } = useContext(AuthContext);
@@ -40,94 +43,76 @@ const UserScheduleListScreen = ({ navigation }) => {
     const availableSeats = totalSeats - bookedCount;
 
     return (
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.routeText}>
+      <GlassCard className="mb-4">
+        <View className="flex-row justify-between items-start mb-3 pb-3 border-b border-white/20">
+          <Text className="text-lg font-extrabold text-white flex-1 pr-3 leading-6">
             {item.routeId?.startLocation} to {item.routeId?.endLocation}
           </Text>
-          <Text style={styles.priceBadge}>LKR {item.routeId?.price}</Text>
+          <Text className="bg-emerald-500/20 text-emerald-300 px-3 py-1.5 rounded-lg border border-emerald-500/30 text-xs font-black overflow-hidden mt-1">
+            LKR {item.routeId?.price}
+          </Text>
         </View>
-        <Text style={styles.detailText}>Bus: {item.busId?.busType} ({item.busId?.licenseNumber})</Text>
-        <Text style={styles.detailText}>
-          Date: {new Date(item.departureDate).toLocaleDateString()}
-        </Text>
-        <Text style={styles.detailText}>
-          Time: {item.departureTime} - {item.arrivalTime}
-        </Text>
-        <Text style={[styles.detailText, { fontWeight: "bold", marginTop: 5 }]}>
-          Available Seats: {availableSeats} / {totalSeats}
-        </Text>
+
+        <View className="mb-4">
+          <Text className="text-sm text-indigo-100 font-semibold mb-1">
+            Bus: {item.busId?.busType} ({item.busId?.licenseNumber})
+          </Text>
+          <Text className="text-sm text-indigo-100 font-semibold mb-1">
+            Date: {new Date(item.departureDate).toLocaleDateString()}
+          </Text>
+          <Text className="text-sm text-indigo-100 font-semibold mb-1">
+            Time: {item.departureTime} - {item.arrivalTime}
+          </Text>
+          <Text className="text-sm text-white font-black mt-2 bg-white/10 self-start px-3 py-1.5 rounded-lg border border-white/20">
+            Available Seats: {availableSeats} / {totalSeats}
+          </Text>
+        </View>
 
         <TouchableOpacity
-          style={[styles.bookBtn, availableSeats === 0 && styles.disabledBtn]}
+          className={`px-4 py-3 rounded-xl items-center border ${
+            availableSeats === 0
+              ? "bg-slate-500/50 border-slate-400/30"
+              : "bg-cyan-500/80 border-cyan-400/50"
+          }`}
           disabled={availableSeats === 0}
           onPress={() => navigation.navigate("SeatSelection", { schedule: item })}
         >
-          <Text style={styles.btnText}>
+          <Text className={`font-black text-base ${availableSeats === 0 ? "text-slate-300" : "text-white"}`}>
             {availableSeats === 0 ? "Sold Out" : "Select Seats"}
           </Text>
         </TouchableOpacity>
-      </View>
+      </GlassCard>
     );
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Available Trips</Text>
-      {loading ? (
-        <ActivityIndicator size="large" color="#3567e0" style={{ marginTop: 20 }} />
-      ) : schedules.length === 0 ? (
-        <Text style={styles.emptyText}>No available trips found</Text>
-      ) : (
-        <FlatList
-          data={schedules}
-          keyExtractor={(item) => item._id}
-          renderItem={renderItem}
-          contentContainerStyle={{ paddingBottom: 20 }}
-        />
-      )}
-    </View>
+    <LiquidBackground>
+      <View className="flex-1 p-5">
+        <View className="flex-row items-center mb-5">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/20">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+          <Text className="text-3xl font-black text-white shadow-sm flex-1">Available Trips</Text>
+        </View>
+
+        {loading ? (
+          <ActivityIndicator size="large" color="#ffffff" style={{ marginTop: 20 }} />
+        ) : schedules.length === 0 ? (
+          <Text className="text-center text-indigo-200 mt-10 font-bold text-base">No available trips found</Text>
+        ) : (
+          <FlatList
+            data={schedules}
+            keyExtractor={(item) => item._id}
+            renderItem={renderItem}
+            contentContainerStyle={{ paddingBottom: 20 }}
+            showsVerticalScrollIndicator={false}
+          />
+        )}
+      </View>
+    </LiquidBackground>
   );
 };
 
 export default UserScheduleListScreen;
 
-const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#eef4ff" },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 15 },
-  card: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    elevation: 3,
-  },
-  cardHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  routeText: { fontSize: 16, fontWeight: "bold", flex: 1 },
-  priceBadge: {
-    backgroundColor: "#dcfce7",
-    color: "#166534",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 5,
-    fontSize: 14,
-    fontWeight: "bold",
-    overflow: "hidden",
-    marginLeft: 10,
-  },
-  detailText: { fontSize: 14, color: "#475569", marginBottom: 5 },
-  bookBtn: {
-    backgroundColor: "#1cab4c",
-    padding: 12,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 15,
-  },
-  disabledBtn: { backgroundColor: "#94a3b8" },
-  btnText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-  emptyText: { textAlign: "center", color: "#64748b", marginTop: 20 },
-});
+// We've moved styles to Tailwind classes!

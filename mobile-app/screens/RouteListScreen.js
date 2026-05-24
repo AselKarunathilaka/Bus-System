@@ -9,8 +9,11 @@ import {
   ActivityIndicator,
   Platform,
 } from "react-native";
-import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const PRICE_OPTIONS = [
   { label: "All prices", value: "all" },
@@ -192,29 +195,30 @@ const RouteListScreen = ({ navigation }) => {
   };
 
   const renderSelectField = (title, fieldKey, value, options, onSelect) => (
-    <View style={styles.selectBlock}>
-      <Text style={styles.selectLabel}>{title}</Text>
+    <View className="mb-3">
+      <Text className="text-xs font-bold text-indigo-200 uppercase mb-1">{title}</Text>
       <TouchableOpacity
-        style={styles.selectButton}
+        className="bg-white/10 border border-white/20 p-3 rounded-xl flex-row justify-between items-center"
         onPress={() => setOpenMenu(openMenu === fieldKey ? null : fieldKey)}
       >
-        <Text style={styles.selectButtonText}>
+        <Text className="text-white font-semibold">
           {getLabelFromOptions(options, value)}
         </Text>
+        <Ionicons name="chevron-down" size={16} color="#ffffff" />
       </TouchableOpacity>
 
       {openMenu === fieldKey && (
-        <View style={styles.optionList}>
+        <View className="mt-2 bg-slate-800/90 rounded-xl border border-white/20 overflow-hidden">
           {options.map((option) => (
             <TouchableOpacity
               key={option.value}
-              style={styles.optionItem}
+              className="p-3 border-b border-white/10"
               onPress={() => {
                 onSelect(option.value);
                 setOpenMenu(null);
               }}
             >
-              <Text style={styles.optionText}>{option.label}</Text>
+              <Text className="text-white font-medium">{option.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -224,13 +228,13 @@ const RouteListScreen = ({ navigation }) => {
 
   const renderStopsPreview = (stops = []) => {
     if (!stops.length) {
-      return <Text style={styles.subText}>No stops added yet</Text>;
+      return <Text className="text-indigo-200 text-sm mb-3">No stops added yet</Text>;
     }
 
     return (
-      <View style={styles.stopContainer}>
+      <View className="bg-white/5 p-3 rounded-xl mb-3">
         {stops.map((stop) => (
-          <Text key={stop._id} style={styles.stopText}>
+          <Text key={stop._id} className="text-white text-sm mb-1">
             • {stop.order}. {stop.stopName} - {stop.location}
           </Text>
         ))}
@@ -240,478 +244,173 @@ const RouteListScreen = ({ navigation }) => {
 
   const renderHeader = () => (
     <>
-      <View style={styles.headerCard}>
-        <Text style={styles.badge}>QuickBus (Highway Bus Reservation System)</Text>
-        <Text style={styles.headerTitle}>
+      <View className="flex-row items-center mb-5">
+        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/20">
+          <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        </TouchableOpacity>
+        <Text className="text-3xl font-black text-white shadow-sm">
           {user?.role === "admin" ? "Manage Routes" : "Available Routes"}
         </Text>
-        <Text style={styles.headerSubtitle}>
+      </View>
+
+      <GlassCard className="mb-4">
+        <Text className="text-xs font-bold text-white bg-white/20 self-start px-3 py-1 rounded-full mb-3 border border-white/30">
+          QuickBus Routing
+        </Text>
+        <Text className="text-indigo-100 text-sm leading-relaxed">
           {user?.role === "admin"
             ? "Create, update, and manage highway routes and stops."
             : "Browse highway routes, prices, distance, and stop details."}
         </Text>
-      </View>
+      </GlassCard>
 
-      <View style={styles.filterCard}>
-        <View style={styles.filterHeaderRow}>
-          <Text style={styles.filterTitle}>Filter Routes</Text>
+      <GlassCard className="mb-4">
+        <View className="flex-row justify-between items-center mb-4">
+          <Text className="text-lg font-extrabold text-white">Filter Routes</Text>
 
-          <View style={styles.filterActions}>
-            <TouchableOpacity style={styles.applyButton} onPress={applyFilters}>
-              <Text style={styles.applyButtonText}>Apply</Text>
+          <View className="flex-row gap-2">
+            <TouchableOpacity className="bg-cyan-500/50 px-3 py-1.5 rounded-lg border border-cyan-400/50" onPress={applyFilters}>
+              <Text className="text-white font-bold text-xs">Apply</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.clearButton} onPress={clearFilters}>
-              <Text style={styles.clearButtonText}>Clear</Text>
+            <TouchableOpacity className="bg-white/10 px-3 py-1.5 rounded-lg border border-white/20" onPress={clearFilters}>
+              <Text className="text-white font-bold text-xs">Clear</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        {renderSelectField(
-          "Starting Location",
-          "start",
-          draftStart,
-          startLocationOptions,
-          setDraftStart
-        )}
-
-        {renderSelectField(
-          "Price Range",
-          "price",
-          draftPrice,
-          PRICE_OPTIONS,
-          setDraftPrice
-        )}
-
-        {renderSelectField(
-          "Distance Range",
-          "distance",
-          draftDistance,
-          DISTANCE_OPTIONS,
-          setDraftDistance
-        )}
-      </View>
+        {renderSelectField("Starting Location", "start", draftStart, startLocationOptions, setDraftStart)}
+        {renderSelectField("Price Range", "price", draftPrice, PRICE_OPTIONS, setDraftPrice)}
+        {renderSelectField("Distance Range", "distance", draftDistance, DISTANCE_OPTIONS, setDraftDistance)}
+      </GlassCard>
 
       {user?.role === "admin" && (
-        <TouchableOpacity
-          style={styles.addButton}
+        <GlassButton
+          title="Add New Route"
           onPress={() => navigation.navigate("RouteForm")}
-        >
-          <Text style={styles.buttonText}>Add Route</Text>
-        </TouchableOpacity>
+          className="mb-4"
+          textClassName="text-white font-extrabold"
+        />
       )}
     </>
   );
 
   if (loading) {
     return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" />
-        <Text style={styles.loaderText}>Loading routes...</Text>
-      </View>
+      <LiquidBackground>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#ffffff" />
+          <Text className="text-white mt-3 font-semibold">Loading routes...</Text>
+        </View>
+      </LiquidBackground>
     );
   }
 
   return (
-    <FlatList
-      style={styles.container}
-      contentContainerStyle={styles.listContent}
-      data={filteredRoutes}
-      keyExtractor={(item) => item._id}
-      ListHeaderComponent={renderHeader}
-      ListEmptyComponent={<Text style={styles.emptyText}>No routes found</Text>}
-      renderItem={({ item }) => (
-        <View style={styles.card}>
-          <View style={styles.topRow}>
-            <View style={{ flex: 1, paddingRight: 12 }}>
-              <Text style={styles.routeName}>{item.routeName}</Text>
-              <Text style={styles.routePath}>
-                {item.startLocation} → {item.endLocation}
+    <LiquidBackground>
+      <FlatList
+        className="flex-1"
+        contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
+        data={filteredRoutes}
+        keyExtractor={(item) => item._id}
+        ListHeaderComponent={renderHeader}
+        ListEmptyComponent={<Text className="text-white text-center mt-10">No routes found</Text>}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item }) => (
+          <GlassCard className="mb-4">
+            <View className="flex-row items-start justify-between mb-4 border-b border-white/20 pb-4">
+              <View className="flex-1 pr-3">
+                <Text className="text-xl font-extrabold text-white mb-1">{item.routeName}</Text>
+                <Text className="text-sm font-semibold text-indigo-200">
+                  {item.startLocation} → {item.endLocation}
+                </Text>
+              </View>
+
+              <Text
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold overflow-hidden ${
+                  item.status === "active" ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30" : "bg-slate-500/50 text-slate-300"
+                }`}
+              >
+                {item.status}
               </Text>
             </View>
 
-            <Text
-              style={[
-                styles.statusBadge,
-                item.status === "active"
-                  ? styles.activeBadge
-                  : styles.inactiveBadge,
-              ]}
+            <View className="flex-row flex-wrap justify-between mb-3">
+              <View className="w-[48%] bg-white/5 rounded-xl p-3 mb-2">
+                <Text className="text-xs font-bold text-indigo-200 uppercase mb-1">Price</Text>
+                <Text className="text-base font-bold text-white">LKR {item.price}</Text>
+              </View>
+
+              <View className="w-[48%] bg-white/5 rounded-xl p-3 mb-2">
+                <Text className="text-xs font-bold text-indigo-200 uppercase mb-1">Distance</Text>
+                <Text className="text-base font-bold text-white">{item.distanceKm ?? "-"} km</Text>
+              </View>
+
+              <View className="w-[48%] bg-white/5 rounded-xl p-3 mb-2">
+                <Text className="text-xs font-bold text-indigo-200 uppercase mb-1">Duration</Text>
+                <Text className="text-base font-bold text-white">
+                  {item.estimatedDuration || "-"}
+                </Text>
+              </View>
+
+              <View className="w-[48%] bg-white/5 rounded-xl p-3 mb-2">
+                <Text className="text-xs font-bold text-indigo-200 uppercase mb-1">Stops</Text>
+                <Text className="text-base font-bold text-white">{item.stopCount || 0}</Text>
+              </View>
+            </View>
+
+            {!!item.description && (
+              <View className="bg-white/5 rounded-xl p-3 mb-3">
+                <Text className="text-xs font-bold text-indigo-200 uppercase mb-1">Description</Text>
+                <Text className="text-sm text-white">{item.description}</Text>
+              </View>
+            )}
+
+            <Text className="text-lg font-bold text-white mb-2">Stops</Text>
+            {renderStopsPreview(item.stops)}
+
+            <TouchableOpacity
+              className="bg-emerald-500/80 p-3 rounded-xl mt-1 border border-emerald-400/50"
+              onPress={() =>
+                navigation.navigate("StopList", {
+                  routeId: item._id,
+                  routeName: item.routeName,
+                })
+              }
             >
-              {item.status}
-            </Text>
-          </View>
-
-          <View style={styles.metricsGrid}>
-            <View style={styles.metricBox}>
-              <Text style={styles.metricLabel}>Price</Text>
-              <Text style={styles.metricValue}>LKR {item.price}</Text>
-            </View>
-
-            <View style={styles.metricBox}>
-              <Text style={styles.metricLabel}>Distance</Text>
-              <Text style={styles.metricValue}>{item.distanceKm ?? "-"} km</Text>
-            </View>
-
-            <View style={styles.metricBox}>
-              <Text style={styles.metricLabel}>Duration</Text>
-              <Text style={styles.metricValue}>
-                {item.estimatedDuration || "-"}
+              <Text className="text-white text-center font-bold">
+                {user?.role === "admin" ? "Manage Stops" : "View Route Stops"}
               </Text>
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.metricBox}>
-              <Text style={styles.metricLabel}>Stops</Text>
-              <Text style={styles.metricValue}>{item.stopCount || 0}</Text>
-            </View>
-          </View>
+            {user?.role === "admin" && (
+              <View className="flex-row justify-between mt-3">
+                <TouchableOpacity
+                  className="bg-amber-500/80 p-3 rounded-xl flex-1 mr-2 border border-amber-400/50"
+                  onPress={() =>
+                    navigation.navigate("RouteForm", {
+                      routeData: item,
+                    })
+                  }
+                >
+                  <Text className="text-white text-center font-bold">Edit Route</Text>
+                </TouchableOpacity>
 
-          {!!item.description && (
-            <View style={styles.descriptionBox}>
-              <Text style={styles.descriptionTitle}>Route Description</Text>
-              <Text style={styles.description}>{item.description}</Text>
-            </View>
-          )}
-
-          <Text style={styles.sectionTitle}>Stops</Text>
-          {renderStopsPreview(item.stops)}
-
-          <TouchableOpacity
-            style={styles.stopButton}
-            onPress={() =>
-              navigation.navigate("StopList", {
-                routeId: item._id,
-                routeName: item.routeName,
-              })
-            }
-          >
-            <Text style={styles.buttonText}>
-              {user?.role === "admin" ? "Manage Stops" : "View Route Stops"}
-            </Text>
-          </TouchableOpacity>
-
-          {user?.role === "admin" && (
-            <>
-              <TouchableOpacity
-                style={styles.editButton}
-                onPress={() =>
-                  navigation.navigate("RouteForm", {
-                    routeData: item,
-                  })
-                }
-              >
-                <Text style={styles.buttonText}>Edit Route</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.deleteButton}
-                onPress={() => handleDeleteRoute(item._id)}
-              >
-                <Text style={styles.buttonText}>Delete Route</Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
-      )}
-    />
+                <TouchableOpacity
+                  className="bg-red-500/80 p-3 rounded-xl flex-1 ml-2 border border-red-400/50"
+                  onPress={() => handleDeleteRoute(item._id)}
+                >
+                  <Text className="text-white text-center font-bold">Delete</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </GlassCard>
+        )}
+      />
+    </LiquidBackground>
   );
 };
 
 export default RouteListScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#eef4ff",
-  },
-  listContent: {
-    padding: 16,
-    paddingBottom: 24,
-  },
-  headerCard: {
-    backgroundColor: "#0f172a",
-    borderRadius: 18,
-    padding: 18,
-    marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 4,
-  },
-  badge: {
-    alignSelf: "flex-start",
-    backgroundColor: "#1e3a8a",
-    color: "#ffffff",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 999,
-    fontSize: 12,
-    fontWeight: "700",
-    marginBottom: 10,
-    overflow: "hidden",
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: "#ffffff",
-    marginBottom: 6,
-  },
-  headerSubtitle: {
-    color: "#cbd5e1",
-    fontSize: 14,
-    lineHeight: 21,
-  },
-  filterCard: {
-    backgroundColor: "#ffffff",
-    borderRadius: 18,
-    padding: 16,
-    marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
-  },
-  filterHeaderRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 14,
-    flexWrap: "wrap",
-    gap: 10,
-  },
-  filterTitle: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: "#0f172a",
-  },
-  filterActions: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  applyButton: {
-    backgroundColor: "#3567e0",
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 10,
-  },
-  applyButtonText: {
-    color: "#fff",
-    fontWeight: "800",
-    textAlign: "center",
-  },
-  clearButton: {
-    backgroundColor: "#475569",
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 10,
-  },
-  clearButtonText: {
-    color: "#fff",
-    fontWeight: "800",
-    textAlign: "center",
-  },
-  selectBlock: {
-    marginBottom: 12,
-  },
-  selectLabel: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: "#64748b",
-    textTransform: "uppercase",
-    marginBottom: 6,
-  },
-  selectButton: {
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-    backgroundColor: "#fff",
-    padding: 14,
-    borderRadius: 12,
-  },
-  selectButtonText: {
-    color: "#0f172a",
-    fontSize: 15,
-    fontWeight: "600",
-  },
-  optionList: {
-    marginTop: 8,
-    backgroundColor: "#f8fafc",
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-    overflow: "hidden",
-  },
-  optionItem: {
-    padding: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
-  },
-  optionText: {
-    color: "#334155",
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  addButton: {
-    backgroundColor: "#3567e0",
-    padding: 15,
-    borderRadius: 16,
-    marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 2,
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#eef4ff",
-  },
-  loaderText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#475569",
-  },
-  card: {
-    backgroundColor: "#ffffff",
-    padding: 18,
-    borderRadius: 22,
-    marginBottom: 18,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
-  },
-  topRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    marginBottom: 16,
-  },
-  routeName: {
-    fontSize: 20,
-    fontWeight: "800",
-    color: "#0f172a",
-    marginBottom: 6,
-  },
-  routePath: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#475569",
-  },
-  statusBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-    borderRadius: 999,
-    overflow: "hidden",
-    color: "#fff",
-    fontSize: 12,
-    fontWeight: "800",
-    textTransform: "uppercase",
-  },
-  activeBadge: {
-    backgroundColor: "#1cab4c",
-  },
-  inactiveBadge: {
-    backgroundColor: "#64748b",
-  },
-  metricsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginBottom: 14,
-  },
-  metricBox: {
-    width: "48%",
-    backgroundColor: "#f8fafc",
-    borderRadius: 14,
-    padding: 12,
-    marginBottom: 10,
-  },
-  metricLabel: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: "#64748b",
-    textTransform: "uppercase",
-    marginBottom: 4,
-  },
-  metricValue: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#0f172a",
-  },
-  descriptionBox: {
-    backgroundColor: "#f8fafc",
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 14,
-  },
-  descriptionTitle: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: "#64748b",
-    textTransform: "uppercase",
-    marginBottom: 6,
-  },
-  description: {
-    color: "#475569",
-    lineHeight: 21,
-    fontSize: 14,
-  },
-  sectionTitle: {
-    marginTop: 4,
-    marginBottom: 8,
-    fontWeight: "800",
-    fontSize: 18,
-    color: "#0f172a",
-  },
-  stopContainer: {
-    backgroundColor: "#f8fafc",
-    padding: 14,
-    borderRadius: 14,
-    marginBottom: 12,
-  },
-  stopText: {
-    fontSize: 15,
-    color: "#334155",
-    marginBottom: 6,
-  },
-  subText: {
-    color: "#64748b",
-    fontSize: 15,
-    marginBottom: 12,
-  },
-  stopButton: {
-    backgroundColor: "#1cab4c",
-    padding: 14,
-    borderRadius: 14,
-    marginTop: 4,
-  },
-  editButton: {
-    backgroundColor: "#f4a20b",
-    padding: 14,
-    borderRadius: 14,
-    marginTop: 12,
-  },
-  deleteButton: {
-    backgroundColor: "#ea2424",
-    padding: 14,
-    borderRadius: 14,
-    marginTop: 12,
-  },
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "800",
-    fontSize: 16,
-  },
-  emptyText: {
-    textAlign: "center",
-    marginTop: 20,
-    fontSize: 16,
-    color: "#666",
-  },
-});
+// We've moved styles to Tailwind classes!

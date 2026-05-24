@@ -6,8 +6,8 @@ const GlassCard = ({ children, className = "" }) => {
   return (
     <View style={styles.container} className={`rounded-3xl overflow-hidden border border-white/20 ${className}`}>
       <BlurView
-        intensity={Platform.OS === "ios" ? 40 : 100}
-        tint="light"
+        intensity={Platform.OS === "ios" ? 40 : 40}
+        tint="default"
         style={StyleSheet.absoluteFillObject}
         className="bg-white/10"
       />
@@ -22,11 +22,11 @@ export default GlassCard;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255, 255, 255, 0.05)",
+    backgroundColor: "transparent",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowRadius: 20,
-    elevation: 5,
+    elevation: 3,
   },
 });

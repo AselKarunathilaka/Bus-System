@@ -16,6 +16,9 @@ import api from "../services/api";
 import { Ionicons } from "@expo/vector-icons";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
 
 const AdminDashboardScreen = ({ navigation }) => {
   const { token, userToken } = useContext(AuthContext);
@@ -386,386 +389,180 @@ const AdminDashboardScreen = ({ navigation }) => {
 
   if (loading) {
     return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#3567e0" />
-        <Text style={styles.loadingText}>Compiling Analytics...</Text>
-      </View>
+      <LiquidBackground>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#ffffff" />
+          <Text className="mt-4 text-indigo-200 font-bold text-base">Compiling Analytics...</Text>
+        </View>
+      </LiquidBackground>
     );
   }
 
   return (
-    <ScrollView
-      style={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#3567e0" />
-      }
-    >
-      <View style={styles.header}>
-        <View style={styles.headerTitleRow}>
-          <View>
-            <Text style={styles.headerTitle}>System Overview</Text>
-            <Text style={styles.headerSubtitle}>Real-time metrics (updates every 15s)</Text>
-          </View>
-          <TouchableOpacity style={styles.exportBtn} onPress={generatePDFReport}>
-            <Ionicons name="document-text" size={18} color="#fff" />
-            <Text style={styles.exportBtnText}>Export PDF</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={styles.filterCard}>
-        <Text style={styles.filterTitle}>Archival Date Filter</Text>
-        <View style={styles.filterRow}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>Start Date</Text>
-            {Platform.OS === 'web' ? (
-              <input 
-                type="date" 
-                style={styles.webDateInput}
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            ) : (
-              <TextInput
-                style={styles.dateInput}
-                placeholder="YYYY-MM-DD"
-                value={startDate}
-                onChangeText={setStartDate}
-              />
-            )}
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputLabel}>End Date</Text>
-            {Platform.OS === 'web' ? (
-              <input 
-                type="date" 
-                style={styles.webDateInput}
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            ) : (
-              <TextInput
-                style={styles.dateInput}
-                placeholder="YYYY-MM-DD"
-                value={endDate}
-                onChangeText={setEndDate}
-              />
-            )}
+    <LiquidBackground>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ padding: 16 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#ffffff" />
+        }
+      >
+        <View className="mb-6">
+          <View className="flex-row justify-between items-center">
+            <View>
+              <Text className="text-3xl font-black text-white">System Overview</Text>
+              <Text className="text-sm text-indigo-200 mt-1">Real-time metrics (updates every 15s)</Text>
+            </View>
+            <TouchableOpacity className="bg-white/20 border border-white/30 flex-row items-center px-4 py-2 rounded-full" onPress={generatePDFReport}>
+              <Ionicons name="document-text" size={18} color="#ffffff" />
+              <Text className="text-white font-bold ml-2">Export PDF</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        {(startDate || endDate) && (
-          <TouchableOpacity style={styles.clearBtn} onPress={() => { setStartDate(""); setEndDate(""); }}>
-            <Text style={styles.clearBtnText}>Clear Filters (Show All Time)</Text>
-          </TouchableOpacity>
-        )}
-      </View>
 
-      <View style={styles.kpiGrid}>
-        <View style={[styles.kpiCard, { borderTopColor: "#10b981" }]}>
-          <Text style={styles.kpiLabel}>Revenue</Text>
-          <Text style={styles.kpiValue}>
-            <Text style={styles.kpiCurrency}>LKR</Text> {metrics.totalRevenue.toLocaleString()}
-          </Text>
-        </View>
-
-        <View style={[styles.kpiCard, { borderTopColor: "#3b82f6" }]}>
-          <Text style={styles.kpiLabel}>Bookings</Text>
-          <Text style={styles.kpiValue}>{metrics.totalBookings}</Text>
-        </View>
-
-        <View style={[styles.kpiCard, { borderTopColor: "#f59e0b" }]}>
-          <Text style={styles.kpiLabel}>Active Routes</Text>
-          <Text style={styles.kpiValue}>{metrics.activeRoutes}</Text>
-        </View>
-
-        <View style={[styles.kpiCard, { borderTopColor: "#8b5cf6" }]}>
-          <Text style={styles.kpiLabel}>Total Buses</Text>
-          <Text style={styles.kpiValue}>{metrics.totalBuses}</Text>
-        </View>
-      </View>
-
-      <View style={styles.chartCard}>
-        <Text style={styles.chartTitle}>Booking Volume (7 Days Ending in Filter)</Text>
-        <View style={styles.barChartContainer}>
-              {chartData.map((dataPoint, index) => (
-            <View key={index} style={styles.barColumn}>
-              <Text style={styles.barValue}>{dataPoint.count > 0 ? dataPoint.count : ""}</Text>
-              <View style={styles.barTrack}>
-                <View
-                  style={[
-                    styles.barFill,
-                    { height: `${dataPoint.heightPercentage}%` },
-                  ]}
+        <GlassCard className="mb-4">
+          <Text className="text-base font-bold text-white mb-3">Archival Date Filter</Text>
+          <View className="flex-row justify-between mb-2">
+            <View className="w-[48%]">
+              <Text className="text-xs text-indigo-200 mb-1">Start Date</Text>
+              {Platform.OS === 'web' ? (
+                <input 
+                  type="date" 
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.3)",
+                    padding: "10px",
+                    borderRadius: "8px",
+                    backgroundColor: "rgba(255,255,255,0.1)",
+                    color: "white",
+                    width: "100%",
+                    boxSizing: "border-box",
+                    fontFamily: "inherit",
+                    outline: "none",
+                  }}
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
                 />
+              ) : (
+                <TextInput
+                  className="border border-white/30 p-3 rounded-lg bg-white/10 text-white"
+                  placeholder="YYYY-MM-DD"
+                  placeholderTextColor="#94a3b8"
+                  value={startDate}
+                  onChangeText={setStartDate}
+                />
+              )}
+            </View>
+            <View className="w-[48%]">
+              <Text className="text-xs text-indigo-200 mb-1">End Date</Text>
+              {Platform.OS === 'web' ? (
+                <input 
+                  type="date" 
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.3)",
+                    padding: "10px",
+                    borderRadius: "8px",
+                    backgroundColor: "rgba(255,255,255,0.1)",
+                    color: "white",
+                    width: "100%",
+                    boxSizing: "border-box",
+                    fontFamily: "inherit",
+                    outline: "none",
+                  }}
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              ) : (
+                <TextInput
+                  className="border border-white/30 p-3 rounded-lg bg-white/10 text-white"
+                  placeholder="YYYY-MM-DD"
+                  placeholderTextColor="#94a3b8"
+                  value={endDate}
+                  onChangeText={setEndDate}
+                />
+              )}
+            </View>
+          </View>
+          {(startDate || endDate) && (
+            <TouchableOpacity className="items-center mt-3" onPress={() => { setStartDate(""); setEndDate(""); }}>
+              <Text className="text-cyan-300 font-bold text-sm">Clear Filters (Show All Time)</Text>
+            </TouchableOpacity>
+          )}
+        </GlassCard>
+
+        <View className="flex-row flex-wrap justify-between mb-2">
+          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-emerald-400">
+            <Text className="text-indigo-200 text-xs font-bold mb-2">Revenue</Text>
+            <Text className="text-white text-2xl font-black">
+              <Text className="text-sm font-semibold text-indigo-300">LKR</Text> {metrics.totalRevenue.toLocaleString()}
+            </Text>
+          </GlassCard>
+
+          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-cyan-400">
+            <Text className="text-indigo-200 text-xs font-bold mb-2">Bookings</Text>
+            <Text className="text-white text-2xl font-black">{metrics.totalBookings}</Text>
+          </GlassCard>
+
+          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-amber-400">
+            <Text className="text-indigo-200 text-xs font-bold mb-2">Active Routes</Text>
+            <Text className="text-white text-2xl font-black">{metrics.activeRoutes}</Text>
+          </GlassCard>
+
+          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-violet-400">
+            <Text className="text-indigo-200 text-xs font-bold mb-2">Total Buses</Text>
+            <Text className="text-white text-2xl font-black">{metrics.totalBuses}</Text>
+          </GlassCard>
+        </View>
+
+        <GlassCard className="mb-5">
+          <Text className="text-lg font-black text-white mb-4">Booking Volume (7 Days Ending in Filter)</Text>
+          <View className="flex-row justify-between items-end h-48 pt-5">
+                {chartData.map((dataPoint, index) => (
+              <View key={index} className="items-center flex-1">
+                <Text className="text-xs font-bold text-cyan-300 mb-1 h-4">{dataPoint.count > 0 ? dataPoint.count : ""}</Text>
+                <View className="w-6 h-32 bg-white/10 rounded-full justify-end overflow-hidden">
+                  <View
+                    className="bg-cyan-400 w-full rounded-full"
+                    style={{ height: `${dataPoint.heightPercentage}%` }}
+                  />
+                </View>
+                <Text className="text-xs text-indigo-200 font-semibold mt-2">{dataPoint.dayLabel}</Text>
               </View>
-              <Text style={styles.barLabel}>{dataPoint.dayLabel}</Text>
-            </View>
-          ))}
-        </View>
-      </View>
+            ))}
+          </View>
+        </GlassCard>
 
-      <View style={styles.chartCard}>
-        <Text style={styles.chartTitle}>Fleet Status Breakdown</Text>
-        <View style={styles.gaugeContainer}>
-          <View style={styles.gaugeLegend}>
-            <View style={styles.legendRow}>
-              <View style={[styles.legendDot, { backgroundColor: "#10b981" }]} />
-              <Text style={styles.legendText}>Available ({metrics.availableBuses})</Text>
+        <GlassCard className="mb-10">
+          <Text className="text-lg font-black text-white mb-2">Fleet Status Breakdown</Text>
+          <View className="mt-2">
+            <View>
+              <View className="flex-row items-center mb-2">
+                <View className="w-3 h-3 rounded-full mr-2 bg-emerald-400" />
+                <Text className="text-sm font-semibold text-white">Available ({metrics.availableBuses})</Text>
+              </View>
+              <View className="flex-row items-center mb-2">
+                <View className="w-3 h-3 rounded-full mr-2 bg-pink-500" />
+                <Text className="text-sm font-semibold text-white">Maintenance ({metrics.maintenanceBuses})</Text>
+              </View>
             </View>
-            <View style={styles.legendRow}>
-              <View style={[styles.legendDot, { backgroundColor: "#ef4444" }]} />
-              <Text style={styles.legendText}>Maintenance ({metrics.maintenanceBuses})</Text>
+
+            <View className="flex-row h-6 rounded-full overflow-hidden bg-white/10 mt-2">
+              <View
+                className="bg-emerald-400"
+                style={{ flex: metrics.availableBuses || 1 }}
+              />
+              <View
+                className="bg-pink-500"
+                style={{ flex: metrics.maintenanceBuses || 0 }}
+              />
             </View>
           </View>
+        </GlassCard>
 
-          <View style={styles.progressTrack}>
-            <View
-              style={[
-                styles.progressFillAvailable,
-                { flex: metrics.availableBuses || 1 },
-              ]}
-            />
-            <View
-              style={[
-                styles.progressFillMaintenance,
-                { flex: metrics.maintenanceBuses || 0 },
-              ]}
-            />
-          </View>
-        </View>
-      </View>
-
-      <View style={styles.footerSpacer} />
-    </ScrollView>
+      </ScrollView>
+    </LiquidBackground>
   );
 };
 
 export default AdminDashboardScreen;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f1f5f9",
-    padding: 16,
-  },
-  centerContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f1f5f9",
-  },
-  loadingText: {
-    marginTop: 12,
-    color: "#64748b",
-    fontWeight: "600",
-    fontSize: 16,
-  },
-  header: {
-    marginBottom: 20,
-  },
-  headerTitleRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  headerTitle: {
-    fontSize: 26,
-    fontWeight: "800",
-    color: "#0f172a",
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: "#64748b",
-    marginTop: 4,
-  },
-  exportBtn: {
-    backgroundColor: "#ef4444",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 99,
-  },
-  exportBtnText: {
-    color: "#fff",
-    fontWeight: "700",
-    marginLeft: 6,
-  },
-  filterCard: {
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: "#e2e8f0",
-  },
-  filterTitle: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#0f172a",
-    marginBottom: 12,
-  },
-  filterRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  inputContainer: {
-    width: "48%",
-  },
-  inputLabel: {
-    fontSize: 12,
-    color: "#64748b",
-    marginBottom: 4,
-  },
-  dateInput: {
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-    padding: 10,
-    borderRadius: 8,
-    backgroundColor: "#f8fafc",
-  },
-  webDateInput: {
-    border: "1px solid #cbd5e1",
-    padding: "10px",
-    borderRadius: "8px",
-    backgroundColor: "#f8fafc",
-    width: "100%",
-    boxSizing: "border-box",
-    fontFamily: "inherit",
-    outline: "none",
-  },
-  clearBtn: {
-    marginTop: 12,
-    alignItems: "center",
-  },
-  clearBtnText: {
-    color: "#3567e0",
-    fontWeight: "700",
-    fontSize: 14,
-  },
-  kpiGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  kpiCard: {
-    backgroundColor: "#fff",
-    width: "48%",
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 16,
-    borderTopWidth: 4,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 2,
-  },
-  kpiLabel: {
-    color: "#64748b",
-    fontSize: 13,
-    fontWeight: "700",
-    marginBottom: 8,
-  },
-  kpiValue: {
-    color: "#0f172a",
-    fontSize: 24,
-    fontWeight: "800",
-  },
-  kpiCurrency: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#94a3b8",
-  },
-  chartCard: {
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 16,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  chartTitle: {
-    fontSize: 16,
-    fontWeight: "800",
-    color: "#0f172a",
-    marginBottom: 20,
-  },
-  barChartContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    height: 180,
-    paddingTop: 20,
-  },
-  barColumn: {
-    alignItems: "center",
-    flex: 1,
-  },
-  barValue: {
-    fontSize: 12,
-    fontWeight: "700",
-    color: "#3b82f6",
-    marginBottom: 4,
-    height: 16,
-  },
-  barTrack: {
-    width: 24,
-    height: 120,
-    backgroundColor: "#f1f5f9",
-    borderRadius: 6,
-    justifyContent: "flex-end",
-    overflow: "hidden",
-  },
-  barFill: {
-    backgroundColor: "#3b82f6",
-    width: "100%",
-    borderRadius: 6,
-  },
-  barLabel: {
-    fontSize: 12,
-    color: "#64748b",
-    fontWeight: "600",
-    marginTop: 8,
-  },
-  gaugeContainer: {
-    marginTop: 10,
-  },
-  legendRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  legendDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginRight: 8,
-  },
-  legendText: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#334155",
-  },
-  progressTrack: {
-    flexDirection: "row",
-    height: 24,
-    borderRadius: 12,
-    overflow: "hidden",
-    backgroundColor: "#f1f5f9",
-    marginTop: 10,
-  },
-  progressFillAvailable: {
-    backgroundColor: "#10b981",
-  },
-  progressFillMaintenance: {
-    backgroundColor: "#ef4444",
-  },
-  footerSpacer: {
-    height: 40,
-  },
-});
+// We've moved styles to Tailwind classes!
