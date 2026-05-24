@@ -7,10 +7,29 @@ import {
   ScrollView,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
+import { Ionicons } from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation }) => {
   const { user, logout } = useContext(AuthContext);
   const isAdmin = user?.role === "admin";
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View style={{ flexDirection: "row", marginRight: 15 }}>
+          <TouchableOpacity onPress={() => navigation.navigate("Routes")} style={{ marginLeft: 15 }}>
+            <Ionicons name="map-outline" size={24} color="#3567e0" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate(isAdmin ? "ScheduleList" : "UserScheduleList")} style={{ marginLeft: 15 }}>
+            <Ionicons name="calendar-outline" size={24} color="#3567e0" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("Buses")} style={{ marginLeft: 15 }}>
+            <Ionicons name="bus-outline" size={24} color="#3567e0" />
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation, isAdmin]);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -117,7 +136,7 @@ const HomeScreen = ({ navigation }) => {
 
       <TouchableOpacity
         style={[styles.actionButton, styles.bookingButton]}
-        onPress={() => navigation.navigate(isAdmin ? "AdminBookingList" : "MyBookings")}
+        onPress={() => navigation.navigate("BookingsTab")}
       >
         <Text style={styles.buttonText}>
           {isAdmin ? "All Bookings" : "My Bookings"}
