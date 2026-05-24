@@ -240,7 +240,7 @@ const AdminDashboardScreen = ({ navigation }) => {
         if (canShare) {
           await Sharing.shareAsync(uri);
         } else {
-          Alert.alert("Report Generated", \`Saved to: \${uri}\`);
+          Alert.alert("Report Generated", `Saved to: ${uri}`);
         }
       }
     } catch (error) {
@@ -352,14 +352,14 @@ const AdminDashboardScreen = ({ navigation }) => {
       <View style={styles.chartCard}>
         <Text style={styles.chartTitle}>Booking Volume (7 Days Ending in Filter)</Text>
         <View style={styles.barChartContainer}>
-          {chartData.map((dataPoint, index) => (
+              {chartData.map((dataPoint, index) => (
             <View key={index} style={styles.barColumn}>
               <Text style={styles.barValue}>{dataPoint.count > 0 ? dataPoint.count : ""}</Text>
               <View style={styles.barTrack}>
                 <View
                   style={[
                     styles.barFill,
-                    { height: \`\${dataPoint.heightPercentage}%\` },
+                    { height: `${dataPoint.heightPercentage}%` },
                   ]}
                 />
               </View>
