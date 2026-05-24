@@ -73,37 +73,67 @@ const MyBookingsScreen = () => {
     }
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.card}>
-      <View style={styles.cardHeader}>
-        <Text style={styles.routeText}>
-          {item.scheduleId?.routeId?.startLocation} to {item.scheduleId?.routeId?.endLocation}
-        </Text>
-        <Text style={[styles.statusBadge, item.status === 'Cancelled' && styles.statusCancelled]}>
-          {item.status}
-        </Text>
+  const getSeatLabel = (seatNumber) => {
+    const row = Math.ceil(seatNumber / 4);
+    const colIndex = (seatNumber - 1) % 4;
+    const colLetter = ["A", "B", "C", "D"][colIndex];
+    return `${row}${colLetter}`;
+  };
+
+  const renderItem = ({ item }) => {
+    const formattedSeats = item.seatNumbers.map(getSeatLabel).join(", ");
+    
+    return (
+      <View style={styles.card}>
+        <View style={styles.cardHeader}>
+          <Text style={styles.routeText}>
+            {item.scheduleId?.routeId?.startLocation} to {item.scheduleId?.routeId?.endLocation}
+          </Text>
+          <Text style={[styles.statusBadge, item.status === 'Cancelled' && styles.statusCancelled]}>
+            {item.status}
+          </Text>
+        </View>
+
+        <View style={styles.detailsContainer}>
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Booking ID:</Text>
+            <Text style={styles.detailValue}>{item.bookingId || "N/A"}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Bus:</Text>
+            <Text style={styles.detailValue}>{item.scheduleId?.busId?.busName} ({item.scheduleId?.busId?.licenseNumber})</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Date:</Text>
+            <Text style={styles.detailValue}>{new Date(item.scheduleId?.departureDate).toLocaleDateString()} at {item.scheduleId?.departureTime}</Text>
+          </View>
+          <View style={styles.detailRow}>
+            <Text style={styles.detailLabel}>Seats:</Text>
+            <Text style={styles.detailValue}>{formattedSeats} ({item.bookingType})</Text>
+          </View>
+          {item.contactNumber && (
+            <View style={styles.detailRow}>
+              <Text style={styles.detailLabel}>Contact:</Text>
+              <Text style={styles.detailValue}>{item.contactNumber}</Text>
+            </View>
+          )}
+        </View>
+
+        <View style={styles.footerRow}>
+          <Text style={styles.priceText}>Total Paid: LKR {item.totalPrice}</Text>
+          
+          {item.status !== "Cancelled" && (
+            <TouchableOpacity
+              style={styles.cancelBtn}
+              onPress={() => handleCancel(item._id)}
+            >
+              <Text style={styles.cancelBtnText}>Cancel Booking</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
-      <Text style={styles.detailText}>
-        Bus: {item.scheduleId?.busId?.busName} ({item.scheduleId?.busId?.licenseNumber})
-      </Text>
-      <Text style={styles.detailText}>
-        Date: {new Date(item.scheduleId?.departureDate).toLocaleDateString()} at {item.scheduleId?.departureTime}
-      </Text>
-      <Text style={styles.detailText}>
-        Seats: {item.seatNumbers.join(", ")} ({item.bookingType})
-      </Text>
-      <Text style={styles.priceText}>Total Paid: LKR {item.totalPrice}</Text>
-      
-      {item.status !== "Cancelled" && (
-        <TouchableOpacity
-          style={styles.cancelBtn}
-          onPress={() => handleCancel(item._id)}
-        >
-          <Text style={styles.cancelBtnText}>Cancel Booking</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  );
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -127,27 +157,37 @@ const MyBookingsScreen = () => {
 export default MyBookingsScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#eef4ff" },
-  title: { fontSize: 24, fontWeight: "bold", marginBottom: 15 },
+  container: { flex: 1, padding: 20, backgroundColor: "#f8fafc" },
+  title: { fontSize: 28, fontWeight: "900", color: "#0f172a", marginBottom: 20 },
   card: {
     backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 15,
-    elevation: 3,
+    padding: 20,
+    borderRadius: 16,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
   },
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
+    alignItems: "center",
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f5f9",
+    paddingBottom: 15,
   },
-  routeText: { fontSize: 16, fontWeight: "bold", flex: 1 },
+  routeText: { fontSize: 18, fontWeight: "800", color: "#1e293b", flex: 1 },
   statusBadge: {
     backgroundColor: "#dcfce7",
     color: "#166534",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 5,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
     fontSize: 12,
     fontWeight: "bold",
     overflow: "hidden",
@@ -157,17 +197,40 @@ const styles = StyleSheet.create({
     backgroundColor: "#fee2e2",
     color: "#991b1b",
   },
-  detailText: { fontSize: 14, color: "#475569", marginBottom: 5 },
-  priceText: { fontSize: 15, fontWeight: "bold", color: "#3567e0", marginTop: 5 },
-  cancelBtn: {
-    marginTop: 15,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ea2424",
-    paddingVertical: 8,
-    borderRadius: 6,
-    alignItems: "center",
+  detailsContainer: {
+    marginBottom: 15,
   },
-  cancelBtnText: { color: "#ea2424", fontWeight: "bold" },
-  emptyText: { textAlign: "center", color: "#64748b", marginTop: 20 },
+  detailRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
+  detailLabel: {
+    fontSize: 14,
+    color: "#64748b",
+    fontWeight: "600",
+  },
+  detailValue: {
+    fontSize: 14,
+    color: "#334155",
+    fontWeight: "700",
+  },
+  footerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 5,
+    borderTopWidth: 1,
+    borderTopColor: "#f1f5f9",
+    paddingTop: 15,
+  },
+  priceText: { fontSize: 16, fontWeight: "900", color: "#3567e0" },
+  cancelBtn: {
+    backgroundColor: "#fee2e2",
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  cancelBtnText: { color: "#ef4444", fontWeight: "bold", fontSize: 13 },
+  emptyText: { textAlign: "center", color: "#64748b", marginTop: 40, fontSize: 16 },
 });
