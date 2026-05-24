@@ -91,8 +91,7 @@ const AdminBookingListScreen = () => {
     }
   };
 
-    }
-  };
+
 
   const getSeatLabel = (seatNumber) => {
     const row = Math.ceil(seatNumber / 4);
