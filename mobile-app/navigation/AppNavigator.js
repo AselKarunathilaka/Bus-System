@@ -53,9 +53,27 @@ const MainTabs = () => {
       <Tab.Screen 
         name="BookingsTab" 
         component={isAdmin ? AdminBookingListScreen : MyBookingsScreen} 
-        options={{ title: "Bookings" }}
+        options={({ navigation }) => ({
+          title: "Bookings",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} style={{ marginLeft: 15 }}>
+              <Ionicons name="arrow-back" size={24} color="#3567e0" />
+            </TouchableOpacity>
+          ),
+        })}
       />
-      <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ title: "Profile" }} />
+      <Tab.Screen 
+        name="ProfileTab" 
+        component={ProfileScreen} 
+        options={({ navigation }) => ({
+          title: "Profile",
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} style={{ marginLeft: 15 }}>
+              <Ionicons name="arrow-back" size={24} color="#3567e0" />
+            </TouchableOpacity>
+          ),
+        })}
+      />
     </Tab.Navigator>
   );
 };

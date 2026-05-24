@@ -144,21 +144,31 @@ const StopFormScreen = ({ route, navigation }) => {
           returnKeyType="done"
         />
 
-        <TouchableOpacity
-          style={[styles.button, loading && styles.buttonDisabled]}
-          onPress={handleSubmit}
-          disabled={loading}
-        >
-          <Text style={styles.buttonText}>
-            {loading
-              ? stopData
-                ? "Updating..."
-                : "Creating..."
-              : stopData
-              ? "Update Stop"
-              : "Create Stop"}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.buttonGroup}>
+          <TouchableOpacity
+            style={[styles.button, loading && styles.buttonDisabled, styles.primaryButton]}
+            onPress={handleSubmit}
+            disabled={loading}
+          >
+            <Text style={styles.buttonText}>
+              {loading
+                ? stopData
+                  ? "Updating..."
+                  : "Creating..."
+                : stopData
+                ? "Update Stop"
+                : "Create Stop"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.button, styles.cancelButton]}
+            onPress={() => navigation.goBack()}
+            disabled={loading}
+          >
+            <Text style={[styles.buttonText, styles.cancelButtonText]}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
 
         <View style={styles.bottomSpacer} />
       </ScrollView>
@@ -195,11 +205,21 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     fontSize: 16,
   },
+  buttonGroup: {
+    marginTop: 10,
+  },
   button: {
-    backgroundColor: "#2563eb",
     padding: 14,
     borderRadius: 12,
-    marginTop: 10,
+    marginBottom: 10,
+  },
+  primaryButton: {
+    backgroundColor: "#2563eb",
+  },
+  cancelButton: {
+    backgroundColor: "#f1f5f9",
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
   },
   buttonDisabled: {
     opacity: 0.7,
@@ -209,6 +229,9 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "700",
     fontSize: 16,
+  },
+  cancelButtonText: {
+    color: "#475569",
   },
   bottomSpacer: {
     height: 40,

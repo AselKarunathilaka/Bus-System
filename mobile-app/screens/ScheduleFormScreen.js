@@ -220,9 +220,18 @@ const ScheduleFormScreen = ({ route, navigation }) => {
         )}
       </View>
 
-      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-        <Text style={styles.saveButtonText}>Save Schedule</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonGroup}>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+          <Text style={styles.saveButtonText}>Save Schedule</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          style={[styles.saveButton, styles.cancelButton]} 
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={[styles.saveButtonText, styles.cancelButtonText]}>Cancel</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -284,17 +293,31 @@ const styles = StyleSheet.create({
     outlineWidth: 0,
     boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
   },
+  buttonGroup: {
+    marginTop: 10,
+    marginBottom: 30,
+  },
   saveButton: {
     backgroundColor: "#3567e0",
-    padding: 18,
+    paddingVertical: 18,
     borderRadius: 12,
     alignItems: "center",
-    marginTop: 15,
+    marginBottom: 10,
     shadowColor: "#3567e0",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 4,
+  },
+  cancelButton: {
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    shadowOpacity: 0,
+    elevation: 0,
   },
   saveButtonText: { color: "#fff", fontSize: 18, fontWeight: "bold", letterSpacing: 0.5 },
+  cancelButtonText: {
+    color: "#475569",
+  },
 });

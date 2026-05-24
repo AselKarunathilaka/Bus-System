@@ -367,15 +367,27 @@ const BusFormScreen = ({ route, navigation }) => {
             setOpenStatus(false);
           })}
 
-        <TouchableOpacity
-          style={[styles.saveButton, saving && styles.disabledButton]}
-          onPress={handleSubmit}
-          disabled={saving}
-        >
-          <Text style={styles.saveButtonText}>
-            {saving ? "Saving..." : editingBus ? "Update Bus" : "Create Bus"}
-          </Text>
-        </TouchableOpacity>
+        <View style={styles.buttonGroup}>
+          <TouchableOpacity
+            style={[styles.saveButton, saving && styles.disabledButton]}
+            onPress={handleSubmit}
+            disabled={saving}
+          >
+            <Text style={styles.saveButtonText}>
+              {saving ? "Saving..." : editingBus ? "Update Bus" : "Create Bus"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.saveButton, styles.cancelButton]}
+            onPress={() => navigation.goBack()}
+            disabled={saving}
+          >
+            <Text style={[styles.saveButtonText, styles.cancelButtonText]}>
+              Cancel
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -484,22 +496,31 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 
+  buttonGroup: {
+    marginTop: 12,
+    marginBottom: 30,
+  },
   saveButton: {
     backgroundColor: "#2563eb",
     borderRadius: 14,
     paddingVertical: 15,
     alignItems: "center",
-    marginTop: 12,
-    marginBottom: 30,
+    marginBottom: 10,
   },
-
+  cancelButton: {
+    backgroundColor: "#ffffff",
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+  },
   disabledButton: {
     opacity: 0.7,
   },
-
   saveButtonText: {
     color: "#ffffff",
     fontSize: 16,
     fontWeight: "800",
+  },
+  cancelButtonText: {
+    color: "#475569",
   },
 });
