@@ -196,6 +196,7 @@ const SeatSelectionScreen = ({ route, navigation }) => {
 
 export default SeatSelectionScreen;
 
+const styles = StyleSheet.create({
   seatBox: {
     width: 48,
     height: 58,
