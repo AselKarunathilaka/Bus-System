@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { AuthContext } from "../context/AuthContext";
+import { TouchableOpacity } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
@@ -30,7 +32,24 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={({ navigation, route }) => ({
+          headerRight: () => {
+            if (authToken && route.name !== "Home") {
+              return (
+                <TouchableOpacity onPress={() => navigation.navigate("Home")} style={{ marginRight: 15 }}>
+                  <Ionicons name="home" size={24} color="#3567e0" />
+                </TouchableOpacity>
+              );
+            }
+            return null;
+          },
+          headerTitleStyle: {
+            fontWeight: "bold",
+          },
+          headerTintColor: "#3567e0",
+        })}
+      >
         {authToken ? (
           <>
             <Stack.Screen name="Home" component={HomeScreen} />
