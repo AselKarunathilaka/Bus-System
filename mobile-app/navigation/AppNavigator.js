@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AuthContext } from "../context/AuthContext";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,6 +26,39 @@ import MyBookingsScreen from "../screens/MyBookingsScreen";
 import AdminBookingListScreen from "../screens/AdminBookingListScreen";
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const MainTabs = () => {
+  const { user } = useContext(AuthContext);
+  const isAdmin = user?.role === "admin";
+
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+          if (route.name === "HomeTab") iconName = focused ? "home" : "home-outline";
+          else if (route.name === "BookingsTab") iconName = focused ? "ticket" : "ticket-outline";
+          else if (route.name === "ProfileTab") iconName = focused ? "person" : "person-outline";
+          
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "#3567e0",
+        tabBarInactiveTintColor: "gray",
+        headerTitleStyle: { fontWeight: "bold" },
+        headerTintColor: "#3567e0",
+      })}
+    >
+      <Tab.Screen name="HomeTab" component={HomeScreen} options={{ title: "Home" }} />
+      <Tab.Screen 
+        name="BookingsTab" 
+        component={isAdmin ? AdminBookingListScreen : MyBookingsScreen} 
+        options={{ title: "Bookings" }}
+      />
+      <Tab.Screen name="ProfileTab" component={ProfileScreen} options={{ title: "Profile" }} />
+    </Tab.Navigator>
+  );
+};
 
 const AppNavigator = () => {
   const { token, userToken } = useContext(AuthContext);
@@ -35,9 +69,9 @@ const AppNavigator = () => {
       <Stack.Navigator
         screenOptions={({ navigation, route }) => ({
           headerRight: () => {
-            if (authToken && route.name !== "Home") {
+            if (authToken && route.name !== "MainTabs") {
               return (
-                <TouchableOpacity onPress={() => navigation.navigate("Home")} style={{ marginRight: 15 }}>
+                <TouchableOpacity onPress={() => navigation.navigate("MainTabs", { screen: "HomeTab" })} style={{ marginRight: 15 }}>
                   <Ionicons name="home" size={24} color="#3567e0" />
                 </TouchableOpacity>
               );
@@ -52,8 +86,7 @@ const AppNavigator = () => {
       >
         {authToken ? (
           <>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
             <Stack.Screen name="Routes" component={RouteListScreen} />
             <Stack.Screen name="RouteForm" component={RouteFormScreen} />
             <Stack.Screen name="StopList" component={StopListScreen} />
@@ -66,8 +99,6 @@ const AppNavigator = () => {
             <Stack.Screen name="UserScheduleList" component={UserScheduleListScreen} />
             <Stack.Screen name="SeatSelection" component={SeatSelectionScreen} />
             <Stack.Screen name="BookingConfirmation" component={BookingConfirmationScreen} />
-            <Stack.Screen name="MyBookings" component={MyBookingsScreen} />
-            <Stack.Screen name="AdminBookingList" component={AdminBookingListScreen} />
           </>
         ) : (
           <>

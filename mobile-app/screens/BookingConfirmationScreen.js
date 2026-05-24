@@ -55,21 +55,13 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
 
       if (Platform.OS === "web") {
         window.alert("Booking confirmed successfully!");
-        if (isAdmin) {
-          navigation.navigate("AdminBookingList");
-        } else {
-          navigation.navigate("MyBookings");
-        }
+        navigation.navigate("MainTabs", { screen: "BookingsTab" });
       } else {
         Alert.alert("Success", "Booking confirmed successfully!", [
           {
             text: isAdmin ? "View Bookings" : "View My Bookings",
             onPress: () => {
-              if (isAdmin) {
-                navigation.navigate("AdminBookingList");
-              } else {
-                navigation.navigate("MyBookings");
-              }
+              navigation.navigate("MainTabs", { screen: "BookingsTab" });
             },
           },
         ]);
