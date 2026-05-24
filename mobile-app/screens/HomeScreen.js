@@ -93,61 +93,62 @@ const HomeScreen = ({ navigation }) => {
         </View>
       )}
 
-      <TouchableOpacity
-        style={[styles.actionButton, styles.profileButton]}
-        onPress={() => navigation.navigate("Profile")}
-      >
-        <Text style={styles.buttonText}>Go to Profile</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.actionButton, styles.routeButton]}
-        onPress={() => navigation.navigate("Routes")}
-      >
-        <Text style={styles.buttonText}>
-          {isAdmin ? "Manage Routes" : "Browse Routes"}
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.actionButton, styles.busButton]}
-        onPress={() => navigation.navigate("Buses")}
-      >
-        <Text style={styles.buttonText}>
-          {isAdmin ? "Manage Buses" : "View Buses"}
-        </Text>
-      </TouchableOpacity>
-
-      {isAdmin && (
+      <Text style={styles.gridTitle}>Quick Actions</Text>
+      
+      <View style={styles.gridContainer}>
         <TouchableOpacity
-          style={[styles.actionButton, styles.scheduleButton]}
-          onPress={() => navigation.navigate("ScheduleList")}
+          style={styles.gridCard}
+          onPress={() => navigation.navigate("Routes")}
         >
-          <Text style={styles.buttonText}>Manage Schedules</Text>
+          <View style={[styles.iconCircle, { backgroundColor: "#e0f2fe" }]}>
+            <Ionicons name="map" size={28} color="#0284c7" />
+          </View>
+          <Text style={styles.gridCardTitle}>
+            {isAdmin ? "Manage Routes" : "Browse Routes"}
+          </Text>
         </TouchableOpacity>
-      )}
+
+        <TouchableOpacity
+          style={styles.gridCard}
+          onPress={() => navigation.navigate("Buses")}
+        >
+          <View style={[styles.iconCircle, { backgroundColor: "#f3e8ff" }]}>
+            <Ionicons name="bus" size={28} color="#9333ea" />
+          </View>
+          <Text style={styles.gridCardTitle}>
+            {isAdmin ? "Manage Buses" : "View Buses"}
+          </Text>
+        </TouchableOpacity>
+
+        {isAdmin && (
+          <TouchableOpacity
+            style={styles.gridCard}
+            onPress={() => navigation.navigate("ScheduleList")}
+          >
+            <View style={[styles.iconCircle, { backgroundColor: "#ffedd5" }]}>
+              <Ionicons name="calendar" size={28} color="#ea580c" />
+            </View>
+            <Text style={styles.gridCardTitle}>Manage Schedules</Text>
+          </TouchableOpacity>
+        )}
+
+        <TouchableOpacity
+          style={styles.gridCard}
+          onPress={() => navigation.navigate("UserScheduleList")}
+        >
+          <View style={[styles.iconCircle, { backgroundColor: "#dcfce7" }]}>
+            <Ionicons name="ticket" size={28} color="#16a34a" />
+          </View>
+          <Text style={styles.gridCardTitle}>Book a Ticket</Text>
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity
-        style={[styles.actionButton, styles.bookTicketButton]}
-        onPress={() => navigation.navigate("UserScheduleList")}
-      >
-        <Text style={styles.buttonText}>Book a Ticket</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.actionButton, styles.bookingButton]}
-        onPress={() => navigation.navigate("BookingsTab")}
-      >
-        <Text style={styles.buttonText}>
-          {isAdmin ? "All Bookings" : "My Bookings"}
-        </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={[styles.actionButton, styles.logoutButton]}
+        style={styles.subtleLogout}
         onPress={logout}
       >
-        <Text style={styles.buttonText}>Logout</Text>
+        <Ionicons name="log-out-outline" size={20} color="#ef4444" />
+        <Text style={styles.subtleLogoutText}>Log Out</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -254,43 +255,65 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 
-  actionButton: {
-    padding: 15,
-    borderRadius: 15,
+  gridTitle: {
+    fontSize: 20,
+    fontWeight: "800",
+    color: "#0f172a",
+    marginTop: 10,
+    marginBottom: 15,
+  },
+
+  gridContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+
+  gridCard: {
+    backgroundColor: "#ffffff",
+    width: "48%",
+    padding: 20,
+    borderRadius: 20,
+    marginBottom: 16,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: "#f1f5f9",
+  },
+
+  iconCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 12,
   },
 
-  profileButton: {
-    backgroundColor: "#3567e0",
-  },
-
-  routeButton: {
-    backgroundColor: "#1cab4c",
-  },
-
-  busButton: {
-    backgroundColor: "#7c3aed",
-  },
-
-  scheduleButton: {
-    backgroundColor: "#f59e0b",
-  },
-
-  bookTicketButton: {
-    backgroundColor: "#0ea5e9",
-  },
-
-  bookingButton: {
-    backgroundColor: "#10b981",
-  },
-
-  logoutButton: {
-    backgroundColor: "#ea2424",
-  },
-
-  buttonText: {
-    color: "#ffffff",
-    textAlign: "center",
+  gridCardTitle: {
     fontWeight: "700",
+    color: "#1e293b",
+    fontSize: 14,
+    textAlign: "center",
+  },
+
+  subtleLogout: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 15,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+
+  subtleLogoutText: {
+    color: "#ef4444",
+    fontWeight: "700",
+    fontSize: 16,
+    marginLeft: 8,
   },
 });
