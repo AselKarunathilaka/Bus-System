@@ -13,6 +13,10 @@ import {
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const BUS_TYPES = ["Normal", "Semi Luxury", "Luxury", "Super Luxury"];
 const BUS_STATUS = ["Available", "Maintenance", "Inactive"];
@@ -191,47 +195,41 @@ const BusFormScreen = ({ route, navigation }) => {
   };
 
   const renderOptionList = (items, selectedValue, onSelect) => (
-    <View style={styles.optionList}>
+    <View className="bg-black/5 rounded-xl border border-black/5 mb-4 overflow-hidden">
       {items.map((item) => (
         <TouchableOpacity
           key={item}
-          style={[
-            styles.optionItem,
-            selectedValue === item && styles.selectedOption,
-          ]}
+          className={`p-4 border-b border-black/5 ${selectedValue === item ? 'bg-blue-50' : ''}`}
           onPress={() => onSelect(item)}
         >
-          <Text style={styles.optionText}>{item}</Text>
+          <Text className="text-slate-900 text-sm font-bold">{item}</Text>
         </TouchableOpacity>
       ))}
     </View>
   );
 
   const renderRouteOptions = () => (
-    <View style={styles.optionList}>
+    <View className="bg-black/5 rounded-xl border border-black/5 mb-4 overflow-hidden">
       <TouchableOpacity
-        style={[styles.optionItem, !assignedRoute && styles.selectedOption]}
+        className={`p-4 border-b border-black/5 ${!assignedRoute ? 'bg-blue-50' : ''}`}
         onPress={() => {
           setAssignedRoute("");
           setOpenRoute(false);
         }}
       >
-        <Text style={styles.optionText}>No route assigned</Text>
+        <Text className="text-slate-900 text-sm font-bold">No route assigned</Text>
       </TouchableOpacity>
 
       {routes.map((item) => (
         <TouchableOpacity
           key={item._id}
-          style={[
-            styles.optionItem,
-            assignedRoute === item._id && styles.selectedOption,
-          ]}
+          className={`p-4 border-b border-black/5 ${assignedRoute === item._id ? 'bg-blue-50' : ''}`}
           onPress={() => {
             setAssignedRoute(item._id);
             setOpenRoute(false);
           }}
         >
-          <Text style={styles.optionText}>
+          <Text className="text-slate-900 text-sm font-bold">
             {item.routeName} ({item.startLocation} → {item.endLocation})
           </Text>
         </TouchableOpacity>
@@ -240,287 +238,174 @@ const BusFormScreen = ({ route, navigation }) => {
   );
 
   return (
-    <KeyboardAvoidingView
-      style={styles.keyboardContainer}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={90}
-    >
-      <ScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+    <LiquidBackground>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={90}
       >
-        <Text style={styles.title}>{editingBus ? "Edit Bus" : "Add Bus"}</Text>
-
-        <Text style={styles.subtitle}>
-          Add bus details, assign a route, and set the bus status separately.
-        </Text>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Bus Name"
-          value={busName}
-          onChangeText={setBusName}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="License Number"
-          value={licenseNumber}
-          onChangeText={(text) => setLicenseNumber(sanitizeLicense(text))}
-          autoCapitalize="characters"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Driver Name"
-          value={driverName}
-          onChangeText={(text) => setDriverName(sanitizeTextOnly(text))}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Driver NIC"
-          value={driverNIC}
-          onChangeText={(text) => setDriverNIC(sanitizeNIC(text))}
-          autoCapitalize="characters"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Conductor Name"
-          value={conductorName}
-          onChangeText={(text) => setConductorName(sanitizeTextOnly(text))}
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Conductor NIC"
-          value={conductorNIC}
-          onChangeText={(text) => setConductorNIC(sanitizeNIC(text))}
-          autoCapitalize="characters"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Bus Contact Number"
-          value={busContactNumber}
-          onChangeText={(text) => setBusContactNumber(sanitizePhone(text))}
-          keyboardType="phone-pad"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Seat Count"
-          value={seatCount}
-          onChangeText={(text) => setSeatCount(sanitizeNumber(text))}
-          keyboardType="numeric"
-        />
-
-        <Text style={styles.label}>Bus Type</Text>
-
-        <TouchableOpacity
-          style={styles.selectButton}
-          onPress={() => setOpenBusType(!openBusType)}
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 120 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          <Text style={styles.selectText}>{busType}</Text>
-        </TouchableOpacity>
-
-        {openBusType &&
-          renderOptionList(BUS_TYPES, busType, (value) => {
-            setBusType(value);
-            setOpenBusType(false);
-          })}
-
-        <Text style={styles.label}>Assign Route</Text>
-
-        {loadingRoutes ? (
-          <View style={styles.loadingRoutes}>
-            <ActivityIndicator />
-            <Text style={styles.loadingRoutesText}>Loading routes...</Text>
+          <View className="flex-row items-center mb-6">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-black/5 p-2 rounded-full border border-black/5">
+              <Ionicons name="arrow-back" size={24} color="#0f172a" />
+            </TouchableOpacity>
+            <Text className="text-3xl font-black text-slate-900 shadow-sm flex-1 tracking-tight">
+              {editingBus ? "Edit Bus" : "Add Bus"}
+            </Text>
           </View>
-        ) : (
-          <>
+
+          <Text className="text-slate-500 text-sm font-semibold mb-6">
+            Add bus details, assign a route, and set the bus status separately.
+          </Text>
+
+          <GlassCard className="mb-6">
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Bus Name"
+              placeholderTextColor="#94a3b8"
+              value={busName}
+              onChangeText={setBusName}
+            />
+
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="License Number"
+              placeholderTextColor="#94a3b8"
+              value={licenseNumber}
+              onChangeText={(text) => setLicenseNumber(sanitizeLicense(text))}
+              autoCapitalize="characters"
+            />
+
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Driver Name"
+              placeholderTextColor="#94a3b8"
+              value={driverName}
+              onChangeText={(text) => setDriverName(sanitizeTextOnly(text))}
+            />
+
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Driver NIC"
+              placeholderTextColor="#94a3b8"
+              value={driverNIC}
+              onChangeText={(text) => setDriverNIC(sanitizeNIC(text))}
+              autoCapitalize="characters"
+            />
+
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Conductor Name"
+              placeholderTextColor="#94a3b8"
+              value={conductorName}
+              onChangeText={(text) => setConductorName(sanitizeTextOnly(text))}
+            />
+
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Conductor NIC"
+              placeholderTextColor="#94a3b8"
+              value={conductorNIC}
+              onChangeText={(text) => setConductorNIC(sanitizeNIC(text))}
+              autoCapitalize="characters"
+            />
+
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Bus Contact Number"
+              placeholderTextColor="#94a3b8"
+              value={busContactNumber}
+              onChangeText={(text) => setBusContactNumber(sanitizePhone(text))}
+              keyboardType="phone-pad"
+            />
+
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Seat Count"
+              placeholderTextColor="#94a3b8"
+              value={seatCount}
+              onChangeText={(text) => setSeatCount(sanitizeNumber(text))}
+              keyboardType="numeric"
+            />
+
+            <Text className="text-slate-900 text-sm font-extrabold mb-2 mt-2 uppercase">Bus Type</Text>
             <TouchableOpacity
-              style={styles.selectButton}
-              onPress={() => setOpenRoute(!openRoute)}
+              className="bg-white border border-black/10 rounded-xl p-4 mb-4 flex-row justify-between items-center"
+              onPress={() => setOpenBusType(!openBusType)}
             >
-              <Text style={styles.selectText}>{selectedRouteLabel()}</Text>
+              <Text className="text-slate-900 text-base font-bold">{busType}</Text>
+              <Ionicons name={openBusType ? "chevron-up" : "chevron-down"} size={20} color="#0f172a" />
             </TouchableOpacity>
 
-            {openRoute && renderRouteOptions()}
-          </>
-        )}
+            {openBusType &&
+              renderOptionList(BUS_TYPES, busType, (value) => {
+                setBusType(value);
+                setOpenBusType(false);
+              })}
 
-        <Text style={styles.label}>Bus Status</Text>
+            <Text className="text-slate-900 text-sm font-extrabold mb-2 mt-2 uppercase">Assign Route</Text>
 
-        <TouchableOpacity
-          style={styles.selectButton}
-          onPress={() => setOpenStatus(!openStatus)}
-        >
-          <Text style={styles.selectText}>{status}</Text>
-        </TouchableOpacity>
+            {loadingRoutes ? (
+              <View className="bg-white rounded-xl p-4 mb-4 items-center border border-black/10">
+                <ActivityIndicator color="#0f172a" />
+                <Text className="mt-2 text-slate-500 font-bold">Loading routes...</Text>
+              </View>
+            ) : (
+              <>
+                <TouchableOpacity
+                  className="bg-white border border-black/10 rounded-xl p-4 mb-4 flex-row justify-between items-center"
+                  onPress={() => setOpenRoute(!openRoute)}
+                >
+                  <Text className="text-slate-900 text-base font-bold" numberOfLines={1}>{selectedRouteLabel()}</Text>
+                  <Ionicons name={openRoute ? "chevron-up" : "chevron-down"} size={20} color="#0f172a" />
+                </TouchableOpacity>
 
-        {openStatus &&
-          renderOptionList(BUS_STATUS, status, (value) => {
-            setStatus(value);
-            setOpenStatus(false);
-          })}
+                {openRoute && renderRouteOptions()}
+              </>
+            )}
 
-        <View style={styles.buttonGroup}>
-          <TouchableOpacity
-            style={[styles.saveButton, saving && styles.disabledButton]}
-            onPress={handleSubmit}
-            disabled={saving}
-          >
-            <Text style={styles.saveButtonText}>
-              {saving ? "Saving..." : editingBus ? "Update Bus" : "Create Bus"}
-            </Text>
-          </TouchableOpacity>
+            <Text className="text-slate-900 text-sm font-extrabold mb-2 mt-2 uppercase">Bus Status</Text>
 
-          <TouchableOpacity
-            style={[styles.saveButton, styles.cancelButton]}
-            onPress={() => navigation.goBack()}
-            disabled={saving}
-          >
-            <Text style={[styles.saveButtonText, styles.cancelButtonText]}>
-              Cancel
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <TouchableOpacity
+              className="bg-white border border-black/10 rounded-xl p-4 mb-4 flex-row justify-between items-center"
+              onPress={() => setOpenStatus(!openStatus)}
+            >
+              <Text className="text-slate-900 text-base font-bold">{status}</Text>
+              <Ionicons name={openStatus ? "chevron-up" : "chevron-down"} size={20} color="#0f172a" />
+            </TouchableOpacity>
+
+            {openStatus &&
+              renderOptionList(BUS_STATUS, status, (value) => {
+                setStatus(value);
+                setOpenStatus(false);
+              })}
+          </GlassCard>
+
+          <View className="mb-10">
+            <GlassButton
+              title={saving ? "Saving..." : editingBus ? "Update Bus" : "Create Bus"}
+              onPress={handleSubmit}
+              className={`mb-4 border-[#007AFF]/20 ${saving ? 'opacity-70' : ''}`}
+              textClassName="text-white font-extrabold"
+              disabled={saving}
+            />
+
+            <TouchableOpacity
+              className="bg-white border border-slate-300 p-4 rounded-xl items-center"
+              onPress={() => navigation.goBack()}
+              disabled={saving}
+            >
+              <Text className="text-slate-600 font-bold text-base">Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </LiquidBackground>
   );
 };
 
 export default BusFormScreen;
-
-const styles = StyleSheet.create({
-  keyboardContainer: {
-    flex: 1,
-    backgroundColor: "#eef4ff",
-  },
-
-  container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#eef4ff",
-  },
-
-  title: {
-    fontSize: 28,
-    fontWeight: "800",
-    color: "#0f172a",
-    marginBottom: 6,
-  },
-
-  subtitle: {
-    fontSize: 15,
-    color: "#64748b",
-    lineHeight: 22,
-    marginBottom: 18,
-  },
-
-  input: {
-    backgroundColor: "#ffffff",
-    borderRadius: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 14,
-    fontSize: 15,
-    color: "#0f172a",
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: "#dbeafe",
-  },
-
-  label: {
-    color: "#0f172a",
-    fontSize: 15,
-    fontWeight: "800",
-    marginBottom: 8,
-    marginTop: 4,
-  },
-
-  selectButton: {
-    backgroundColor: "#ffffff",
-    borderRadius: 14,
-    paddingHorizontal: 14,
-    paddingVertical: 14,
-    borderWidth: 1,
-    borderColor: "#dbeafe",
-    marginBottom: 12,
-  },
-
-  selectText: {
-    color: "#0f172a",
-    fontSize: 15,
-    fontWeight: "700",
-  },
-
-  optionList: {
-    backgroundColor: "#ffffff",
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: "#dbeafe",
-    marginBottom: 12,
-    overflow: "hidden",
-  },
-
-  optionItem: {
-    padding: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e2e8f0",
-  },
-
-  selectedOption: {
-    backgroundColor: "#dbeafe",
-  },
-
-  optionText: {
-    color: "#0f172a",
-    fontSize: 14,
-    fontWeight: "700",
-  },
-
-  loadingRoutes: {
-    backgroundColor: "#ffffff",
-    borderRadius: 14,
-    padding: 14,
-    marginBottom: 12,
-    alignItems: "center",
-  },
-
-  loadingRoutesText: {
-    marginTop: 8,
-    color: "#64748b",
-    fontWeight: "700",
-  },
-
-  buttonGroup: {
-    marginTop: 12,
-    marginBottom: 30,
-  },
-  saveButton: {
-    backgroundColor: "#2563eb",
-    borderRadius: 14,
-    paddingVertical: 15,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  cancelButton: {
-    backgroundColor: "#ffffff",
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-  },
-  disabledButton: {
-    opacity: 0.7,
-  },
-  saveButtonText: {
-    color: "#ffffff",
-    fontSize: 16,
-    fontWeight: "800",
-  },
-  cancelButtonText: {
-    color: "#475569",
-  },
-});

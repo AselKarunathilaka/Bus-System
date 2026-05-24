@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Text, Pressable, View, StyleSheet, Platform } from "react-native";
-import { BlurView } from "expo-blur";
+import { Text, Pressable, View, StyleSheet } from "react-native";
 import Animated, {
   useAnimatedStyle,
   withTiming,
@@ -23,7 +22,7 @@ const GlassButton = ({ title, onPress, className = "", textClassName = "", icon 
     <AnimatedPressable
       onPressIn={() => {
         setIsPressed(true);
-        scale.value = withTiming(0.95, { duration: 100 });
+        scale.value = withTiming(0.96, { duration: 100 });
       }}
       onPressOut={() => {
         setIsPressed(false);
@@ -31,18 +30,12 @@ const GlassButton = ({ title, onPress, className = "", textClassName = "", icon 
       }}
       onPress={onPress}
       style={[animatedStyle, styles.container]}
-      className={`rounded-2xl overflow-hidden border border-white/30 ${className}`}
+      className={`rounded-2xl overflow-hidden ${isPressed ? "bg-[#005bb5]" : "bg-[#007AFF]"} ${className}`}
     >
-      <BlurView
-        intensity={Platform.OS === "ios" ? 50 : 50}
-        tint="default"
-        style={StyleSheet.absoluteFillObject}
-        className={isPressed ? "bg-white/30" : "bg-white/10"}
-      />
       <View className="px-6 py-4 flex-row items-center justify-center">
         {icon && icon}
         <Text
-          className={`font-bold text-white text-lg ${icon ? "ml-2" : ""} ${textClassName}`}
+          className={`font-semibold text-white text-lg ${icon ? "ml-2" : ""} ${textClassName}`}
         >
           {title}
         </Text>
@@ -55,11 +48,10 @@ export default GlassButton;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "transparent",
-    shadowColor: "#000",
+    shadowColor: "#007AFF",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
     elevation: 2,
   },
 });

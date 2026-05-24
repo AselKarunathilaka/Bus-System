@@ -5,12 +5,15 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
-  StyleSheet,
   ActivityIndicator,
   Platform,
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const StopListScreen = ({ route, navigation }) => {
   const { token, user, userToken } = useContext(AuthContext);
@@ -90,49 +93,68 @@ const StopListScreen = ({ route, navigation }) => {
 
   if (loading) {
     return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" />
-        <Text style={styles.loaderText}>Loading stops...</Text>
-      </View>
+      <LiquidBackground>
+        <View className="flex-1 justify-center items-center">
+          <ActivityIndicator size="large" color="#0f172a" />
+          <Text className="mt-3 text-slate-600 font-semibold">Loading stops...</Text>
+        </View>
+      </LiquidBackground>
     );
   }
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>{routeName} Stops</Text>
-      <Text style={styles.subtitle}>
-        {user?.role === "admin"
-          ? "Add, edit, and remove stops for this route"
-          : "View all stops available in this route"}
-      </Text>
-
-      {user?.role === "admin" && (
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate("StopForm", { routeId })}
-        >
-          <Text style={styles.buttonText}>Add Stop</Text>
+  const renderHeader = () => (
+    <>
+      <View className="flex-row items-center mb-5">
+        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-black/5 p-2 rounded-full border border-black/5">
+          <Ionicons name="arrow-back" size={24} color="#0f172a" />
         </TouchableOpacity>
-      )}
+        <Text className="text-3xl font-black text-slate-900 shadow-sm flex-1 tracking-tight">
+          {routeName} Stops
+        </Text>
+      </View>
 
+      <GlassCard className="mb-4">
+        <Text className="text-slate-600 text-sm leading-relaxed mb-4">
+          {user?.role === "admin"
+            ? "Add, edit, and remove stops for this route"
+            : "View all stops available in this route"}
+        </Text>
+
+        {user?.role === "admin" && (
+          <GlassButton
+            title="+ Add Stop"
+            onPress={() => navigation.navigate("StopForm", { routeId })}
+            className="border-[#007AFF]/20"
+            textClassName="text-white font-extrabold"
+          />
+        )}
+      </GlassCard>
+    </>
+  );
+
+  return (
+    <LiquidBackground>
       <FlatList
         data={stops}
+        className="flex-1"
         keyExtractor={(item) => item._id}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
+        ListHeaderComponent={renderHeader}
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <Text style={styles.emptyText}>No stops found for this route</Text>
+          <Text className="text-center mt-10 text-slate-500 font-medium">No stops found for this route</Text>
         }
         renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.stopName}>
+          <GlassCard className="mb-4">
+            <Text className="text-lg font-extrabold text-slate-900 mb-1 tracking-tight">
               {item.order}. {item.stopName}
             </Text>
-            <Text style={styles.text}>Location: {item.location}</Text>
+            <Text className="text-sm font-medium text-slate-500 mb-4">Location: {item.location}</Text>
 
             {user?.role === "admin" && (
-              <>
+              <View className="flex-row gap-3">
                 <TouchableOpacity
-                  style={styles.editButton}
+                  className="bg-amber-100 p-3 rounded-xl flex-1 border border-amber-200"
                   onPress={() =>
                     navigation.navigate("StopForm", {
                       routeId,
@@ -140,105 +162,22 @@ const StopListScreen = ({ route, navigation }) => {
                     })
                   }
                 >
-                  <Text style={styles.buttonText}>Edit Stop</Text>
+                  <Text className="text-amber-600 font-bold text-center">Edit Stop</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={styles.deleteButton}
+                  className="bg-red-100 p-3 rounded-xl flex-1 border border-red-200"
                   onPress={() => handleDeleteStop(item._id)}
                 >
-                  <Text style={styles.buttonText}>Delete Stop</Text>
+                  <Text className="text-red-600 font-bold text-center">Delete Stop</Text>
                 </TouchableOpacity>
-              </>
+              </View>
             )}
-          </View>
+          </GlassCard>
         )}
       />
-    </View>
+    </LiquidBackground>
   );
 };
 
 export default StopListScreen;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    backgroundColor: "#eef4ff",
-  },
-  loaderContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#eef4ff",
-  },
-  loaderText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#475569",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "800",
-    textAlign: "center",
-    marginBottom: 8,
-    color: "#0f172a",
-  },
-  subtitle: {
-    textAlign: "center",
-    fontSize: 15,
-    color: "#475569",
-    marginBottom: 16,
-  },
-  addButton: {
-    backgroundColor: "#2563eb",
-    padding: 14,
-    borderRadius: 12,
-    marginBottom: 16,
-  },
-  editButton: {
-    backgroundColor: "#f59e0b",
-    padding: 12,
-    borderRadius: 12,
-    marginTop: 10,
-  },
-  deleteButton: {
-    backgroundColor: "#dc2626",
-    padding: 12,
-    borderRadius: 12,
-    marginTop: 10,
-  },
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "700",
-  },
-  card: {
-    backgroundColor: "#fff",
-    padding: 14,
-    borderRadius: 16,
-    marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
-  },
-  stopName: {
-    fontSize: 18,
-    fontWeight: "800",
-    marginBottom: 6,
-    color: "#0f172a",
-  },
-  text: {
-    fontSize: 15,
-    marginBottom: 4,
-    color: "#475569",
-  },
-  emptyText: {
-    textAlign: "center",
-    marginTop: 20,
-    fontSize: 16,
-    color: "#666",
-  },
-});

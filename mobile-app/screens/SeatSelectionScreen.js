@@ -7,7 +7,12 @@ import {
   FlatList,
   Alert,
   ScrollView,
+  ScrollView,
 } from "react-native";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const SeatSelectionScreen = ({ route, navigation }) => {
   const { schedule } = route.params;
@@ -105,212 +110,119 @@ const SeatSelectionScreen = ({ route, navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Select Your Seats</Text>
-      
-      <View style={styles.typeSelector}>
-        <TouchableOpacity
-          style={[styles.typeBtn, bookingType === "Single" && styles.typeBtnActive]}
-          onPress={() => handleTypeChange("Single")}
-        >
-          <Text style={[styles.typeBtnText, bookingType === "Single" && styles.typeBtnTextActive]}>
-            Single (1 Seat)
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.typeBtn, bookingType === "Family" && styles.typeBtnActive]}
-          onPress={() => handleTypeChange("Family")}
-        >
-          <Text style={[styles.typeBtnText, bookingType === "Family" && styles.typeBtnTextActive]}>
-            Family (Up to 8)
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <LiquidBackground>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
+        <View className="flex-row items-center mb-6">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-black/5 p-2 rounded-full border border-black/5">
+            <Ionicons name="arrow-back" size={24} color="#0f172a" />
+          </TouchableOpacity>
+          <Text className="text-3xl font-black text-slate-900 shadow-sm flex-1 tracking-tight">Select Seats</Text>
+        </View>
+        
+        <View className="flex-row bg-black/5 rounded-xl p-1 mb-5 border border-black/10">
+          <TouchableOpacity
+            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Single" ? 'bg-white shadow-sm border border-black/5' : ''}`}
+            onPress={() => handleTypeChange("Single")}
+          >
+            <Text className={`font-bold ${bookingType === "Single" ? 'text-slate-900' : 'text-slate-500'}`}>
+              Single (1 Seat)
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Family" ? 'bg-white shadow-sm border border-black/5' : ''}`}
+            onPress={() => handleTypeChange("Family")}
+          >
+            <Text className={`font-bold ${bookingType === "Family" ? 'text-slate-900' : 'text-slate-500'}`}>
+              Family (Up to 8)
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.legendContainer}>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendBox, styles.seatAvailable]} />
-          <Text style={styles.legendText}>Available</Text>
+        <View className="flex-row justify-around mb-6 bg-black/5 p-3 rounded-xl border border-black/5">
+          <View className="flex-row items-center">
+            <View className="w-4 h-4 rounded border-2 border-slate-400 mr-2" />
+            <Text className="text-xs text-slate-600 font-bold uppercase">Available</Text>
+          </View>
+          <View className="flex-row items-center">
+            <View className="w-4 h-4 rounded bg-[#007AFF] mr-2" />
+            <Text className="text-xs text-slate-600 font-bold uppercase">Selected</Text>
+          </View>
+          <View className="flex-row items-center">
+            <View className="w-4 h-4 rounded bg-slate-300 mr-2" />
+            <Text className="text-xs text-slate-600 font-bold uppercase">Booked</Text>
+          </View>
         </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendBox, styles.seatSelected]} />
-          <Text style={styles.legendText}>Selected</Text>
-        </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendBox, styles.seatBooked]} />
-          <Text style={styles.legendText}>Booked</Text>
-        </View>
-      </View>
 
-      <View style={styles.busContainerWrapper}>
-        <View style={styles.busContainer}>
-          <View style={styles.driverSection}>
-            <View style={styles.steeringWheel}>
-              <Text style={styles.driverIcon}>🚍</Text>
+        <View className="items-center mb-6">
+          <View className="w-full max-w-[400px] bg-white rounded-[40px] border-[6px] border-slate-200 p-5 pt-8 shadow-sm">
+            <View className="items-end mb-8 pr-3 border-b-2 border-slate-100 pb-5">
+              <View className="w-12 h-12 bg-slate-100 rounded-full justify-center items-center border-2 border-slate-200">
+                <Text className="text-xl">🚍</Text>
+              </View>
+            </View>
+            
+            <View className="pb-5">
+              {rows.map((item, index) => (
+                <View key={index} className="flex-row justify-center mb-4">
+                  <View className="flex-row gap-3">
+                    {renderSeat(item[0])}
+                    {renderSeat(item[1])}
+                  </View>
+                  <View className="w-12" />
+                  <View className="flex-row gap-3">
+                    {renderSeat(item[2])}
+                    {renderSeat(item[3])}
+                  </View>
+                </View>
+              ))}
             </View>
           </View>
-          
-          <View style={styles.flatListContent}>
-            {rows.map((item, index) => (
-              <View key={index} style={styles.busRow}>
-                <View style={styles.seatPair}>
-                  {renderSeat(item[0])}
-                  {renderSeat(item[1])}
-                </View>
-                <View style={styles.aisle} />
-                <View style={styles.seatPair}>
-                  {renderSeat(item[2])}
-                  {renderSeat(item[3])}
-                </View>
-              </View>
-            ))}
-          </View>
         </View>
-      </View>
 
-      <View style={styles.footer}>
-        <Text style={styles.selectedCountText}>
-          Selected: {selectedSeats.length} / {bookingType === "Single" ? 1 : 8}
-        </Text>
-        <TouchableOpacity style={styles.continueBtn} onPress={handleContinue}>
-          <Text style={styles.continueBtnText}>Continue to Book</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+        <GlassCard className="flex-row justify-between items-center mb-10">
+          <Text className="text-base font-bold text-slate-900">
+            Selected: <Text className="text-[#007AFF]">{selectedSeats.length}</Text> / {bookingType === "Single" ? 1 : 8}
+          </Text>
+          <TouchableOpacity 
+            className="bg-[#007AFF] px-6 py-3 rounded-xl shadow-sm"
+            onPress={handleContinue}
+          >
+            <Text className="color-white font-black text-sm uppercase">Continue</Text>
+          </TouchableOpacity>
+        </GlassCard>
+      </ScrollView>
+    </LiquidBackground>
   );
 };
 
 export default SeatSelectionScreen;
 
-const styles = StyleSheet.create({
-  container: { flexGrow: 1, backgroundColor: "#0f172a", padding: 20 },
-  title: { fontSize: 24, fontWeight: "800", color: "#fff", marginBottom: 15, textAlign: "center" },
-  typeSelector: {
-    flexDirection: "row",
-    backgroundColor: "#1e293b",
-    borderRadius: 10,
-    padding: 5,
-    marginBottom: 15,
-  },
-  typeBtn: {
-    flex: 1,
-    paddingVertical: 12,
-    alignItems: "center",
-    borderRadius: 8,
-  },
-  typeBtnActive: { backgroundColor: "#3567e0" },
-  typeBtnText: { fontWeight: "bold", color: "#94a3b8" },
-  typeBtnTextActive: { color: "#fff" },
-  
-  legendContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 20,
-    backgroundColor: "#1e293b",
-    padding: 10,
-    borderRadius: 10,
-  },
-  legendItem: { flexDirection: "row", alignItems: "center" },
-  legendBox: { width: 16, height: 16, borderRadius: 4, marginRight: 8 },
-  legendText: { fontSize: 13, color: "#cbd5e1", fontWeight: "600" },
-
-  busContainerWrapper: {
-    alignItems: "center",
-    marginBottom: 15,
-  },
-  busContainer: {
-    width: "100%",
-    maxWidth: 400,
-    backgroundColor: "#1e293b",
-    borderRadius: 30,
-    borderWidth: 4,
-    borderColor: "#334155",
-    padding: 15,
-    paddingTop: 20,
-  },
-  driverSection: {
-    alignItems: "flex-end",
-    marginBottom: 25,
-    paddingRight: 10,
-    borderBottomWidth: 2,
-    borderBottomColor: "#334155",
-    paddingBottom: 15,
-  },
-  steeringWheel: {
-    width: 40,
-    height: 40,
-    backgroundColor: "#0f172a",
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#475569",
-  },
-  driverIcon: { fontSize: 18 },
-  flatListContent: { paddingBottom: 20 },
-  busRow: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginBottom: 12,
-  },
-  seatPair: {
-    flexDirection: "row",
-    gap: 10,
-  },
-  aisle: {
-    width: 40, // Aisle width
-  },
   seatBox: {
-    width: 45,
-    height: 55,
+    width: 48,
+    height: 58,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 8,
-    borderWidth: 1,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
+    borderRadius: 12,
+    borderWidth: 2,
   },
   seatHidden: {
     backgroundColor: "transparent",
     borderWidth: 0,
-    elevation: 0,
-    shadowOpacity: 0,
   },
   seatAvailable: {
-    backgroundColor: "transparent",
-    borderColor: "#64748b",
-    borderWidth: 1.5,
+    backgroundColor: "#ffffff",
+    borderColor: "#94a3b8",
   },
   seatSelected: {
-    backgroundColor: "#10b981",
-    borderColor: "#059669",
+    backgroundColor: "#007AFF",
+    borderColor: "#007AFF",
   },
   seatBooked: {
-    backgroundColor: "#ef4444",
-    borderColor: "#b91c1c",
+    backgroundColor: "#e2e8f0",
+    borderColor: "#cbd5e1",
   },
-  seatText: { fontWeight: "700", fontSize: 14 },
-  seatTextAvailable: { color: "#cbd5e1" },
+  seatText: { fontWeight: "800", fontSize: 14 },
+  seatTextAvailable: { color: "#64748b" },
   seatTextSelected: { color: "#ffffff" },
-  seatTextBooked: { color: "#fca5a5" },
-
-  footer: {
-    backgroundColor: "#1e293b",
-    padding: 15,
-    borderRadius: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  selectedCountText: { fontSize: 16, fontWeight: "bold", color: "#f8fafc" },
-  continueBtn: {
-    backgroundColor: "#3567e0",
-    paddingHorizontal: 25,
-    paddingVertical: 12,
-    borderRadius: 10,
-  },
-  continueBtnText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
+  seatTextBooked: { color: "#94a3b8" },
 });

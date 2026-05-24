@@ -11,6 +11,9 @@ import {
   View,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import LiquidBackground from "../components/LiquidBackground";
 
 const RegisterScreen = ({ navigation }) => {
   const { register } = useContext(AuthContext);
@@ -100,194 +103,104 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.keyboardContainer}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={90}
-    >
-      <ScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+    <LiquidBackground>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={90}
       >
-        <View style={styles.heroCard}>
-          <Text style={styles.badge}>QuickBus (Highway Bus Reservation System)</Text>
-          <Text style={styles.heroTitle}>Create Your Account</Text>
-          <Text style={styles.heroSubtitle}>
-            Register to browse highway routes, view stops, and use the QuickBus system.
-          </Text>
-        </View>
-
-        <View style={styles.formCard}>
-          <Text style={styles.formTitle}>Get Started</Text>
-          <Text style={styles.formSubtitle}>
-            Create an account to begin using the system
-          </Text>
-
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
-            placeholderTextColor="#888"
-            value={fullName}
-            onChangeText={(text) => setFullName(sanitizeNameField(text))}
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#888"
-            value={email}
-            onChangeText={setEmail}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Phone Number"
-            placeholderTextColor="#888"
-            value={phone}
-            onChangeText={(text) => setPhone(sanitizePhoneField(text))}
-            keyboardType="phone-pad"
-            returnKeyType="next"
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#888"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            returnKeyType="done"
-          />
-
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleRegister}
-            disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading ? "Creating Account..." : "Register"}
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <GlassCard className="mb-6 items-center">
+            <View className="bg-black/5 px-4 py-2 rounded-full border border-black/5 mb-4">
+              <Text className="text-slate-900 text-xs font-bold">QuickBus Portal</Text>
+            </View>
+            <Text className="text-3xl font-extrabold text-slate-900 mb-2 text-center shadow-sm">
+              Create Account
             </Text>
-          </TouchableOpacity>
+            <Text className="text-sm text-slate-600 text-center leading-relaxed">
+              Register to browse highway routes, view stops, and use the QuickBus system.
+            </Text>
+          </GlassCard>
 
-          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
-            <Text style={styles.linkText}>Already have an account? Login</Text>
-          </TouchableOpacity>
-        </View>
+          <GlassCard className="mb-6">
+            <Text className="text-xl font-bold text-slate-900 mb-6 text-center shadow-sm">
+              Get Started
+            </Text>
 
-        <View style={styles.bottomSpacer} />
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-4">
+              <TextInput
+                className="py-4 text-base text-slate-900 font-semibold"
+                placeholder="Full Name"
+                placeholderTextColor="#94a3b8"
+                value={fullName}
+                onChangeText={(text) => setFullName(sanitizeNameField(text))}
+                returnKeyType="next"
+              />
+            </View>
+
+            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-4">
+              <TextInput
+                className="py-4 text-base text-slate-900 font-semibold"
+                placeholder="Email Address"
+                placeholderTextColor="#94a3b8"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                returnKeyType="next"
+              />
+            </View>
+
+            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-4">
+              <TextInput
+                className="py-4 text-base text-slate-900 font-semibold"
+                placeholder="Phone Number"
+                placeholderTextColor="#94a3b8"
+                value={phone}
+                onChangeText={(text) => setPhone(sanitizePhoneField(text))}
+                keyboardType="phone-pad"
+                returnKeyType="next"
+              />
+            </View>
+
+            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-6">
+              <TextInput
+                className="py-4 text-base text-slate-900 font-semibold"
+                placeholder="Password"
+                placeholderTextColor="#94a3b8"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                returnKeyType="done"
+              />
+            </View>
+
+            <GlassButton
+              title={loading ? "Creating Account..." : "Register"}
+              onPress={handleRegister}
+              className="mb-6"
+              textClassName="text-white font-extrabold"
+            />
+
+            <GlassButton
+              title="Already have an account? Login"
+              onPress={() => navigation.navigate("Login")}
+              className="bg-transparent border-black/10"
+              textClassName="text-slate-600"
+            />
+          </GlassCard>
+
+          <View className="h-[30px]" />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </LiquidBackground>
   );
 };
 
 export default RegisterScreen;
 
-const styles = StyleSheet.create({
-  keyboardContainer: {
-    flex: 1,
-    backgroundColor: "#eef4ff",
-  },
-  container: {
-    flexGrow: 1,
-    padding: 20,
-    backgroundColor: "#eef4ff",
-    justifyContent: "center",
-  },
-  heroCard: {
-    backgroundColor: "#0f172a",
-    borderRadius: 22,
-    padding: 22,
-    marginBottom: 18,
-    shadowColor: "#000",
-    shadowOpacity: 0.12,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 4,
-  },
-  badge: {
-    alignSelf: "flex-start",
-    backgroundColor: "#1e3a8a",
-    color: "#ffffff",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 999,
-    fontSize: 12,
-    fontWeight: "700",
-    marginBottom: 14,
-    overflow: "hidden",
-  },
-  heroTitle: {
-    fontSize: 28,
-    fontWeight: "800",
-    color: "#ffffff",
-    marginBottom: 10,
-  },
-  heroSubtitle: {
-    fontSize: 15,
-    color: "#cbd5e1",
-    lineHeight: 22,
-  },
-  formCard: {
-    backgroundColor: "#ffffff",
-    borderRadius: 22,
-    padding: 22,
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 3,
-  },
-  formTitle: {
-    fontSize: 28,
-    fontWeight: "800",
-    textAlign: "center",
-    color: "#0f172a",
-    marginBottom: 8,
-  },
-  formSubtitle: {
-    textAlign: "center",
-    color: "#64748b",
-    fontSize: 15,
-    marginBottom: 22,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-    backgroundColor: "#fff",
-    padding: 16,
-    borderRadius: 14,
-    marginBottom: 16,
-    fontSize: 16,
-    color: "#0f172a",
-  },
-  button: {
-    backgroundColor: "#3567e0",
-    padding: 16,
-    borderRadius: 14,
-    marginTop: 4,
-    marginBottom: 18,
-  },
-  buttonDisabled: {
-    opacity: 0.7,
-  },
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "800",
-    fontSize: 16,
-  },
-  linkText: {
-    textAlign: "center",
-    color: "#2563eb",
-    fontSize: 15,
-    fontWeight: "600",
-  },
-  bottomSpacer: {
-    height: 30,
-  },
-});
+// We've moved styles to Tailwind classes!

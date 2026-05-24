@@ -391,8 +391,8 @@ const AdminDashboardScreen = ({ navigation }) => {
     return (
       <LiquidBackground>
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#ffffff" />
-          <Text className="mt-4 text-indigo-200 font-bold text-base">Compiling Analytics...</Text>
+          <ActivityIndicator size="large" color="#0f172a" />
+          <Text className="mt-4 text-slate-600 font-bold text-base">Compiling Analytics...</Text>
         </View>
       </LiquidBackground>
     );
@@ -410,30 +410,30 @@ const AdminDashboardScreen = ({ navigation }) => {
         <View className="mb-6">
           <View className="flex-row justify-between items-center">
             <View>
-              <Text className="text-3xl font-black text-white">System Overview</Text>
-              <Text className="text-sm text-indigo-200 mt-1">Real-time metrics (updates every 15s)</Text>
+              <Text className="text-3xl font-black text-slate-900 tracking-tight">System Overview</Text>
+              <Text className="text-sm text-slate-500 mt-1">Real-time metrics (updates every 15s)</Text>
             </View>
-            <TouchableOpacity className="bg-white/20 border border-white/30 flex-row items-center px-4 py-2 rounded-full" onPress={generatePDFReport}>
-              <Ionicons name="document-text" size={18} color="#ffffff" />
-              <Text className="text-white font-bold ml-2">Export PDF</Text>
+            <TouchableOpacity className="bg-black/5 border border-black/5 flex-row items-center px-4 py-2 rounded-full" onPress={generatePDFReport}>
+              <Ionicons name="document-text" size={18} color="#007AFF" />
+              <Text className="text-[#007AFF] font-bold ml-2">Export PDF</Text>
             </TouchableOpacity>
           </View>
         </View>
 
         <GlassCard className="mb-4">
-          <Text className="text-base font-bold text-white mb-3">Archival Date Filter</Text>
+          <Text className="text-base font-bold text-slate-900 mb-3">Archival Date Filter</Text>
           <View className="flex-row justify-between mb-2">
             <View className="w-[48%]">
-              <Text className="text-xs text-indigo-200 mb-1">Start Date</Text>
+              <Text className="text-xs text-slate-500 mb-1 font-semibold uppercase">Start Date</Text>
               {Platform.OS === 'web' ? (
                 <input 
                   type="date" 
                   style={{
-                    border: "1px solid rgba(255,255,255,0.3)",
+                    border: "1px solid rgba(0,0,0,0.1)",
                     padding: "10px",
                     borderRadius: "8px",
-                    backgroundColor: "rgba(255,255,255,0.1)",
-                    color: "white",
+                    backgroundColor: "rgba(0,0,0,0.02)",
+                    color: "#0f172a",
                     width: "100%",
                     boxSizing: "border-box",
                     fontFamily: "inherit",
@@ -444,7 +444,7 @@ const AdminDashboardScreen = ({ navigation }) => {
                 />
               ) : (
                 <TextInput
-                  className="border border-white/30 p-3 rounded-lg bg-white/10 text-white"
+                  className="border border-black/10 p-3 rounded-lg bg-black/5 text-slate-900"
                   placeholder="YYYY-MM-DD"
                   placeholderTextColor="#94a3b8"
                   value={startDate}
@@ -453,16 +453,16 @@ const AdminDashboardScreen = ({ navigation }) => {
               )}
             </View>
             <View className="w-[48%]">
-              <Text className="text-xs text-indigo-200 mb-1">End Date</Text>
+              <Text className="text-xs text-slate-500 mb-1 font-semibold uppercase">End Date</Text>
               {Platform.OS === 'web' ? (
                 <input 
                   type="date" 
                   style={{
-                    border: "1px solid rgba(255,255,255,0.3)",
+                    border: "1px solid rgba(0,0,0,0.1)",
                     padding: "10px",
                     borderRadius: "8px",
-                    backgroundColor: "rgba(255,255,255,0.1)",
-                    color: "white",
+                    backgroundColor: "rgba(0,0,0,0.02)",
+                    color: "#0f172a",
                     width: "100%",
                     boxSizing: "border-box",
                     fontFamily: "inherit",
@@ -473,7 +473,7 @@ const AdminDashboardScreen = ({ navigation }) => {
                 />
               ) : (
                 <TextInput
-                  className="border border-white/30 p-3 rounded-lg bg-white/10 text-white"
+                  className="border border-black/10 p-3 rounded-lg bg-black/5 text-slate-900"
                   placeholder="YYYY-MM-DD"
                   placeholderTextColor="#94a3b8"
                   value={endDate}
@@ -484,74 +484,74 @@ const AdminDashboardScreen = ({ navigation }) => {
           </View>
           {(startDate || endDate) && (
             <TouchableOpacity className="items-center mt-3" onPress={() => { setStartDate(""); setEndDate(""); }}>
-              <Text className="text-cyan-300 font-bold text-sm">Clear Filters (Show All Time)</Text>
+              <Text className="text-[#007AFF] font-bold text-sm">Clear Filters (Show All Time)</Text>
             </TouchableOpacity>
           )}
         </GlassCard>
 
         <View className="flex-row flex-wrap justify-between mb-2">
-          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-emerald-400">
-            <Text className="text-indigo-200 text-xs font-bold mb-2">Revenue</Text>
-            <Text className="text-white text-2xl font-black">
-              <Text className="text-sm font-semibold text-indigo-300">LKR</Text> {metrics.totalRevenue.toLocaleString()}
+          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-emerald-500">
+            <Text className="text-slate-500 text-xs font-bold mb-2 uppercase">Revenue</Text>
+            <Text className="text-slate-900 text-2xl font-black">
+              <Text className="text-sm font-semibold text-slate-400">LKR</Text> {metrics.totalRevenue.toLocaleString()}
             </Text>
           </GlassCard>
 
-          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-cyan-400">
-            <Text className="text-indigo-200 text-xs font-bold mb-2">Bookings</Text>
-            <Text className="text-white text-2xl font-black">{metrics.totalBookings}</Text>
+          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-blue-500">
+            <Text className="text-slate-500 text-xs font-bold mb-2 uppercase">Bookings</Text>
+            <Text className="text-slate-900 text-2xl font-black">{metrics.totalBookings}</Text>
           </GlassCard>
 
-          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-amber-400">
-            <Text className="text-indigo-200 text-xs font-bold mb-2">Active Routes</Text>
-            <Text className="text-white text-2xl font-black">{metrics.activeRoutes}</Text>
+          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-amber-500">
+            <Text className="text-slate-500 text-xs font-bold mb-2 uppercase">Active Routes</Text>
+            <Text className="text-slate-900 text-2xl font-black">{metrics.activeRoutes}</Text>
           </GlassCard>
 
-          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-violet-400">
-            <Text className="text-indigo-200 text-xs font-bold mb-2">Total Buses</Text>
-            <Text className="text-white text-2xl font-black">{metrics.totalBuses}</Text>
+          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-violet-500">
+            <Text className="text-slate-500 text-xs font-bold mb-2 uppercase">Total Buses</Text>
+            <Text className="text-slate-900 text-2xl font-black">{metrics.totalBuses}</Text>
           </GlassCard>
         </View>
 
         <GlassCard className="mb-5">
-          <Text className="text-lg font-black text-white mb-4">Booking Volume (7 Days Ending in Filter)</Text>
+          <Text className="text-lg font-black text-slate-900 mb-4 tracking-tight">Booking Volume (7 Days Ending in Filter)</Text>
           <View className="flex-row justify-between items-end h-48 pt-5">
                 {chartData.map((dataPoint, index) => (
               <View key={index} className="items-center flex-1">
-                <Text className="text-xs font-bold text-cyan-300 mb-1 h-4">{dataPoint.count > 0 ? dataPoint.count : ""}</Text>
-                <View className="w-6 h-32 bg-white/10 rounded-full justify-end overflow-hidden">
+                <Text className="text-xs font-bold text-[#007AFF] mb-1 h-4">{dataPoint.count > 0 ? dataPoint.count : ""}</Text>
+                <View className="w-6 h-32 bg-black/5 rounded-full justify-end overflow-hidden">
                   <View
-                    className="bg-cyan-400 w-full rounded-full"
+                    className="bg-[#007AFF] w-full rounded-full"
                     style={{ height: `${dataPoint.heightPercentage}%` }}
                   />
                 </View>
-                <Text className="text-xs text-indigo-200 font-semibold mt-2">{dataPoint.dayLabel}</Text>
+                <Text className="text-xs text-slate-500 font-semibold mt-2">{dataPoint.dayLabel}</Text>
               </View>
             ))}
           </View>
         </GlassCard>
 
         <GlassCard className="mb-10">
-          <Text className="text-lg font-black text-white mb-2">Fleet Status Breakdown</Text>
+          <Text className="text-lg font-black text-slate-900 mb-2 tracking-tight">Fleet Status Breakdown</Text>
           <View className="mt-2">
             <View>
               <View className="flex-row items-center mb-2">
-                <View className="w-3 h-3 rounded-full mr-2 bg-emerald-400" />
-                <Text className="text-sm font-semibold text-white">Available ({metrics.availableBuses})</Text>
+                <View className="w-3 h-3 rounded-full mr-2 bg-emerald-500" />
+                <Text className="text-sm font-semibold text-slate-700">Available ({metrics.availableBuses})</Text>
               </View>
               <View className="flex-row items-center mb-2">
-                <View className="w-3 h-3 rounded-full mr-2 bg-pink-500" />
-                <Text className="text-sm font-semibold text-white">Maintenance ({metrics.maintenanceBuses})</Text>
+                <View className="w-3 h-3 rounded-full mr-2 bg-amber-500" />
+                <Text className="text-sm font-semibold text-slate-700">Maintenance ({metrics.maintenanceBuses})</Text>
               </View>
             </View>
 
-            <View className="flex-row h-6 rounded-full overflow-hidden bg-white/10 mt-2">
+            <View className="flex-row h-6 rounded-full overflow-hidden bg-black/5 mt-2">
               <View
-                className="bg-emerald-400"
+                className="bg-emerald-500"
                 style={{ flex: metrics.availableBuses || 1 }}
               />
               <View
-                className="bg-pink-500"
+                className="bg-amber-500"
                 style={{ flex: metrics.maintenanceBuses || 0 }}
               />
             </View>

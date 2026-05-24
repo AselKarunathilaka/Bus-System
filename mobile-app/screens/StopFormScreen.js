@@ -12,6 +12,10 @@ import {
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
+import LiquidBackground from "../components/LiquidBackground";
+import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
+import { Ionicons } from "@expo/vector-icons";
 
 const StopFormScreen = ({ route, navigation }) => {
   const { token, userToken } = useContext(AuthContext);
@@ -107,133 +111,77 @@ const StopFormScreen = ({ route, navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.keyboardContainer}
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={90}
-    >
-      <ScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+    <LiquidBackground>
+      <KeyboardAvoidingView
+        className="flex-1"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={90}
       >
-        <Text style={styles.title}>{stopData ? "Edit Stop" : "Add Stop"}</Text>
-
-        <TextInput
-          style={styles.input}
-          placeholder="Stop Name"
-          value={stopName}
-          onChangeText={(text) => setStopName(sanitizeNameField(text))}
-          returnKeyType="next"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Location"
-          value={location}
-          onChangeText={(text) => setLocation(sanitizeNameField(text))}
-          returnKeyType="next"
-        />
-
-        <TextInput
-          style={styles.input}
-          placeholder="Order"
-          value={order}
-          onChangeText={(text) => setOrder(sanitizeNumericField(text))}
-          keyboardType="numeric"
-          returnKeyType="done"
-        />
-
-        <View style={styles.buttonGroup}>
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled, styles.primaryButton]}
-            onPress={handleSubmit}
-            disabled={loading}
-          >
-            <Text style={styles.buttonText}>
-              {loading
-                ? stopData
-                  ? "Updating..."
-                  : "Creating..."
-                : stopData
-                ? "Update Stop"
-                : "Create Stop"}
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 120 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="flex-row items-center mb-6">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-black/5 p-2 rounded-full border border-black/5">
+              <Ionicons name="arrow-back" size={24} color="#0f172a" />
+            </TouchableOpacity>
+            <Text className="text-3xl font-black text-slate-900 shadow-sm flex-1 tracking-tight">
+              {stopData ? "Edit Stop" : "Add Stop"}
             </Text>
-          </TouchableOpacity>
+          </View>
 
-          <TouchableOpacity
-            style={[styles.button, styles.cancelButton]}
-            onPress={() => navigation.goBack()}
-            disabled={loading}
-          >
-            <Text style={[styles.buttonText, styles.cancelButtonText]}>Cancel</Text>
-          </TouchableOpacity>
-        </View>
+          <GlassCard className="mb-6">
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Stop Name"
+              placeholderTextColor="#94a3b8"
+              value={stopName}
+              onChangeText={(text) => setStopName(sanitizeNameField(text))}
+              returnKeyType="next"
+            />
 
-        <View style={styles.bottomSpacer} />
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Location"
+              placeholderTextColor="#94a3b8"
+              value={location}
+              onChangeText={(text) => setLocation(sanitizeNameField(text))}
+              returnKeyType="next"
+            />
+
+            <TextInput
+              className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl mb-4 font-semibold text-base"
+              placeholder="Order"
+              placeholderTextColor="#94a3b8"
+              value={order}
+              onChangeText={(text) => setOrder(sanitizeNumericField(text))}
+              keyboardType="numeric"
+              returnKeyType="done"
+            />
+          </GlassCard>
+
+          <View className="mb-10">
+            <GlassButton
+              title={loading ? (stopData ? "Updating..." : "Creating...") : (stopData ? "Update Stop" : "Create Stop")}
+              onPress={handleSubmit}
+              className={`mb-4 border-[#007AFF]/20 ${loading ? 'opacity-70' : ''}`}
+              textClassName="text-white font-extrabold"
+              disabled={loading}
+            />
+
+            <TouchableOpacity
+              className="bg-white border border-slate-300 p-4 rounded-xl items-center"
+              onPress={() => navigation.goBack()}
+              disabled={loading}
+            >
+              <Text className="text-slate-600 font-bold text-base">Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </LiquidBackground>
   );
 };
 
 export default StopFormScreen;
-
-const styles = StyleSheet.create({
-  keyboardContainer: {
-    flex: 1,
-    backgroundColor: "#f8fafc",
-  },
-  container: {
-    flexGrow: 1,
-    padding: 24,
-    paddingBottom: 120,
-    backgroundColor: "#f8fafc",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    textAlign: "center",
-    marginBottom: 24,
-    color: "#0f172a",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-    backgroundColor: "#fff",
-    padding: 14,
-    borderRadius: 12,
-    marginBottom: 14,
-    fontSize: 16,
-  },
-  buttonGroup: {
-    marginTop: 10,
-  },
-  button: {
-    padding: 14,
-    borderRadius: 12,
-    marginBottom: 10,
-  },
-  primaryButton: {
-    backgroundColor: "#2563eb",
-  },
-  cancelButton: {
-    backgroundColor: "#f1f5f9",
-    borderWidth: 1,
-    borderColor: "#cbd5e1",
-  },
-  buttonDisabled: {
-    opacity: 0.7,
-  },
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  cancelButtonText: {
-    color: "#475569",
-  },
-  bottomSpacer: {
-    height: 40,
-  },
-});

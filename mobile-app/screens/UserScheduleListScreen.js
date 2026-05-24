@@ -44,26 +44,26 @@ const UserScheduleListScreen = ({ navigation }) => {
 
     return (
       <GlassCard className="mb-4">
-        <View className="flex-row justify-between items-start mb-3 pb-3 border-b border-white/20">
-          <Text className="text-lg font-extrabold text-white flex-1 pr-3 leading-6">
+        <View className="flex-row justify-between items-start mb-3 pb-3 border-b border-black/5">
+          <Text className="text-lg font-extrabold text-slate-900 flex-1 pr-3 leading-6">
             {item.routeId?.startLocation} to {item.routeId?.endLocation}
           </Text>
-          <Text className="bg-emerald-500/20 text-emerald-300 px-3 py-1.5 rounded-lg border border-emerald-500/30 text-xs font-black overflow-hidden mt-1">
+          <Text className="bg-emerald-100 text-emerald-600 px-3 py-1.5 rounded-lg border border-emerald-200 text-xs font-black overflow-hidden mt-1">
             LKR {item.routeId?.price}
           </Text>
         </View>
 
         <View className="mb-4">
-          <Text className="text-sm text-indigo-100 font-semibold mb-1">
+          <Text className="text-sm text-slate-500 font-semibold mb-1">
             Bus: {item.busId?.busType} ({item.busId?.licenseNumber})
           </Text>
-          <Text className="text-sm text-indigo-100 font-semibold mb-1">
+          <Text className="text-sm text-slate-500 font-semibold mb-1">
             Date: {new Date(item.departureDate).toLocaleDateString()}
           </Text>
-          <Text className="text-sm text-indigo-100 font-semibold mb-1">
+          <Text className="text-sm text-slate-500 font-semibold mb-1">
             Time: {item.departureTime} - {item.arrivalTime}
           </Text>
-          <Text className="text-sm text-white font-black mt-2 bg-white/10 self-start px-3 py-1.5 rounded-lg border border-white/20">
+          <Text className="text-sm text-slate-900 font-black mt-2 bg-black/5 self-start px-3 py-1.5 rounded-lg border border-black/5">
             Available Seats: {availableSeats} / {totalSeats}
           </Text>
         </View>
@@ -71,13 +71,13 @@ const UserScheduleListScreen = ({ navigation }) => {
         <TouchableOpacity
           className={`px-4 py-3 rounded-xl items-center border ${
             availableSeats === 0
-              ? "bg-slate-500/50 border-slate-400/30"
-              : "bg-cyan-500/80 border-cyan-400/50"
+              ? "bg-slate-100 border-slate-200"
+              : "bg-[#007AFF] border-[#007AFF]"
           }`}
           disabled={availableSeats === 0}
           onPress={() => navigation.navigate("SeatSelection", { schedule: item })}
         >
-          <Text className={`font-black text-base ${availableSeats === 0 ? "text-slate-300" : "text-white"}`}>
+          <Text className={`font-black text-base ${availableSeats === 0 ? "text-slate-400" : "text-white"}`}>
             {availableSeats === 0 ? "Sold Out" : "Select Seats"}
           </Text>
         </TouchableOpacity>
@@ -89,16 +89,16 @@ const UserScheduleListScreen = ({ navigation }) => {
     <LiquidBackground>
       <View className="flex-1 p-5">
         <View className="flex-row items-center mb-5">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/20">
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-black/5 p-2 rounded-full border border-black/5">
+            <Ionicons name="arrow-back" size={24} color="#0f172a" />
           </TouchableOpacity>
-          <Text className="text-3xl font-black text-white shadow-sm flex-1">Available Trips</Text>
+          <Text className="text-3xl font-black text-slate-900 shadow-sm flex-1 tracking-tight">Available Trips</Text>
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color="#ffffff" style={{ marginTop: 20 }} />
+          <ActivityIndicator size="large" color="#0f172a" style={{ marginTop: 20 }} />
         ) : schedules.length === 0 ? (
-          <Text className="text-center text-indigo-200 mt-10 font-bold text-base">No available trips found</Text>
+          <Text className="text-center text-slate-500 mt-10 font-bold text-base">No available trips found</Text>
         ) : (
           <FlatList
             data={schedules}

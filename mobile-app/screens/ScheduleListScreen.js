@@ -83,32 +83,32 @@ const ScheduleListScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <GlassCard className="mb-4 p-4">
       <View className="flex-row justify-between mb-3">
-        <Text className="text-lg font-bold text-white">
+        <Text className="text-lg font-bold text-slate-900 tracking-tight">
           {item.routeId?.startLocation} to {item.routeId?.endLocation}
         </Text>
-        <Text className="bg-cyan-500/20 text-cyan-200 px-2 py-1 rounded border border-cyan-500/30 text-xs font-bold overflow-hidden">
+        <Text className="bg-blue-100 text-blue-600 px-2 py-1 rounded border border-blue-200 text-xs font-bold overflow-hidden">
           {item.status}
         </Text>
       </View>
-      <Text className="text-sm text-indigo-100 mb-1 font-semibold">Bus: {item.busId?.licenseNumber}</Text>
-      <Text className="text-sm text-indigo-100 mb-1 font-semibold">
+      <Text className="text-sm text-slate-500 mb-1 font-semibold">Bus: {item.busId?.licenseNumber}</Text>
+      <Text className="text-sm text-slate-500 mb-1 font-semibold">
         Date: {new Date(item.departureDate).toLocaleDateString()}
       </Text>
-      <Text className="text-sm text-indigo-100 mb-3 font-semibold">
+      <Text className="text-sm text-slate-500 mb-3 font-semibold">
         Time: {item.departureTime} - {item.arrivalTime}
       </Text>
       <View className="flex-row justify-end mt-2">
         <TouchableOpacity
-          className="bg-blue-500/80 px-4 py-2 rounded-lg border border-blue-400/50 mr-3"
+          className="bg-[#007AFF]/10 px-4 py-2 rounded-lg border border-[#007AFF]/20 mr-3"
           onPress={() => navigation.navigate("ScheduleForm", { schedule: item })}
         >
-          <Text className="text-white font-bold text-sm">Edit</Text>
+          <Text className="text-[#007AFF] font-bold text-sm">Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="bg-red-500/80 px-4 py-2 rounded-lg border border-red-400/50"
+          className="bg-red-100 px-4 py-2 rounded-lg border border-red-200"
           onPress={() => handleDelete(item._id)}
         >
-          <Text className="text-white font-bold text-sm">Delete</Text>
+          <Text className="text-red-600 font-bold text-sm">Delete</Text>
         </TouchableOpacity>
       </View>
     </GlassCard>
@@ -117,17 +117,17 @@ const ScheduleListScreen = ({ navigation }) => {
   return (
     <LiquidBackground>
       <View className="flex-1 p-5">
-        <Text className="text-3xl font-black text-white mb-5 shadow-sm">Manage Schedules</Text>
+        <Text className="text-3xl font-black text-slate-900 mb-5 shadow-sm tracking-tight">Manage Schedules</Text>
         <GlassButton
           title="+ Add New Schedule"
           onPress={() => navigation.navigate("ScheduleForm")}
-          className="mb-6 border-emerald-400/50"
-          textClassName="text-emerald-300 font-extrabold"
+          className="mb-6 border-[#007AFF]/20"
+          textClassName="text-white font-extrabold"
         />
         {loading ? (
-          <ActivityIndicator size="large" color="#ffffff" style={{ marginTop: 20 }} />
+          <ActivityIndicator size="large" color="#0f172a" style={{ marginTop: 20 }} />
         ) : schedules.length === 0 ? (
-          <Text className="text-center text-indigo-200 mt-5 font-semibold text-base">No schedules found</Text>
+          <Text className="text-center text-slate-500 mt-5 font-semibold text-base">No schedules found</Text>
         ) : (
           <FlatList
             data={schedules}

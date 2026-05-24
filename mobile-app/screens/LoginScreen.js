@@ -57,27 +57,27 @@ const LoginScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           <GlassCard className="mb-6 items-center">
-            <View className="bg-white/20 px-4 py-2 rounded-full border border-white/30 mb-4">
-              <Text className="text-white text-xs font-bold">QuickBus Connect</Text>
+            <View className="bg-black/5 px-4 py-2 rounded-full border border-black/5 mb-4">
+              <Text className="text-slate-900 text-xs font-bold">QuickBus Connect</Text>
             </View>
-            <Text className="text-3xl font-extrabold text-white mb-2 text-center shadow-sm">
+            <Text className="text-3xl font-extrabold text-slate-900 mb-2 text-center shadow-sm">
               Login
             </Text>
-            <Text className="text-sm text-indigo-100 text-center leading-relaxed">
-              Welcome back to the Liquid Glass QuickBus portal.
+            <Text className="text-sm text-slate-600 text-center leading-relaxed">
+              Welcome back to the minimalist QuickBus portal.
             </Text>
           </GlassCard>
 
           <GlassCard className="mb-6">
-            <Text className="text-xl font-bold text-white mb-6 text-center shadow-sm">
+            <Text className="text-xl font-bold text-slate-900 mb-6 text-center shadow-sm">
               Account Access
             </Text>
 
-            <View className="bg-white/10 border border-white/20 rounded-2xl px-4 mb-4">
+            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-4">
               <TextInput
-                className="py-4 text-base text-white font-semibold"
+                className="py-4 text-base text-slate-900 font-semibold"
                 placeholder="Email Address"
-                placeholderTextColor="#cbd5e1"
+                placeholderTextColor="#94a3b8"
                 value={email}
                 onChangeText={setEmail}
                 autoCapitalize="none"
@@ -86,11 +86,11 @@ const LoginScreen = ({ navigation }) => {
               />
             </View>
 
-            <View className="bg-white/10 border border-white/20 rounded-2xl px-4 mb-6">
+            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-6">
               <TextInput
-                className="py-4 text-base text-white font-semibold"
+                className="py-4 text-base text-slate-900 font-semibold"
                 placeholder="Password"
-                placeholderTextColor="#cbd5e1"
+                placeholderTextColor="#94a3b8"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -108,8 +108,8 @@ const LoginScreen = ({ navigation }) => {
             <GlassButton
               title="Create an Account"
               onPress={() => navigation.navigate("Register")}
-              className="bg-transparent border-white/20"
-              textClassName="text-indigo-200"
+              className="bg-transparent border-black/10"
+              textClassName="text-slate-600"
             />
           </GlassCard>
 

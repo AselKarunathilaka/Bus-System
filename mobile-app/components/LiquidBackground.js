@@ -5,15 +5,15 @@ import { LinearGradient } from "expo-linear-gradient";
 const LiquidBackground = ({ children }) => {
   return (
     <View style={styles.container}>
-      {/* Base Dark Space Gradient */}
+      {/* Base Light Minimal Gradient */}
       <LinearGradient
-        colors={["#0a0a2a", "#1a1a4a", "#2a0a4a"]}
+        colors={["#f5f5f7", "#ffffff", "#f5f5f7"]}
         style={StyleSheet.absoluteFillObject}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
       />
       
-      {/* Floating Organic Orbs for Liquid Effect */}
+      {/* Very Subtle Ambient Orbs for Depth (Optional Apple-like glass depth) */}
       <View style={styles.orb1} />
       <View style={styles.orb2} />
       <View style={styles.orb3} />
@@ -29,7 +29,7 @@ export default LiquidBackground;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0a0a2a",
+    backgroundColor: "#f5f5f7",
   },
   orb1: {
     position: "absolute",
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     width: 400,
     height: 400,
     borderRadius: 200,
-    backgroundColor: "rgba(0, 255, 255, 0.4)", // Vibrant Cyan
+    backgroundColor: "rgba(220, 220, 230, 0.4)", // Very light subtle gray-blue
     transform: [{ scaleX: 1.2 }, { rotate: "45deg" }],
     filter: "blur(60px)",
   },
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     width: 450,
     height: 450,
     borderRadius: 225,
-    backgroundColor: "rgba(255, 0, 255, 0.35)", // Vibrant Magenta
+    backgroundColor: "rgba(230, 230, 240, 0.35)", // Subtle gray
     filter: "blur(80px)",
   },
   orb3: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 300,
     borderRadius: 150,
-    backgroundColor: "rgba(138, 43, 226, 0.3)", // Vibrant Blue Violet
+    backgroundColor: "rgba(200, 210, 230, 0.2)", // Subtle cool gray
     filter: "blur(70px)",
   },
 });
