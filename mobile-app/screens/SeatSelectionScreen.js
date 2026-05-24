@@ -5,7 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
+  FlatList,
   Alert,
+  ScrollView,
 } from "react-native";
 
 const SeatSelectionScreen = ({ route, navigation }) => {
@@ -104,7 +106,7 @@ const SeatSelectionScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Select Your Seats</Text>
       
       <View style={styles.typeSelector}>
@@ -149,13 +151,9 @@ const SeatSelectionScreen = ({ route, navigation }) => {
             </View>
           </View>
           
-          <FlatList
-            data={rows}
-            keyExtractor={(_, index) => index.toString()}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.flatListContent}
-            renderItem={({ item }) => (
-              <View style={styles.busRow}>
+          <View style={styles.flatListContent}>
+            {rows.map((item, index) => (
+              <View key={index} style={styles.busRow}>
                 <View style={styles.seatPair}>
                   {renderSeat(item[0])}
                   {renderSeat(item[1])}
@@ -166,8 +164,8 @@ const SeatSelectionScreen = ({ route, navigation }) => {
                   {renderSeat(item[3])}
                 </View>
               </View>
-            )}
-          />
+            ))}
+          </View>
         </View>
       </View>
 
@@ -179,14 +177,14 @@ const SeatSelectionScreen = ({ route, navigation }) => {
           <Text style={styles.continueBtnText}>Continue to Book</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 export default SeatSelectionScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#0f172a", padding: 20 },
+  container: { flexGrow: 1, backgroundColor: "#0f172a", padding: 20 },
   title: { fontSize: 24, fontWeight: "800", color: "#fff", marginBottom: 15, textAlign: "center" },
   typeSelector: {
     flexDirection: "row",
@@ -218,14 +216,12 @@ const styles = StyleSheet.create({
   legendText: { fontSize: 13, color: "#cbd5e1", fontWeight: "600" },
 
   busContainerWrapper: {
-    flex: 1,
     alignItems: "center",
     marginBottom: 15,
   },
   busContainer: {
     width: "100%",
     maxWidth: 400,
-    flex: 1,
     backgroundColor: "#1e293b",
     borderRadius: 30,
     borderWidth: 4,

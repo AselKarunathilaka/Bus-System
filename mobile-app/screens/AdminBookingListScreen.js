@@ -6,6 +6,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  TouchableOpacity,
+  Platform,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
@@ -31,6 +33,64 @@ const AdminBookingListScreen = () => {
     fetchBookings();
   }, [token]);
 
+  const handleCancel = async (bookingId) => {
+    const executeCancel = async () => {
+      try {
+        await api.delete(`/bookings/${bookingId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (Platform.OS === "web") window.alert("Booking cancelled successfully.");
+        else Alert.alert("Success", "Booking cancelled successfully.");
+        
+        // Refresh bookings
+        setBookings((prev) =>
+          prev.map((b) => (b._id === bookingId ? { ...b, status: "Cancelled" } : b))
+        );
+      } catch (error) {
+        const msg = error.response?.data?.message || "Failed to cancel booking.";
+        if (Platform.OS === "web") window.alert(msg);
+        else Alert.alert("Error", msg);
+      }
+    };
+
+    if (Platform.OS === "web") {
+      if (window.confirm("Are you sure you want to cancel this booking?")) executeCancel();
+    } else {
+      Alert.alert("Cancel", "Are you sure you want to cancel this booking?", [
+        { text: "No", style: "cancel" },
+        { text: "Yes", style: "destructive", onPress: executeCancel },
+      ]);
+    }
+  };
+
+  const handleDelete = async (bookingId) => {
+    const executeDelete = async () => {
+      try {
+        await api.delete(`/bookings/admin/${bookingId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (Platform.OS === "web") window.alert("Booking deleted permanently.");
+        else Alert.alert("Success", "Booking deleted permanently.");
+        
+        // Refresh bookings
+        setBookings((prev) => prev.filter((b) => b._id !== bookingId));
+      } catch (error) {
+        const msg = error.response?.data?.message || "Failed to delete booking.";
+        if (Platform.OS === "web") window.alert(msg);
+        else Alert.alert("Error", msg);
+      }
+    };
+
+    if (Platform.OS === "web") {
+      if (window.confirm("Permanently delete this booking record?")) executeDelete();
+    } else {
+      Alert.alert("Delete", "Permanently delete this booking record?", [
+        { text: "No", style: "cancel" },
+        { text: "Delete", style: "destructive", onPress: executeDelete },
+      ]);
+    }
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
@@ -52,6 +112,23 @@ const AdminBookingListScreen = () => {
       <Text style={styles.dateText}>
         Booked On: {new Date(item.bookingDate).toLocaleDateString()}
       </Text>
+      
+      <View style={styles.actionRow}>
+        {item.status !== "Cancelled" && (
+          <TouchableOpacity
+            style={[styles.actionBtn, styles.cancelBtn]}
+            onPress={() => handleCancel(item._id)}
+          >
+            <Text style={styles.btnText}>Cancel</Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity
+          style={[styles.actionBtn, styles.deleteBtn]}
+          onPress={() => handleDelete(item._id)}
+        >
+          <Text style={styles.btnText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -110,4 +187,16 @@ const styles = StyleSheet.create({
   priceText: { fontSize: 14, fontWeight: "bold", color: "#3567e0", marginTop: 5 },
   dateText: { fontSize: 12, color: "#94a3b8", marginTop: 5 },
   emptyText: { textAlign: "center", color: "#64748b", marginTop: 20 },
+  actionRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginTop: 15,
+    borderTopWidth: 1,
+    borderTopColor: "#f1f5f9",
+    paddingTop: 10,
+  },
+  actionBtn: { paddingVertical: 8, paddingHorizontal: 15, borderRadius: 6, marginLeft: 10 },
+  cancelBtn: { backgroundColor: "#f59e0b" },
+  deleteBtn: { backgroundColor: "#ea2424" },
+  btnText: { color: "#fff", fontWeight: "bold", fontSize: 13 },
 });

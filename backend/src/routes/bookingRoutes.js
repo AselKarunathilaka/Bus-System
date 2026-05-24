@@ -9,5 +9,6 @@ router.post("/", authMiddleware, bookingController.createBooking);
 router.get("/my", authMiddleware, bookingController.getMyBookings);
 router.get("/", authMiddleware, roleMiddleware("admin"), bookingController.getAllBookings);
 router.delete("/:id", authMiddleware, bookingController.cancelBooking);
+router.delete("/admin/:id", authMiddleware, roleMiddleware("admin"), bookingController.deleteBooking);
 
 module.exports = router;

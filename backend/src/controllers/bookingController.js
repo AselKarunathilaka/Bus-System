@@ -185,3 +185,50 @@ exports.cancelBooking = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
+exports.deleteBooking = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+
+  try {
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "Invalid booking ID" });
+    }
+
+    const booking = await Booking.findById(id).session(session);
+
+    if (!booking) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    // Free up seats if it wasn't cancelled already
+    if (booking.status !== "Cancelled") {
+      const schedule = await Schedule.findById(booking.scheduleId).session(session);
+      if (schedule) {
+        schedule.bookedSeats = schedule.bookedSeats.filter(
+          (seat) => !booking.seatNumbers.includes(seat)
+        );
+        await schedule.save({ session });
+      }
+    }
+
+    await Booking.findByIdAndDelete(id, { session });
+
+    await session.commitTransaction();
+    session.endSession();
+
+    return res.status(200).json({
+      message: "Booking deleted successfully",
+    });
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+    return res.status(500).json({ message: error.message });
+  }
+};
