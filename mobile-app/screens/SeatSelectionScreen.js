@@ -112,50 +112,50 @@ const SeatSelectionScreen = ({ route, navigation }) => {
     <LiquidBackground>
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
         <View className="flex-row items-center mb-6">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-black/5 p-2 rounded-full border border-black/5">
-            <Ionicons name="arrow-back" size={24} color="#0f172a" />
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
           </TouchableOpacity>
-          <Text className="text-3xl font-black text-slate-900 shadow-sm flex-1 tracking-tight">Select Seats</Text>
+          <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">Select Seats</Text>
         </View>
         
-        <View className="flex-row bg-black/5 rounded-xl p-1 mb-5 border border-black/10">
+        <View className="flex-row bg-white/10 rounded-xl p-1 mb-5 border border-white/10">
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Single" ? 'bg-white shadow-sm border border-black/5' : ''}`}
+            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Single" ? 'bg-[#38bdf8]/20 shadow-sm border border-[#38bdf8]/30' : ''}`}
             onPress={() => handleTypeChange("Single")}
           >
-            <Text className={`font-bold ${bookingType === "Single" ? 'text-slate-900' : 'text-slate-500'}`}>
+            <Text className={`font-bold ${bookingType === "Single" ? 'text-white' : 'text-slate-400'}`}>
               Single (1 Seat)
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Family" ? 'bg-white shadow-sm border border-black/5' : ''}`}
+            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Family" ? 'bg-[#38bdf8]/20 shadow-sm border border-[#38bdf8]/30' : ''}`}
             onPress={() => handleTypeChange("Family")}
           >
-            <Text className={`font-bold ${bookingType === "Family" ? 'text-slate-900' : 'text-slate-500'}`}>
+            <Text className={`font-bold ${bookingType === "Family" ? 'text-white' : 'text-slate-400'}`}>
               Family (Up to 8)
             </Text>
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row justify-around mb-6 bg-black/5 p-3 rounded-xl border border-black/5">
+        <View className="flex-row justify-around mb-6 bg-white/10 p-3 rounded-xl border border-white/10">
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded border-2 border-slate-400 mr-2" />
-            <Text className="text-xs text-slate-600 font-bold uppercase">Available</Text>
+            <View className="w-4 h-4 rounded border-2 border-white/40 mr-2" />
+            <Text className="text-xs text-slate-400 font-bold uppercase">Available</Text>
           </View>
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded bg-[#007AFF] mr-2" />
-            <Text className="text-xs text-slate-600 font-bold uppercase">Selected</Text>
+            <View className="w-4 h-4 rounded bg-[#10b981] mr-2" />
+            <Text className="text-xs text-slate-400 font-bold uppercase">Selected</Text>
           </View>
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded bg-slate-300 mr-2" />
-            <Text className="text-xs text-slate-600 font-bold uppercase">Booked</Text>
+            <View className="w-4 h-4 rounded bg-[#ef4444] mr-2" />
+            <Text className="text-xs text-slate-400 font-bold uppercase">Booked</Text>
           </View>
         </View>
 
         <View className="items-center mb-6">
-          <View className="w-full max-w-[400px] bg-white rounded-[40px] border-[6px] border-slate-200 p-5 pt-8 shadow-sm">
-            <View className="items-end mb-8 pr-3 border-b-2 border-slate-100 pb-5">
-              <View className="w-12 h-12 bg-slate-100 rounded-full justify-center items-center border-2 border-slate-200">
+          <View className="w-full max-w-[400px] bg-white/5 rounded-[40px] border-[6px] border-white/10 p-5 pt-8 shadow-sm">
+            <View className="items-end mb-8 pr-3 border-b-2 border-white/5 pb-5">
+              <View className="w-12 h-12 bg-white/10 rounded-full justify-center items-center border-2 border-white/10">
                 <Text className="text-xl">🚍</Text>
               </View>
             </View>
@@ -179,14 +179,14 @@ const SeatSelectionScreen = ({ route, navigation }) => {
         </View>
 
         <GlassCard className="flex-row justify-between items-center mb-10">
-          <Text className="text-base font-bold text-slate-900">
-            Selected: <Text className="text-[#007AFF]">{selectedSeats.length}</Text> / {bookingType === "Single" ? 1 : 8}
+          <Text className="text-base font-bold text-white">
+            Selected: <Text className="text-[#10b981]">{selectedSeats.length}</Text> / {bookingType === "Single" ? 1 : 8}
           </Text>
           <TouchableOpacity 
-            className="bg-[#007AFF] px-6 py-3 rounded-xl shadow-sm"
+            className="bg-[#10b981] px-6 py-3 rounded-xl shadow-sm"
             onPress={handleContinue}
           >
-            <Text className="color-white font-black text-sm uppercase">Continue</Text>
+            <Text className="text-slate-900 font-bold text-sm uppercase">Continue</Text>
           </TouchableOpacity>
         </GlassCard>
       </ScrollView>
@@ -210,19 +210,19 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   seatAvailable: {
-    backgroundColor: "#ffffff",
-    borderColor: "#94a3b8",
+    backgroundColor: "rgba(255,255,255,0.05)",
+    borderColor: "rgba(255,255,255,0.2)",
   },
   seatSelected: {
-    backgroundColor: "#007AFF",
-    borderColor: "#007AFF",
+    backgroundColor: "#10b981",
+    borderColor: "#10b981",
   },
   seatBooked: {
-    backgroundColor: "#e2e8f0",
-    borderColor: "#cbd5e1",
+    backgroundColor: "#ef4444",
+    borderColor: "#ef4444",
   },
   seatText: { fontWeight: "800", fontSize: 14 },
-  seatTextAvailable: { color: "#64748b" },
-  seatTextSelected: { color: "#ffffff" },
-  seatTextBooked: { color: "#94a3b8" },
+  seatTextAvailable: { color: "#94a3b8" },
+  seatTextSelected: { color: "#0f172a" },
+  seatTextBooked: { color: "#ffffff" },
 });

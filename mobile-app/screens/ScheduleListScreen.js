@@ -83,32 +83,32 @@ const ScheduleListScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <GlassCard className="mb-4 p-4">
       <View className="flex-row justify-between mb-3">
-        <Text className="text-lg font-bold text-slate-900 tracking-tight">
+        <Text className="text-lg font-bold text-white tracking-tight">
           {item.routeId?.startLocation} to {item.routeId?.endLocation}
         </Text>
-        <Text className="bg-blue-100 text-blue-600 px-2 py-1 rounded border border-blue-200 text-xs font-bold overflow-hidden">
+        <Text className="bg-[#007AFF]/20 text-[#38bdf8] px-2 py-1 rounded border border-[#007AFF]/30 text-xs font-bold overflow-hidden">
           {item.status}
         </Text>
       </View>
-      <Text className="text-sm text-slate-500 mb-1 font-semibold">Bus: {item.busId?.licenseNumber}</Text>
-      <Text className="text-sm text-slate-500 mb-1 font-semibold">
+      <Text className="text-sm text-slate-400 mb-1 font-semibold">Bus: {item.busId?.licenseNumber}</Text>
+      <Text className="text-sm text-slate-400 mb-1 font-semibold">
         Date: {new Date(item.departureDate).toLocaleDateString()}
       </Text>
-      <Text className="text-sm text-slate-500 mb-3 font-semibold">
+      <Text className="text-sm text-slate-400 mb-3 font-semibold">
         Time: {item.departureTime} - {item.arrivalTime}
       </Text>
       <View className="flex-row justify-end mt-2">
         <TouchableOpacity
-          className="bg-[#007AFF]/10 px-4 py-2 rounded-lg border border-[#007AFF]/20 mr-3"
+          className="bg-white/10 px-4 py-2 rounded-lg border border-white/10 mr-3"
           onPress={() => navigation.navigate("ScheduleForm", { schedule: item })}
         >
-          <Text className="text-[#007AFF] font-bold text-sm">Edit</Text>
+          <Text className="text-white font-bold text-sm">Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="bg-red-100 px-4 py-2 rounded-lg border border-red-200"
+          className="bg-red-500/20 px-4 py-2 rounded-lg border border-red-500/30"
           onPress={() => handleDelete(item._id)}
         >
-          <Text className="text-red-600 font-bold text-sm">Delete</Text>
+          <Text className="text-red-400 font-bold text-sm">Delete</Text>
         </TouchableOpacity>
       </View>
     </GlassCard>
@@ -117,17 +117,25 @@ const ScheduleListScreen = ({ navigation }) => {
   return (
     <LiquidBackground>
       <View className="flex-1 p-5">
-        <Text className="text-3xl font-black text-slate-900 mb-5 shadow-sm tracking-tight">Manage Schedules</Text>
+        <View className="flex-row items-center mb-5">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+          <Text className="text-3xl font-bold text-white tracking-tight flex-1">Manage Schedules</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs", { screen: "HomeTab" })} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={22} color="#38bdf8" />
+          </TouchableOpacity>
+        </View>
         <GlassButton
           title="+ Add New Schedule"
           onPress={() => navigation.navigate("ScheduleForm")}
-          className="mb-6 border-[#007AFF]/20"
-          textClassName="text-white font-extrabold"
+          className="mb-6"
+          variant="secondary"
         />
         {loading ? (
-          <ActivityIndicator size="large" color="#0f172a" style={{ marginTop: 20 }} />
+          <ActivityIndicator size="large" color="#38bdf8" style={{ marginTop: 20 }} />
         ) : schedules.length === 0 ? (
-          <Text className="text-center text-slate-500 mt-5 font-semibold text-base">No schedules found</Text>
+          <Text className="text-center text-slate-400 mt-5 font-semibold text-base">No schedules found</Text>
         ) : (
           <FlatList
             data={schedules}

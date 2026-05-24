@@ -115,25 +115,26 @@ const RegisterScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           <GlassCard className="mb-6 items-center">
-            <View className="bg-black/5 px-4 py-2 rounded-full border border-black/5 mb-4">
-              <Text className="text-slate-900 text-xs font-bold">QuickBus Portal</Text>
+            <View className="bg-white/10 px-4 py-2 rounded-full border border-white/10 mb-4">
+              <Text className="text-white text-xs font-bold">QuickBus Portal</Text>
             </View>
-            <Text className="text-3xl font-extrabold text-slate-900 mb-2 text-center shadow-sm">
+            <Text className="text-3xl font-bold text-white mb-2 text-center">
               Create Account
             </Text>
-            <Text className="text-sm text-slate-600 text-center leading-relaxed">
+            <Text className="text-sm text-slate-300 text-center leading-relaxed">
               Register to browse highway routes, view stops, and use the QuickBus system.
             </Text>
           </GlassCard>
 
           <GlassCard className="mb-6">
-            <Text className="text-xl font-bold text-slate-900 mb-6 text-center shadow-sm">
+            <Text className="text-xl font-bold text-white mb-6 text-center">
               Get Started
             </Text>
 
-            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-4">
+            <View className="bg-black/40 border border-white/10 rounded-2xl px-4 mb-4">
               <TextInput
-                className="py-4 text-base text-slate-900 font-semibold"
+                className="py-4 text-base text-white font-semibold"
+                style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
                 placeholder="Full Name"
                 placeholderTextColor="#94a3b8"
                 value={fullName}
@@ -142,9 +143,10 @@ const RegisterScreen = ({ navigation }) => {
               />
             </View>
 
-            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-4">
+            <View className="bg-black/40 border border-white/10 rounded-2xl px-4 mb-4">
               <TextInput
-                className="py-4 text-base text-slate-900 font-semibold"
+                className="py-4 text-base text-white font-semibold"
+                style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
                 placeholder="Email Address"
                 placeholderTextColor="#94a3b8"
                 value={email}
@@ -155,9 +157,10 @@ const RegisterScreen = ({ navigation }) => {
               />
             </View>
 
-            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-4">
+            <View className="bg-black/40 border border-white/10 rounded-2xl px-4 mb-4">
               <TextInput
-                className="py-4 text-base text-slate-900 font-semibold"
+                className="py-4 text-base text-white font-semibold"
+                style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
                 placeholder="Phone Number"
                 placeholderTextColor="#94a3b8"
                 value={phone}
@@ -167,9 +170,10 @@ const RegisterScreen = ({ navigation }) => {
               />
             </View>
 
-            <View className="bg-black/5 border border-black/5 rounded-2xl px-4 mb-6">
+            <View className="bg-black/40 border border-white/10 rounded-2xl px-4 mb-6">
               <TextInput
-                className="py-4 text-base text-slate-900 font-semibold"
+                className="py-4 text-base text-white font-semibold"
+                style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
                 placeholder="Password"
                 placeholderTextColor="#94a3b8"
                 value={password}
@@ -183,14 +187,13 @@ const RegisterScreen = ({ navigation }) => {
               title={loading ? "Creating Account..." : "Register"}
               onPress={handleRegister}
               className="mb-6"
-              textClassName="text-white font-extrabold"
+              variant="primary"
             />
 
             <GlassButton
               title="Already have an account? Login"
               onPress={() => navigation.navigate("Login")}
-              className="bg-transparent border-black/10"
-              textClassName="text-slate-600"
+              variant="secondary"
             />
           </GlassCard>
 

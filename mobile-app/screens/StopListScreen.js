@@ -95,8 +95,8 @@ const StopListScreen = ({ route, navigation }) => {
     return (
       <LiquidBackground>
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#0f172a" />
-          <Text className="mt-3 text-slate-600 font-semibold">Loading stops...</Text>
+          <ActivityIndicator size="large" color="#38bdf8" />
+          <Text className="mt-3 text-slate-400 font-semibold">Loading stops...</Text>
         </View>
       </LiquidBackground>
     );
@@ -105,16 +105,16 @@ const StopListScreen = ({ route, navigation }) => {
   const renderHeader = () => (
     <>
       <View className="flex-row items-center mb-5">
-        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-black/5 p-2 rounded-full border border-black/5">
-          <Ionicons name="arrow-back" size={24} color="#0f172a" />
+        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+          <Ionicons name="arrow-back" size={24} color="#ffffff" />
         </TouchableOpacity>
-        <Text className="text-3xl font-black text-slate-900 shadow-sm flex-1 tracking-tight">
+        <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">
           {routeName} Stops
         </Text>
       </View>
 
       <GlassCard className="mb-4">
-        <Text className="text-slate-600 text-sm leading-relaxed mb-4">
+        <Text className="text-slate-400 text-sm leading-relaxed mb-4">
           {user?.role === "admin"
             ? "Add, edit, and remove stops for this route"
             : "View all stops available in this route"}
@@ -124,8 +124,8 @@ const StopListScreen = ({ route, navigation }) => {
           <GlassButton
             title="+ Add Stop"
             onPress={() => navigation.navigate("StopForm", { routeId })}
-            className="border-[#007AFF]/20"
-            textClassName="text-white font-extrabold"
+            className="border-white/10"
+            textClassName="text-white font-bold"
           />
         )}
       </GlassCard>
@@ -142,19 +142,19 @@ const StopListScreen = ({ route, navigation }) => {
         ListHeaderComponent={renderHeader}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <Text className="text-center mt-10 text-slate-500 font-medium">No stops found for this route</Text>
+          <Text className="text-center mt-10 text-slate-400 font-medium">No stops found for this route</Text>
         }
         renderItem={({ item }) => (
           <GlassCard className="mb-4">
-            <Text className="text-lg font-extrabold text-slate-900 mb-1 tracking-tight">
+            <Text className="text-lg font-bold text-white mb-1 tracking-tight">
               {item.order}. {item.stopName}
             </Text>
-            <Text className="text-sm font-medium text-slate-500 mb-4">Location: {item.location}</Text>
+            <Text className="text-sm font-medium text-slate-400 mb-4">Location: {item.location}</Text>
 
             {user?.role === "admin" && (
               <View className="flex-row gap-3">
                 <TouchableOpacity
-                  className="bg-amber-100 p-3 rounded-xl flex-1 border border-amber-200"
+                  className="bg-amber-500/20 p-3 rounded-xl flex-1 border border-amber-500/30"
                   onPress={() =>
                     navigation.navigate("StopForm", {
                       routeId,
@@ -162,14 +162,14 @@ const StopListScreen = ({ route, navigation }) => {
                     })
                   }
                 >
-                  <Text className="text-amber-600 font-bold text-center">Edit Stop</Text>
+                  <Text className="text-amber-400 font-bold text-center">Edit Stop</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  className="bg-red-100 p-3 rounded-xl flex-1 border border-red-200"
+                  className="bg-red-500/20 p-3 rounded-xl flex-1 border border-red-500/30"
                   onPress={() => handleDeleteStop(item._id)}
                 >
-                  <Text className="text-red-600 font-bold text-center">Delete Stop</Text>
+                  <Text className="text-red-400 font-bold text-center">Delete Stop</Text>
                 </TouchableOpacity>
               </View>
             )}

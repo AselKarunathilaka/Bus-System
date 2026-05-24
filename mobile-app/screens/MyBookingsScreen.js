@@ -88,49 +88,49 @@ const MyBookingsScreen = ({ navigation }) => {
     
     return (
       <GlassCard className="mb-5">
-        <View className="flex-row justify-between items-center mb-4 border-b border-black/5 pb-4">
-          <Text className="text-lg font-extrabold text-slate-900 flex-1 pr-3 tracking-tight">
+        <View className="flex-row justify-between items-center mb-4 border-b border-white/10 pb-4">
+          <Text className="text-lg font-bold text-white flex-1 pr-3 tracking-tight">
             {item.scheduleId?.routeId?.startLocation} to {item.scheduleId?.routeId?.endLocation}
           </Text>
-          <Text className={`px-3 py-1.5 rounded-lg text-xs font-bold overflow-hidden ${item.status === 'Cancelled' ? 'bg-red-100 text-red-600 border border-red-200' : 'bg-emerald-100 text-emerald-600 border border-emerald-200'}`}>
+          <Text className={`px-3 py-1.5 rounded-lg text-xs font-bold overflow-hidden ${item.status === 'Cancelled' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'}`}>
             {item.status}
           </Text>
         </View>
 
         <View className="mb-4">
           <View className="flex-row justify-between mb-2">
-            <Text className="text-sm text-slate-500 font-semibold">Booking ID:</Text>
-            <Text className="text-sm text-slate-900 font-bold text-right flex-1 ml-2">{item.bookingId || "N/A"}</Text>
+            <Text className="text-sm text-slate-400 font-semibold">Booking ID:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{item.bookingId || "N/A"}</Text>
           </View>
           <View className="flex-row justify-between mb-2">
-            <Text className="text-sm text-slate-500 font-semibold">Bus:</Text>
-            <Text className="text-sm text-slate-900 font-bold text-right flex-1 ml-2">{item.scheduleId?.busId?.busName} ({item.scheduleId?.busId?.licenseNumber})</Text>
+            <Text className="text-sm text-slate-400 font-semibold">Bus:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{item.scheduleId?.busId?.busName} ({item.scheduleId?.busId?.licenseNumber})</Text>
           </View>
           <View className="flex-row justify-between mb-2">
-            <Text className="text-sm text-slate-500 font-semibold">Date:</Text>
-            <Text className="text-sm text-slate-900 font-bold text-right flex-1 ml-2">{new Date(item.scheduleId?.departureDate).toLocaleDateString()} at {item.scheduleId?.departureTime}</Text>
+            <Text className="text-sm text-slate-400 font-semibold">Date:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{new Date(item.scheduleId?.departureDate).toLocaleDateString()} at {item.scheduleId?.departureTime}</Text>
           </View>
           <View className="flex-row justify-between mb-2">
-            <Text className="text-sm text-slate-500 font-semibold">Seats:</Text>
-            <Text className="text-sm text-slate-900 font-bold text-right flex-1 ml-2">{formattedSeats} ({item.bookingType})</Text>
+            <Text className="text-sm text-slate-400 font-semibold">Seats:</Text>
+            <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{formattedSeats} ({item.bookingType})</Text>
           </View>
           {item.contactNumber && (
             <View className="flex-row justify-between mb-2">
-              <Text className="text-sm text-slate-500 font-semibold">Contact:</Text>
-              <Text className="text-sm text-slate-900 font-bold text-right flex-1 ml-2">{item.contactNumber}</Text>
+              <Text className="text-sm text-slate-400 font-semibold">Contact:</Text>
+              <Text className="text-sm text-white font-bold text-right flex-1 ml-2">{item.contactNumber}</Text>
             </View>
           )}
         </View>
 
-        <View className="flex-row justify-between items-center border-t border-black/5 pt-4">
-          <Text className="text-xl font-black text-[#007AFF]">Total: LKR {item.totalPrice}</Text>
+        <View className="flex-row justify-between items-center border-t border-white/10 pt-4">
+          <Text className="text-xl font-bold text-[#38bdf8]">Total: LKR {item.totalPrice}</Text>
           
           {item.status !== "Cancelled" && (
             <TouchableOpacity
-              className="bg-red-100 px-3 py-2 rounded-lg ml-2 border border-red-200"
+              className="bg-red-500/20 px-3 py-2 rounded-lg ml-2 border border-red-500/30"
               onPress={() => handleCancel(item._id)}
             >
-              <Text className="text-red-600 font-bold text-xs">Cancel Booking</Text>
+              <Text className="text-red-400 font-bold text-xs">Cancel Booking</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -142,16 +142,16 @@ const MyBookingsScreen = ({ navigation }) => {
     <LiquidBackground>
       <View className="flex-1 p-5">
         <View className="flex-row items-center mb-5">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-black/5 p-2 rounded-full border border-black/5">
-            <Ionicons name="arrow-back" size={24} color="#0f172a" />
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
           </TouchableOpacity>
-          <Text className="text-3xl font-black text-slate-900 shadow-sm flex-1 tracking-tight">My Bookings</Text>
+          <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">My Bookings</Text>
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color="#0f172a" style={{ marginTop: 20 }} />
+          <ActivityIndicator size="large" color="#38bdf8" style={{ marginTop: 20 }} />
         ) : bookings.length === 0 ? (
-          <Text className="text-center text-slate-500 mt-10 text-base font-semibold">You haven't made any bookings yet.</Text>
+          <Text className="text-center text-slate-400 mt-10 text-base font-semibold">You haven't made any bookings yet.</Text>
         ) : (
           <FlatList
             data={bookings}

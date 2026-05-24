@@ -36,6 +36,7 @@ const MainTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
+        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === "HomeTab") iconName = focused ? "home" : "home-outline";
@@ -44,10 +45,12 @@ const MainTabs = () => {
           
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#3567e0",
+        tabBarActiveTintColor: "#38bdf8",
         tabBarInactiveTintColor: "gray",
-        headerTitleStyle: { fontWeight: "bold" },
-        headerTintColor: "#3567e0",
+        tabBarStyle: {
+          backgroundColor: '#0f172a',
+          borderTopColor: '#1e293b'
+        }
       })}
     >
       <Tab.Screen name="HomeTab" component={HomeScreen} options={{ title: "Home" }} />
@@ -86,22 +89,9 @@ const AppNavigator = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        screenOptions={({ navigation, route }) => ({
-          headerRight: () => {
-            if (authToken && route.name !== "MainTabs") {
-              return (
-                <TouchableOpacity onPress={() => navigation.navigate("MainTabs", { screen: "HomeTab" })} style={{ marginRight: 15 }}>
-                  <Ionicons name="home" size={24} color="#3567e0" />
-                </TouchableOpacity>
-              );
-            }
-            return null;
-          },
-          headerTitleStyle: {
-            fontWeight: "bold",
-          },
-          headerTintColor: "#3567e0",
-        })}
+        screenOptions={{
+          headerShown: false,
+        }}
       >
         {authToken ? (
           <>

@@ -81,52 +81,53 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
     <LiquidBackground>
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 120 }}>
         <View className="flex-row items-center mb-6">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-black/5 p-2 rounded-full border border-black/5">
-            <Ionicons name="arrow-back" size={24} color="#0f172a" />
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
           </TouchableOpacity>
-          <Text className="text-3xl font-black text-slate-900 shadow-sm flex-1 tracking-tight">Confirm Booking</Text>
+          <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">Confirm Booking</Text>
         </View>
 
         <GlassCard className="mb-6">
-          <Text className="text-base font-bold text-slate-900 mb-4 pb-2 border-b border-black/5">Journey Details</Text>
+          <Text className="text-base font-bold text-white mb-4 pb-2 border-b border-white/10">Journey Details</Text>
           <View className="flex-row justify-between mb-3">
-            <Text className="text-sm font-bold text-slate-500 uppercase">Route</Text>
-            <Text className="text-sm font-bold text-slate-900 text-right flex-1 ml-4">{schedule.routeId?.startLocation} to {schedule.routeId?.endLocation}</Text>
+            <Text className="text-sm font-bold text-slate-400 uppercase">Route</Text>
+            <Text className="text-sm font-bold text-white text-right flex-1 ml-4">{schedule.routeId?.startLocation} to {schedule.routeId?.endLocation}</Text>
           </View>
           <View className="flex-row justify-between mb-3">
-            <Text className="text-sm font-bold text-slate-500 uppercase">Bus</Text>
-            <Text className="text-sm font-bold text-slate-900 text-right flex-1 ml-4">{schedule.busId?.busName} ({schedule.busId?.licenseNumber})</Text>
+            <Text className="text-sm font-bold text-slate-400 uppercase">Bus</Text>
+            <Text className="text-sm font-bold text-white text-right flex-1 ml-4">{schedule.busId?.busName} ({schedule.busId?.licenseNumber})</Text>
           </View>
           <View className="flex-row justify-between mb-3">
-            <Text className="text-sm font-bold text-slate-500 uppercase">Date</Text>
-            <Text className="text-sm font-bold text-slate-900">{new Date(schedule.departureDate).toLocaleDateString()}</Text>
+            <Text className="text-sm font-bold text-slate-400 uppercase">Date</Text>
+            <Text className="text-sm font-bold text-white">{new Date(schedule.departureDate).toLocaleDateString()}</Text>
           </View>
           <View className="flex-row justify-between">
-            <Text className="text-sm font-bold text-slate-500 uppercase">Time</Text>
-            <Text className="text-sm font-bold text-slate-900">{schedule.departureTime} - {schedule.arrivalTime}</Text>
+            <Text className="text-sm font-bold text-slate-400 uppercase">Time</Text>
+            <Text className="text-sm font-bold text-white">{schedule.departureTime} - {schedule.arrivalTime}</Text>
           </View>
         </GlassCard>
 
         <GlassCard className="mb-6">
-          <Text className="text-base font-bold text-slate-900 mb-4 pb-2 border-b border-black/5">Ticket Details</Text>
+          <Text className="text-base font-bold text-white mb-4 pb-2 border-b border-white/10">Ticket Details</Text>
           <View className="flex-row justify-between mb-3">
-            <Text className="text-sm font-bold text-slate-500 uppercase">Booking Type</Text>
-            <Text className="text-sm font-bold text-slate-900">{bookingType}</Text>
+            <Text className="text-sm font-bold text-slate-400 uppercase">Booking Type</Text>
+            <Text className="text-sm font-bold text-white">{bookingType}</Text>
           </View>
           <View className="flex-row justify-between mb-3">
-            <Text className="text-sm font-bold text-slate-500 uppercase">Seats</Text>
-            <Text className="text-sm font-bold text-slate-900">{formattedSeats}</Text>
+            <Text className="text-sm font-bold text-slate-400 uppercase">Seats</Text>
+            <Text className="text-sm font-bold text-white">{formattedSeats}</Text>
           </View>
           <View className="flex-row justify-between">
-            <Text className="text-sm font-bold text-slate-500 uppercase">Seat Count</Text>
-            <Text className="text-sm font-bold text-slate-900">{selectedSeats.length}</Text>
+            <Text className="text-sm font-bold text-slate-400 uppercase">Seat Count</Text>
+            <Text className="text-sm font-bold text-white">{selectedSeats.length}</Text>
           </View>
         </GlassCard>
 
         <GlassCard className="mb-6">
-          <Text className="text-base font-bold text-slate-900 mb-4 pb-2 border-b border-black/5">Contact Info</Text>
+          <Text className="text-base font-bold text-white mb-4 pb-2 border-b border-white/10">Contact Info</Text>
           <TextInput
-            className="bg-black/5 border border-black/10 text-slate-900 p-4 rounded-xl font-semibold text-base"
+            className="bg-white/10 border border-white/10 text-white p-4 rounded-xl font-semibold text-base"
+            style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
             placeholder="Enter Phone Number"
             placeholderTextColor="#94a3b8"
             value={contactNumber}
