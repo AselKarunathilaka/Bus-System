@@ -9,7 +9,7 @@ exports.createBooking = async (req, res) => {
   session.startTransaction();
 
   try {
-    const { scheduleId, seatNumbers, bookingType, totalPrice } = req.body;
+    const { scheduleId, seatNumbers, bookingType, totalPrice, contactNumber } = req.body;
 
     if (!scheduleId || !seatNumbers || !bookingType || totalPrice === undefined) {
       await session.abortTransaction();
@@ -56,15 +56,20 @@ exports.createBooking = async (req, res) => {
       return res.status(400).json({ message: "One or more selected seats are already booked" });
     }
 
+    // Generate unique booking ID
+    const bookingId = `BKG-${Math.floor(100000 + Math.random() * 900000)}`;
+
     // Create the booking
     const booking = await Booking.create(
       [
         {
+          bookingId,
           userId: req.user._id,
           scheduleId,
           seatNumbers,
           bookingType,
           totalPrice,
+          contactNumber,
           status: "Confirmed",
         },
       ],

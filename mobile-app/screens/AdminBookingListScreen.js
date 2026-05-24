@@ -94,7 +94,10 @@ const AdminBookingListScreen = () => {
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <View style={styles.cardHeader}>
-        <Text style={styles.userName}>{item.userId?.fullName || "Unknown User"}</Text>
+        <View>
+          <Text style={styles.userName}>{item.userId?.fullName || "Unknown User"}</Text>
+          <Text style={styles.bookingIdText}>ID: {item.bookingId}</Text>
+        </View>
         <Text style={[styles.statusBadge, item.status === 'Cancelled' && styles.statusCancelled]}>
           {item.status}
         </Text>
@@ -166,9 +169,11 @@ const styles = StyleSheet.create({
   cardHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: 5,
   },
   userName: { fontSize: 16, fontWeight: "bold", color: "#0f172a" },
+  bookingIdText: { fontSize: 12, color: "#64748b", marginTop: 2 },
   statusBadge: {
     backgroundColor: "#dcfce7",
     color: "#166534",

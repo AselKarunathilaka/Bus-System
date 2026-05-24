@@ -2,6 +2,11 @@ const mongoose = require("mongoose");
 
 const bookingSchema = new mongoose.Schema(
   {
+    bookingId: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -37,6 +42,10 @@ const bookingSchema = new mongoose.Schema(
       type: String,
       enum: ["Confirmed", "Cancelled"],
       default: "Confirmed",
+    },
+    contactNumber: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }

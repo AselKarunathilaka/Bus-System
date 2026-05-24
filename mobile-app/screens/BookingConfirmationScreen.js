@@ -6,19 +6,38 @@ import {
   TouchableOpacity,
   Alert,
   ActivityIndicator,
+  ScrollView,
+  TextInput,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
 
 const BookingConfirmationScreen = ({ route, navigation }) => {
   const { schedule, selectedSeats, bookingType } = route.params;
-  const { token } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [contactNumber, setContactNumber] = useState("");
+
+  const isAdmin = user?.role === "admin";
 
   const basePrice = schedule.routeId?.price || 0;
   const totalPrice = basePrice * selectedSeats.length;
 
+  const getSeatLabel = (seatNumber) => {
+    const row = Math.ceil(seatNumber / 4);
+    const colIndex = (seatNumber - 1) % 4;
+    const colLetter = ["A", "B", "C", "D"][colIndex];
+    return `${row}${colLetter}`;
+  };
+
+  const formattedSeats = selectedSeats.map(getSeatLabel).join(", ");
+
   const handleConfirm = async () => {
+    if (!isAdmin && (!contactNumber || contactNumber.trim() === "")) {
+      Alert.alert("Error", "Contact number is required for your booking.");
+      return;
+    }
+
     setLoading(true);
     try {
       const payload = {
@@ -26,6 +45,7 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
         seatNumbers: selectedSeats,
         bookingType,
         totalPrice,
+        contactNumber,
       };
 
       await api.post("/bookings", payload, {
@@ -46,7 +66,7 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Confirm Your Booking</Text>
 
       <View style={styles.card}>
@@ -71,11 +91,24 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
           <Text style={styles.bold}>Booking Type:</Text> {bookingType}
         </Text>
         <Text style={styles.detailText}>
-          <Text style={styles.bold}>Selected Seats:</Text> {selectedSeats.join(", ")}
+          <Text style={styles.bold}>Selected Seats:</Text> {formattedSeats}
         </Text>
         <Text style={styles.detailText}>
           <Text style={styles.bold}>Seat Count:</Text> {selectedSeats.length}
         </Text>
+      </View>
+
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Contact Information</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Sri Lanka Phone Number (e.g. 0771234567)"
+          value={contactNumber}
+          onChangeText={setContactNumber}
+          keyboardType="phone-pad"
+          maxLength={12}
+        />
+        {isAdmin && <Text style={styles.optionalText}>(Optional for Admins)</Text>}
       </View>
 
       <View style={styles.summaryCard}>
@@ -94,14 +127,14 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
           <Text style={styles.confirmBtnText}>Confirm & Pay</Text>
         )}
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 export default BookingConfirmationScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#eef4ff" },
+  container: { flexGrow: 1, padding: 20, backgroundColor: "#eef4ff" },
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 20, textAlign: "center" },
   card: {
     backgroundColor: "#fff",
@@ -114,6 +147,21 @@ const styles = StyleSheet.create({
   detailText: { fontSize: 15, color: "#334155", marginBottom: 5 },
   bold: { fontWeight: "bold", color: "#0f172a" },
   
+  input: {
+    borderWidth: 1,
+    borderColor: "#cbd5e1",
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 16,
+    backgroundColor: "#f8fafc",
+    marginTop: 5,
+  },
+  optionalText: {
+    fontSize: 12,
+    color: "#64748b",
+    marginTop: 5,
+  },
+
   summaryCard: {
     backgroundColor: "#1e3a8a",
     padding: 20,
