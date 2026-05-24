@@ -7,7 +7,6 @@ import {
   FlatList,
   Alert,
   ScrollView,
-  ScrollView,
 } from "react-native";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
