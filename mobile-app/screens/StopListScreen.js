@@ -126,12 +126,15 @@ const StopListScreen = ({ route, navigation }) => {
         </Text>
 
         {user?.role === "admin" && (
-          <GlassButton
-            title="+ Add Stop"
-            onPress={() => navigation.navigate("StopForm", { routeId })}
-            className="border-white/10"
-            textClassName="text-white font-bold"
-          />
+          <View className="mt-4 px-1 w-full">
+            <TouchableOpacity 
+              className="flex-row items-center justify-center bg-emerald-500/20 py-4 rounded-2xl border border-emerald-500/40 shadow-sm"
+              onPress={() => navigation.navigate("StopForm", { routeId })}
+            >
+              <Ionicons name="add-circle" size={24} color="#34d399" style={{ marginRight: 8 }} />
+              <Text className="text-emerald-300 font-black text-lg tracking-widest uppercase">Add Stop</Text>
+            </TouchableOpacity>
+          </View>
         )}
       </GlassCard>
     </>

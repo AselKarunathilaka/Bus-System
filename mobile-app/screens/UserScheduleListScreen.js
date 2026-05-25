@@ -82,11 +82,16 @@ const UserScheduleListScreen = ({ navigation }) => {
   return (
     <LiquidBackground>
       <View className="flex-1 p-5">
-        <View className="flex-row items-center mb-5">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        <View className="flex-row items-center justify-between mb-5">
+          <View className="flex-row items-center flex-1">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            </TouchableOpacity>
+            <Text className="text-3xl font-bold text-white flex-1 tracking-tight">Available Trips</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={20} color="#ffffff" />
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-white flex-1 tracking-tight">Available Trips</Text>
         </View>
 
         {loading ? (

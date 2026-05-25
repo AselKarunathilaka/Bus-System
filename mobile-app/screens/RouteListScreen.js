@@ -246,13 +246,18 @@ const RouteListScreen = ({ navigation }) => {
 
   const renderHeader = () => (
     <>
-      <View className="flex-row items-center mb-5">
-        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-          <Ionicons name="arrow-back" size={24} color="#ffffff" />
+      <View className="flex-row items-center justify-between mb-5">
+        <View className="flex-row items-center flex-1">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+          <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
+            {user?.role === "admin" ? "Manage Routes" : "Available Routes"}
+          </Text>
+        </View>
+        <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+          <Ionicons name="home" size={20} color="#ffffff" />
         </TouchableOpacity>
-        <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
-          {user?.role === "admin" ? "Manage Routes" : "Available Routes"}
-        </Text>
       </View>
 
       <GlassCard className="mb-4">
@@ -287,12 +292,15 @@ const RouteListScreen = ({ navigation }) => {
       </GlassCard>
 
       {user?.role === "admin" && (
-        <GlassButton
-          title="Add New Route"
-          onPress={() => navigation.navigate("RouteForm")}
-          className="mb-4"
-          textClassName="text-white font-extrabold"
-        />
+        <View className="mb-6 px-1">
+          <TouchableOpacity 
+            className="flex-row items-center justify-center bg-emerald-500/20 py-4 rounded-2xl border border-emerald-500/40 shadow-sm"
+            onPress={() => navigation.navigate("RouteForm")}
+          >
+            <Ionicons name="add-circle" size={24} color="#34d399" style={{ marginRight: 8 }} />
+            <Text className="text-emerald-300 font-black text-lg tracking-widest uppercase">Add New Route</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </>
   );

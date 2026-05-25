@@ -125,12 +125,15 @@ const ScheduleListScreen = ({ navigation }) => {
             <Ionicons name="home" size={22} color="#38bdf8" />
           </TouchableOpacity>
         </View>
-        <GlassButton
-          title="+ Add New Schedule"
-          onPress={() => navigation.navigate("ScheduleForm")}
-          className="mb-6"
-          variant="secondary"
-        />
+        <View className="mb-6 px-1 mt-2">
+          <TouchableOpacity 
+            className="flex-row items-center justify-center bg-emerald-500/20 py-4 rounded-2xl border border-emerald-500/40 shadow-sm"
+            onPress={() => navigation.navigate("ScheduleForm")}
+          >
+            <Ionicons name="add-circle" size={24} color="#34d399" style={{ marginRight: 8 }} />
+            <Text className="text-emerald-300 font-black text-lg tracking-widest uppercase">Add New Schedule</Text>
+          </TouchableOpacity>
+        </View>
         {loading ? (
           <View className="flex-1 justify-center items-center mt-10">
             <ActivityIndicator size="large" color="#a855f7" />

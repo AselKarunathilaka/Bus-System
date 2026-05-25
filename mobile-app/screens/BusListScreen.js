@@ -162,12 +162,15 @@ const BusListScreen = ({ navigation }) => {
         </View>
 
         {isAdmin && (
-          <GlassButton
-            title="+ Add New Bus"
-            onPress={() => navigation.navigate("BusForm")}
-            className="mt-5 border-[#007AFF]/20"
-            textClassName="text-white font-extrabold"
-          />
+          <View className="mt-5 px-1">
+            <TouchableOpacity 
+              className="flex-row items-center justify-center bg-emerald-500/20 py-4 rounded-2xl border border-emerald-500/40 shadow-sm"
+              onPress={() => navigation.navigate("BusForm")}
+            >
+              <Ionicons name="add-circle" size={24} color="#34d399" style={{ marginRight: 8 }} />
+              <Text className="text-emerald-300 font-black text-lg tracking-widest uppercase">Add New Bus</Text>
+            </TouchableOpacity>
+          </View>
         )}
       </GlassCard>
     </View>
