@@ -108,23 +108,21 @@ const AdminBookingListScreen = ({ navigation }) => {
     const formattedSeats = item.seatNumbers?.map(getSeatLabel).join(", ") || "";
 
     return (
-      <GlassCard className="mb-6 p-0 overflow-hidden border-0 bg-transparent shadow-none">
+      <GlassCard className="mb-6 p-0 overflow-hidden">
         {/* Header */}
-        <View className="bg-white/10 p-4 border border-white/10 border-b-0 rounded-t-2xl">
-          <View className="flex-row justify-between items-center mb-2">
-            <View>
-              <Text className="text-lg font-bold text-white tracking-tight">{item.userId?.fullName || "Unknown User"}</Text>
-              <Text className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">
-                ID: {item.bookingId || "N/A"}
-              </Text>
-            </View>
-            <StatusBadge status={item.status} />
+        <View className="bg-white/10 p-5 border-b border-white/10 flex-row justify-between items-center">
+          <View>
+            <Text className="text-xl font-black text-white tracking-tight">{item.userId?.fullName || "Unknown User"}</Text>
+            <Text className="text-xs text-[#38bdf8] font-bold uppercase tracking-widest mt-1">
+              ID: {item.bookingId || "N/A"}
+            </Text>
           </View>
+          <StatusBadge status={item.status} />
         </View>
 
         {/* Body */}
-        <View className="bg-white/5 p-4 border-l border-r border-white/10 border-dashed border-t border-b-0 relative">
-          <View className="flex-row justify-between mb-3">
+        <View className="p-5">
+          <View className="flex-row justify-between mb-4">
             <View>
               <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Route</Text>
               <Text className="text-sm font-bold text-white">{item.scheduleId?.routeId?.startLocation} to {item.scheduleId?.routeId?.endLocation}</Text>
@@ -135,7 +133,7 @@ const AdminBookingListScreen = ({ navigation }) => {
             </View>
           </View>
 
-          <View className="flex-row justify-between mb-3">
+          <View className="flex-row justify-between mb-4">
             <View>
               <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date</Text>
               <Text className="text-sm font-bold text-white">
@@ -144,12 +142,12 @@ const AdminBookingListScreen = ({ navigation }) => {
             </View>
             <View className="items-end">
               <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Seats ({item.bookingType})</Text>
-              <Text className="text-sm font-bold text-cyan-400">{formattedSeats}</Text>
+              <Text className="text-sm font-bold text-emerald-400">{formattedSeats}</Text>
             </View>
           </View>
 
           {item.contactNumber && (
-            <View className="flex-row justify-between mb-3">
+            <View className="flex-row justify-between mb-4">
               <View>
                 <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Contact</Text>
                 <Text className="text-sm font-bold text-white">{item.contactNumber}</Text>
@@ -157,7 +155,7 @@ const AdminBookingListScreen = ({ navigation }) => {
             </View>
           )}
 
-          <View className="flex-row justify-between border-t border-white/5 pt-3">
+          <View className="flex-row justify-between pt-1">
             <View>
               <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Booked On</Text>
               <Text className="text-sm font-bold text-slate-300">{new Date(item.bookingDate).toLocaleDateString()}</Text>
@@ -166,28 +164,26 @@ const AdminBookingListScreen = ({ navigation }) => {
         </View>
 
         {/* Footer */}
-        <View className="bg-gradient-to-r from-blue-900/40 to-cyan-900/40 p-4 border border-white/10 border-t-0 rounded-b-2xl border-dashed">
-          <View className="flex-row justify-between items-center">
-            <View>
-              <Text className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Total</Text>
-              <Text className="text-xl font-black text-white">LKR {item.totalPrice}</Text>
-            </View>
-            <View className="flex-row">
-              {item.status !== "Cancelled" && (
-                <TouchableOpacity
-                  className="bg-amber-500/20 px-3 py-2 rounded-xl ml-2 border border-amber-500/30"
-                  onPress={() => handleCancel(item._id)}
-                >
-                  <Text className="text-amber-400 font-bold text-xs">Cancel</Text>
-                </TouchableOpacity>
-              )}
+        <View className="bg-gradient-to-r from-blue-600/30 to-cyan-500/20 p-5 border-t border-white/10 flex-row justify-between items-center">
+          <View>
+            <Text className="text-[10px] text-cyan-200 font-bold uppercase tracking-widest mb-1">Total</Text>
+            <Text className="text-2xl font-black text-white">LKR {item.totalPrice}</Text>
+          </View>
+          <View className="flex-row">
+            {item.status !== "Cancelled" && (
               <TouchableOpacity
-                className="bg-red-500/20 px-3 py-2 rounded-xl ml-2 border border-red-500/30"
-                onPress={() => handleDelete(item._id)}
+                className="bg-amber-500/30 px-4 py-2.5 rounded-xl ml-2 border border-amber-500/50 shadow-sm"
+                onPress={() => handleCancel(item._id)}
               >
-                <Text className="text-red-400 font-bold text-xs">Delete</Text>
+                <Text className="text-amber-300 font-bold text-xs uppercase tracking-wider">Cancel</Text>
               </TouchableOpacity>
-            </View>
+            )}
+            <TouchableOpacity
+              className="bg-red-500/30 px-4 py-2.5 rounded-xl ml-2 border border-red-500/50 shadow-sm"
+              onPress={() => handleDelete(item._id)}
+            >
+              <Text className="text-red-300 font-bold text-xs uppercase tracking-wider">Delete</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </GlassCard>
@@ -204,7 +200,7 @@ const AdminBookingListScreen = ({ navigation }) => {
             </TouchableOpacity>
             <Text className="text-3xl font-bold text-white tracking-tight">All Bookings</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-white/10 p-2 rounded-full border border-white/10">
             <Ionicons name="home" size={20} color="#ffffff" />
           </TouchableOpacity>
         </View>

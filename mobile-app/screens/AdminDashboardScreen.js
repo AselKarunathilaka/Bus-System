@@ -457,15 +457,6 @@ const AdminDashboardScreen = ({ navigation }) => {
               onPress={() => navigation.navigate("ScheduleList")}
             />
           </View>
-          <View className="w-[100%] mt-3">
-            <TouchableOpacity 
-              className="flex-row items-center justify-center bg-white/10 py-4 rounded-2xl border border-white/20 shadow-sm"
-              onPress={() => navigation.navigate("AdminGuide")}
-            >
-              <Ionicons name="book" size={24} color="#e2e8f0" style={{ marginRight: 8 }} />
-              <Text className="text-white font-black text-lg tracking-widest uppercase">Admin System Guide</Text>
-            </TouchableOpacity>
-          </View>
         </View>
 
         <GlassCard className="mb-4">

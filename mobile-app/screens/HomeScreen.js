@@ -143,6 +143,19 @@ const HomeScreen = ({ navigation }) => {
             />
           </View>
 
+          {!isAdmin && (
+            <View className="w-full mb-4">
+              <GlassButton
+                title="Help & Support"
+                variant="glass"
+                className="flex-col h-32 border-[#3b82f6]/30 bg-[#3b82f6]/5"
+                textClassName="mt-3 text-lg font-bold text-white text-center tracking-widest"
+                icon={<View className="bg-[#3b82f6]/20 p-3 rounded-full border border-[#3b82f6]/40"><Ionicons name="help-buoy" size={28} color="#93c5fd" /></View>}
+                onPress={() => navigation.navigate("UserGuide")}
+              />
+            </View>
+          )}
+
           {isAdmin && (
             <View className="w-[48%] mb-4">
               <GlassButton
@@ -152,6 +165,19 @@ const HomeScreen = ({ navigation }) => {
                 textClassName="mt-3 text-base text-white text-center"
                 icon={<View className="bg-[#3b82f6]/20 p-3 rounded-full border border-[#3b82f6]/40"><Ionicons name="bar-chart" size={28} color="#93c5fd" /></View>}
                 onPress={() => navigation.navigate("AdminDashboard")}
+              />
+            </View>
+          )}
+
+          {isAdmin && (
+            <View className="w-full mb-4">
+              <GlassButton
+                title="Admin System Guide"
+                variant="glass"
+                className="flex-col h-32 border-[#14b8a6]/30 bg-[#14b8a6]/5"
+                textClassName="mt-3 text-lg font-bold text-white text-center tracking-widest"
+                icon={<View className="bg-[#14b8a6]/20 p-3 rounded-full border border-[#14b8a6]/40"><Ionicons name="book" size={28} color="#5eead4" /></View>}
+                onPress={() => navigation.navigate("AdminGuide")}
               />
             </View>
           )}

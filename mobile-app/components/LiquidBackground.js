@@ -9,7 +9,7 @@ const LiquidBackground = ({ children }) => {
     <View style={styles.container}>
       {/* Base Vibrant Gradient */}
       <LinearGradient
-        colors={["#0f172a", "#1e1b4b", "#0f172a"]}
+        colors={["#020617", "#0f172a", "#020617"]}
         style={StyleSheet.absoluteFillObject}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     height: width * 0.8,
     borderRadius: width * 0.4,
-    backgroundColor: "rgba(56, 189, 248, 0.45)", // Bright Cyan
+    backgroundColor: "rgba(56, 189, 248, 0.6)", // Bright Cyan
     transform: [{ scaleX: 1.2 }, { rotate: "45deg" }],
     filter: "blur(90px)",
   },
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     height: width * 0.9,
     borderRadius: width * 0.45,
-    backgroundColor: "rgba(139, 92, 246, 0.45)", // Vibrant Purple
+    backgroundColor: "rgba(168, 85, 247, 0.55)", // Vibrant Purple
     filter: "blur(110px)",
   },
   orb3: {
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     width: width * 0.6,
     height: width * 0.6,
     borderRadius: width * 0.3,
-    backgroundColor: "rgba(236, 72, 153, 0.35)", // Soft Pink
+    backgroundColor: "rgba(244, 63, 94, 0.45)", // Soft Rose
     filter: "blur(100px)",
   },
 });

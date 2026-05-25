@@ -26,6 +26,7 @@ import MyBookingsScreen from "../screens/MyBookingsScreen";
 import AdminBookingListScreen from "../screens/AdminBookingListScreen";
 import AdminDashboardScreen from "../screens/AdminDashboardScreen";
 import AdminGuideScreen from "../screens/AdminGuideScreen";
+import UserGuideScreen from "../screens/UserGuideScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -100,6 +101,7 @@ const AppNavigator = () => {
             <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
             <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: "Admin Dashboard" }} />
             <Stack.Screen name="AdminGuide" component={AdminGuideScreen} options={{ title: "Admin Guide" }} />
+            <Stack.Screen name="UserGuide" component={UserGuideScreen} options={{ title: "Help & Support" }} />
             <Stack.Screen name="Routes" component={RouteListScreen} />
             <Stack.Screen name="RouteForm" component={RouteFormScreen} />
             <Stack.Screen name="StopList" component={StopListScreen} />

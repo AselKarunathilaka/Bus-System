@@ -198,15 +198,15 @@ const RouteListScreen = ({ navigation }) => {
 
   const renderSelectField = (title, fieldKey, value, options, onSelect) => (
     <View className="mb-3">
-      <Text className="text-xs font-bold text-slate-400 uppercase mb-1">{title}</Text>
+      <Text className="text-xs font-bold text-[#38bdf8] uppercase tracking-widest mb-1.5 ml-1">{title}</Text>
       <TouchableOpacity
-        className="bg-white/10 border border-white/10 p-3 rounded-xl flex-row justify-between items-center"
+        className="bg-black/20 border border-white/15 p-4 rounded-2xl flex-row justify-between items-center"
         onPress={() => setOpenMenu(openMenu === fieldKey ? null : fieldKey)}
       >
-        <Text className="text-white font-semibold">
+        <Text className="text-white font-semibold text-base">
           {getLabelFromOptions(options, value)}
         </Text>
-        <Ionicons name="chevron-down" size={16} color="#ffffff" />
+        <Ionicons name="chevron-down" size={18} color="#94a3b8" />
       </TouchableOpacity>
 
       {openMenu === fieldKey && (
@@ -272,16 +272,19 @@ const RouteListScreen = ({ navigation }) => {
       </GlassCard>
 
       <GlassCard className="mb-4">
-        <View className="flex-row justify-between items-center mb-4">
-          <Text className="text-lg font-bold text-white tracking-tight">Filter Routes</Text>
+        <View className="flex-row justify-between items-center mb-5 border-b border-white/10 pb-3">
+          <View className="flex-row items-center">
+            <Ionicons name="filter" size={20} color="#38bdf8" className="mr-2" />
+            <Text className="text-xl font-bold text-white tracking-tight ml-2">Filter Routes</Text>
+          </View>
 
           <View className="flex-row gap-2">
-            <TouchableOpacity className="bg-[#007AFF] px-3 py-1.5 rounded-lg border border-[#007AFF]" onPress={applyFilters}>
-              <Text className="text-white font-bold text-xs">Apply</Text>
+            <TouchableOpacity className="bg-[#0ea5e9]/90 px-4 py-2 rounded-xl border border-[#38bdf8] shadow-sm shadow-[#38bdf8]/40" onPress={applyFilters}>
+              <Text className="text-white font-bold text-xs tracking-wider uppercase">Apply</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="bg-white/10 px-3 py-1.5 rounded-lg border border-white/10" onPress={clearFilters}>
-              <Text className="text-slate-400 font-bold text-xs">Clear</Text>
+            <TouchableOpacity className="bg-white/10 px-4 py-2 rounded-xl border border-white/20" onPress={clearFilters}>
+              <Text className="text-slate-300 font-bold text-xs tracking-wider uppercase">Clear</Text>
             </TouchableOpacity>
           </View>
         </View>
