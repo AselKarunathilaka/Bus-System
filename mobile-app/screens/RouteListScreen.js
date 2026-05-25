@@ -14,6 +14,7 @@ import { AuthContext } from "../context/AuthContext";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
 import GlassButton from "../components/GlassButton";
+import StatusBadge from "../components/StatusBadge";
 import { Ionicons } from "@expo/vector-icons";
 
 const PRICE_OPTIONS = [
@@ -300,8 +301,8 @@ const RouteListScreen = ({ navigation }) => {
     return (
       <LiquidBackground>
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#38bdf8" />
-          <Text className="text-slate-400 mt-3 font-semibold">Loading routes...</Text>
+          <ActivityIndicator size="large" color="#a855f7" />
+          <Text className="text-purple-300 mt-3 font-semibold">Loading vibrant routes...</Text>
         </View>
       </LiquidBackground>
     );
@@ -315,25 +316,28 @@ const RouteListScreen = ({ navigation }) => {
         data={filteredRoutes}
         keyExtractor={(item) => item._id}
         ListHeaderComponent={renderHeader}
-        ListEmptyComponent={<Text className="text-slate-400 text-center mt-10 font-medium">No routes found</Text>}
+        ListEmptyComponent={
+          <View className="items-center justify-center mt-16 opacity-80">
+            <Ionicons name="map-outline" size={64} color="#a855f7" />
+            <Text className="text-purple-200 mt-4 font-bold text-lg">No routes found</Text>
+            <Text className="text-slate-400 text-sm mt-1 text-center max-w-[250px]">Try adjusting your filters or checking back later.</Text>
+          </View>
+        }
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
           <GlassCard className="mb-4">
             <View className="flex-row items-start justify-between mb-4 border-b border-white/10 pb-4">
               <View className="flex-1 pr-3">
                 <Text className="text-xl font-bold text-white mb-1 tracking-tight">{item.routeName}</Text>
-                <Text className="text-sm font-semibold text-slate-400">
-                  {item.startLocation} → {item.endLocation}
-                </Text>
+                <View className="flex-row items-center mt-1">
+                  <Ionicons name="location" size={14} color="#0ea5e9" />
+                  <Text className="text-sm font-semibold text-[#0ea5e9] mx-1">{item.startLocation}</Text>
+                  <Ionicons name="arrow-forward" size={12} color="#94a3b8" />
+                  <Text className="text-sm font-semibold text-[#a855f7] ml-1">{item.endLocation}</Text>
+                </View>
               </View>
 
-              <Text
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold overflow-hidden ${
-                  item.status === "active" ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30" : "bg-white/5 text-slate-400 border border-white/10"
-                }`}
-              >
-                {item.status}
-              </Text>
+              <StatusBadge status={item.status} />
             </View>
 
             <View className="flex-row flex-wrap justify-between mb-3">

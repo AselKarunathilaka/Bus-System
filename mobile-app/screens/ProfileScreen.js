@@ -13,6 +13,7 @@ import { AuthContext } from "../context/AuthContext";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
 import GlassButton from "../components/GlassButton";
+import GlassInput from "../components/GlassInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const ProfileScreen = ({ navigation }) => {
@@ -51,34 +52,37 @@ const ProfileScreen = ({ navigation }) => {
   return (
     <LiquidBackground>
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
-        <View className="flex-row items-center mb-6">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center flex-1">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            </TouchableOpacity>
+            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">My Profile</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={20} color="#ffffff" />
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">My Profile</Text>
         </View>
 
         <GlassCard className="mb-6">
           <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Full Name</Text>
-          <TextInput
-            className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-            style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+          <GlassInput
+            icon="person"
             value={fullName}
             onChangeText={setFullName}
             placeholderTextColor="#94a3b8"
           />
 
           <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Email</Text>
-          <TextInput
-            className="bg-white/5 border border-white/10 text-slate-400 p-4 rounded-xl mb-4 font-semibold text-base"
+          <GlassInput
+            icon="mail"
             value={user?.email || ""}
             editable={false}
           />
 
           <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Phone</Text>
-          <TextInput
-            className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-            style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+          <GlassInput
+            icon="call"
             value={phone}
             onChangeText={setPhone}
             keyboardType="phone-pad"
@@ -86,8 +90,8 @@ const ProfileScreen = ({ navigation }) => {
           />
 
           <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Role</Text>
-          <TextInput
-            className="bg-white/5 border border-white/10 text-slate-400 p-4 rounded-xl mb-4 font-semibold text-base uppercase"
+          <GlassInput
+            icon="shield-checkmark"
             value={user?.role || ""}
             editable={false}
           />

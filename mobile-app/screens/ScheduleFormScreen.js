@@ -15,6 +15,7 @@ import api from "../services/api";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
 import GlassButton from "../components/GlassButton";
+import GlassInput from "../components/GlassInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const ScheduleFormScreen = ({ route, navigation }) => {
@@ -98,13 +99,18 @@ const ScheduleFormScreen = ({ route, navigation }) => {
   return (
     <LiquidBackground>
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 120 }}>
-        <View className="flex-row items-center mb-6">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
-          </TouchableOpacity>
-          <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">
+        <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center flex-1">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            </TouchableOpacity>
+            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
             {existingSchedule ? "Edit Schedule" : "Add Schedule"}
           </Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={20} color="#ffffff" />
+          </TouchableOpacity>
         </View>
 
         <GlassCard className="mb-6">
@@ -168,12 +174,11 @@ const ScheduleFormScreen = ({ route, navigation }) => {
               style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.1)", marginBottom: 16, color: "#ffffff", outlineWidth: 0 }}
             />
           ) : (
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
+            <GlassInput
+              icon="calendar"
               value={departureDate}
               onChangeText={setDepartureDate}
               placeholder="YYYY-MM-DD"
-              placeholderTextColor="#94a3b8"
             />
           )}
 
@@ -186,12 +191,11 @@ const ScheduleFormScreen = ({ route, navigation }) => {
               style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.1)", marginBottom: 16, color: "#ffffff", outlineWidth: 0 }}
             />
           ) : (
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
+            <GlassInput
+              icon="time"
               value={departureTime}
               onChangeText={setDepartureTime}
               placeholder="08:00 AM"
-              placeholderTextColor="#94a3b8"
             />
           )}
 
@@ -204,12 +208,11 @@ const ScheduleFormScreen = ({ route, navigation }) => {
               style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.1)", marginBottom: 16, color: "#ffffff", outlineWidth: 0 }}
             />
           ) : (
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
+            <GlassInput
+              icon="time-outline"
               value={arrivalTime}
               onChangeText={setArrivalTime}
               placeholder="12:30 PM"
-              placeholderTextColor="#94a3b8"
             />
           )}
 

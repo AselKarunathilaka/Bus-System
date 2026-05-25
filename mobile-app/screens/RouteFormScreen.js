@@ -15,6 +15,7 @@ import { AuthContext } from "../context/AuthContext";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
 import GlassButton from "../components/GlassButton";
+import GlassInput from "../components/GlassInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const RouteFormScreen = ({ route, navigation }) => {
@@ -176,73 +177,66 @@ const RouteFormScreen = ({ route, navigation }) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center mb-6">
+          <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center flex-1">
             <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
               <Ionicons name="arrow-back" size={24} color="#ffffff" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">
+            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
               {editingRoute ? "Edit Route" : "Add Route"}
             </Text>
           </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={20} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
 
           <GlassCard className="mb-6">
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="map"
               placeholder="Route Name"
-              placeholderTextColor="#94a3b8"
               value={routeName}
               onChangeText={(text) => setRouteName(sanitizeNameField(text))}
               returnKeyType="next"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="navigate-circle"
               placeholder="Start Location"
-              placeholderTextColor="#94a3b8"
               value={startLocation}
               onChangeText={(text) => setStartLocation(sanitizeNameField(text))}
               returnKeyType="next"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="location"
               placeholder="End Location"
-              placeholderTextColor="#94a3b8"
               value={endLocation}
               onChangeText={(text) => setEndLocation(sanitizeNameField(text))}
               returnKeyType="next"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="cash"
               placeholder="Price (LKR)"
-              placeholderTextColor="#94a3b8"
               value={price}
               onChangeText={(text) => setPrice(sanitizeNumericField(text))}
               keyboardType="numeric"
               returnKeyType="next"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="speedometer"
               placeholder="Distance in KM"
-              placeholderTextColor="#94a3b8"
               value={distanceKm}
               onChangeText={(text) => setDistanceKm(sanitizeNumericField(text))}
               keyboardType="numeric"
               returnKeyType="next"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="time"
               placeholder="Estimated Duration (e.g. 3h 30m)"
-              placeholderTextColor="#94a3b8"
               value={estimatedDuration}
               onChangeText={(text) => setEstimatedDuration(sanitizeDurationField(text))}
               returnKeyType="next"
@@ -250,6 +244,7 @@ const RouteFormScreen = ({ route, navigation }) => {
 
             <TextInput
               className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base min-h-[100px]"
+              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
               placeholder="Description"
               placeholderTextColor="#94a3b8"
               value={description}
@@ -258,11 +253,9 @@ const RouteFormScreen = ({ route, navigation }) => {
               textAlignVertical="top"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="toggle"
               placeholder="Status (active/inactive)"
-              placeholderTextColor="#94a3b8"
               value={status}
               onChangeText={setStatus}
               autoCapitalize="none"

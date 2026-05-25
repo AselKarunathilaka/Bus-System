@@ -19,6 +19,7 @@ import { AuthContext } from "../context/AuthContext";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
 import GlassButton from "../components/GlassButton";
+import StatusBadge from "../components/StatusBadge";
 import { Ionicons } from "@expo/vector-icons";
 
 
@@ -108,23 +109,23 @@ const BusListScreen = ({ navigation }) => {
     [buses]
   );
 
-  const getStatusStyle = (status) => {
-    if (status === "Available") return "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30";
-    if (status === "Maintenance") return "bg-amber-500/20 text-amber-400 border border-amber-500/30";
-    if (status === "Inactive") return "bg-red-500/20 text-red-400 border border-red-500/30";
-    return "bg-white/10 text-slate-400";
-  };
+  // getStatusStyle is replaced by StatusBadge component
 
   const renderDashboardHeader = () => (
     <View className="mb-4 mt-2 px-3">
-      <View className="flex-row items-center mb-4">
-        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-          <Ionicons name="arrow-back" size={24} color="#ffffff" />
-        </TouchableOpacity>
-        <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">
+      <View className="flex-row items-center justify-between mb-4">
+          <View className="flex-row items-center flex-1">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            </TouchableOpacity>
+            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
           {isAdmin ? "Bus Dashboard" : "Available Buses"}
         </Text>
-      </View>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={20} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
 
       <GlassCard className="mb-4">
         <Text className="text-slate-400 text-sm leading-relaxed mb-4">
@@ -180,9 +181,7 @@ const BusListScreen = ({ navigation }) => {
           <Text className="text-sm font-semibold text-slate-400 mt-1">{item.licenseNumber}</Text>
         </View>
 
-        <Text className={`px-3 py-1.5 rounded-lg text-xs font-bold overflow-hidden ${getStatusStyle(item.status)}`}>
-          {item.status}
-        </Text>
+        <StatusBadge status={item.status} />
       </View>
 
       <View className="flex-row flex-wrap justify-between mb-3">
@@ -244,8 +243,8 @@ const BusListScreen = ({ navigation }) => {
     return (
       <LiquidBackground>
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#38bdf8" />
-          <Text className="mt-3 text-slate-400 font-semibold">Loading buses...</Text>
+          <ActivityIndicator size="large" color="#a855f7" />
+          <Text className="mt-3 text-purple-300 font-semibold">Loading vibrant buses...</Text>
         </View>
       </LiquidBackground>
     );
@@ -262,7 +261,11 @@ const BusListScreen = ({ navigation }) => {
         contentContainerStyle={{ paddingBottom: 24, paddingTop: 12 }}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <Text className="text-center text-slate-400 mt-10 font-bold">No buses found.</Text>
+          <View className="items-center justify-center mt-16 opacity-80">
+            <Ionicons name="bus-outline" size={64} color="#0ea5e9" />
+            <Text className="text-cyan-200 mt-4 font-bold text-lg">No buses found</Text>
+            <Text className="text-slate-400 text-sm mt-1 text-center">Your fleet is currently empty.</Text>
+          </View>
         }
       />
     </LiquidBackground>

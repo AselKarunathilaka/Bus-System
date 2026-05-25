@@ -45,11 +45,12 @@ const MainTabs = () => {
           
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#38bdf8",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "#06b6d4", // Cyan 500
+        tabBarInactiveTintColor: "#64748b", // Slate 500
         tabBarStyle: {
-          backgroundColor: '#0f172a',
-          borderTopColor: '#1e293b'
+          backgroundColor: '#020617', // Slate 950
+          borderTopColor: 'rgba(255,255,255,0.1)',
+          paddingTop: 5,
         }
       })}
     >
@@ -60,7 +61,7 @@ const MainTabs = () => {
         options={({ navigation }) => ({
           title: "Bookings",
           headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} style={{ marginLeft: 15 }}>
+            <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} style={{ marginLeft: 15 }}>
               <Ionicons name="arrow-back" size={24} color="#3567e0" />
             </TouchableOpacity>
           ),
@@ -72,7 +73,7 @@ const MainTabs = () => {
         options={({ navigation }) => ({
           title: "Profile",
           headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} style={{ marginLeft: 15 }}>
+            <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} style={{ marginLeft: 15 }}>
               <Ionicons name="arrow-back" size={24} color="#3567e0" />
             </TouchableOpacity>
           ),

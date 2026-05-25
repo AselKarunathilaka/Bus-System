@@ -12,6 +12,7 @@ import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
+import GlassButton from "../components/GlassButton";
 import { Ionicons } from "@expo/vector-icons";
 
 const UserScheduleListScreen = ({ navigation }) => {
@@ -68,19 +69,12 @@ const UserScheduleListScreen = ({ navigation }) => {
           </Text>
         </View>
 
-        <TouchableOpacity
-          className={`px-4 py-3 rounded-xl items-center border ${
-            availableSeats === 0
-              ? "bg-white/5 border-white/10"
-              : "bg-[#007AFF] border-[#007AFF]"
-          }`}
-          disabled={availableSeats === 0}
+        <GlassButton
+          title={availableSeats === 0 ? "Sold Out" : "Select Seats"}
+          variant={availableSeats === 0 ? "secondary" : "primary"}
           onPress={() => navigation.navigate("SeatSelection", { schedule: item })}
-        >
-          <Text className={`font-bold text-base ${availableSeats === 0 ? "text-slate-500" : "text-white"}`}>
-            {availableSeats === 0 ? "Sold Out" : "Select Seats"}
-          </Text>
-        </TouchableOpacity>
+          disabled={availableSeats === 0}
+        />
       </GlassCard>
     );
   };
@@ -96,9 +90,16 @@ const UserScheduleListScreen = ({ navigation }) => {
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color="#38bdf8" style={{ marginTop: 20 }} />
+          <View className="flex-1 justify-center items-center mt-10">
+            <ActivityIndicator size="large" color="#a855f7" />
+            <Text className="mt-3 text-purple-300 font-semibold">Loading available trips...</Text>
+          </View>
         ) : schedules.length === 0 ? (
-          <Text className="text-center text-slate-400 mt-10 font-bold text-base">No available trips found</Text>
+          <View className="items-center justify-center mt-16 opacity-80">
+            <Ionicons name="bus-outline" size={64} color="#0ea5e9" />
+            <Text className="text-cyan-200 mt-4 font-bold text-lg">No trips available</Text>
+            <Text className="text-slate-400 text-sm mt-1 text-center">There are currently no active bus schedules.</Text>
+          </View>
         ) : (
           <FlatList
             data={schedules}

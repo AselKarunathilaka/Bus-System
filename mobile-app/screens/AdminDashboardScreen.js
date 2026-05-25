@@ -425,6 +425,40 @@ const AdminDashboardScreen = ({ navigation }) => {
           </View>
         </View>
 
+        <Text className="text-lg font-bold text-white mb-3 mt-2 tracking-tight">Quick Actions</Text>
+        <View className="flex-row flex-wrap justify-between mb-6">
+          <View className="w-[31%]">
+            <GlassButton
+              title="Routes"
+              variant="glass"
+              className="flex-col h-24 border-[#0ea5e9]/30 bg-[#0ea5e9]/10"
+              textClassName="mt-2 text-sm text-white font-bold"
+              icon={<View className="bg-[#0ea5e9]/20 p-2 rounded-full border border-[#0ea5e9]/40"><Ionicons name="map" size={20} color="#7dd3fc" /></View>}
+              onPress={() => navigation.navigate("Routes")}
+            />
+          </View>
+          <View className="w-[31%]">
+            <GlassButton
+              title="Buses"
+              variant="glass"
+              className="flex-col h-24 border-[#a855f7]/30 bg-[#a855f7]/10"
+              textClassName="mt-2 text-sm text-white font-bold"
+              icon={<View className="bg-[#a855f7]/20 p-2 rounded-full border border-[#a855f7]/40"><Ionicons name="bus" size={20} color="#d8b4fe" /></View>}
+              onPress={() => navigation.navigate("Buses")}
+            />
+          </View>
+          <View className="w-[31%]">
+            <GlassButton
+              title="Schedules"
+              variant="glass"
+              className="flex-col h-24 border-[#f43f5e]/30 bg-[#f43f5e]/10"
+              textClassName="mt-2 text-sm text-white font-bold"
+              icon={<View className="bg-[#f43f5e]/20 p-2 rounded-full border border-[#f43f5e]/40"><Ionicons name="calendar" size={20} color="#fda4af" /></View>}
+              onPress={() => navigation.navigate("ScheduleList")}
+            />
+          </View>
+        </View>
+
         <GlassCard className="mb-4">
           <Text className="text-base font-bold text-white mb-3">Archival Date Filter</Text>
           <View className="flex-row justify-between mb-2">
@@ -495,26 +529,26 @@ const AdminDashboardScreen = ({ navigation }) => {
         </GlassCard>
 
         <View className="flex-row flex-wrap justify-between mb-2">
-          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-emerald-400">
-            <Text className="text-slate-400 text-xs font-bold mb-2 uppercase">Revenue</Text>
-            <Text className="text-white text-2xl font-bold">
-              <Text className="text-sm font-semibold text-slate-500">LKR</Text> {metrics.totalRevenue.toLocaleString()}
+          <GlassCard className="w-[48%] mb-4 border border-emerald-400/40 bg-emerald-400/10" style={{ shadowColor: "#34d399" }}>
+            <Text className="text-emerald-300 text-xs font-bold mb-2 uppercase tracking-widest">Revenue</Text>
+            <Text className="text-white text-2xl font-black">
+              <Text className="text-sm font-semibold text-emerald-300/80">LKR</Text> {metrics.totalRevenue.toLocaleString()}
             </Text>
           </GlassCard>
 
-          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-blue-400">
-            <Text className="text-slate-400 text-xs font-bold mb-2 uppercase">Bookings</Text>
-            <Text className="text-white text-2xl font-bold">{metrics.totalBookings}</Text>
+          <GlassCard className="w-[48%] mb-4 border border-blue-400/40 bg-blue-400/10" style={{ shadowColor: "#60a5fa" }}>
+            <Text className="text-blue-300 text-xs font-bold mb-2 uppercase tracking-widest">Bookings</Text>
+            <Text className="text-white text-2xl font-black">{metrics.totalBookings}</Text>
           </GlassCard>
 
-          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-amber-400">
-            <Text className="text-slate-400 text-xs font-bold mb-2 uppercase">Active Routes</Text>
-            <Text className="text-white text-2xl font-bold">{metrics.activeRoutes}</Text>
+          <GlassCard className="w-[48%] mb-4 border border-amber-400/40 bg-amber-400/10" style={{ shadowColor: "#fbbf24" }}>
+            <Text className="text-amber-300 text-xs font-bold mb-2 uppercase tracking-widest">Active Routes</Text>
+            <Text className="text-white text-2xl font-black">{metrics.activeRoutes}</Text>
           </GlassCard>
 
-          <GlassCard className="w-[48%] mb-4 border-t-4 border-t-violet-400">
-            <Text className="text-slate-400 text-xs font-bold mb-2 uppercase">Total Buses</Text>
-            <Text className="text-white text-2xl font-bold">{metrics.totalBuses}</Text>
+          <GlassCard className="w-[48%] mb-4 border border-violet-400/40 bg-violet-400/10" style={{ shadowColor: "#a78bfa" }}>
+            <Text className="text-violet-300 text-xs font-bold mb-2 uppercase tracking-widest">Total Buses</Text>
+            <Text className="text-white text-2xl font-black">{metrics.totalBuses}</Text>
           </GlassCard>
         </View>
 
@@ -524,9 +558,9 @@ const AdminDashboardScreen = ({ navigation }) => {
                 {chartData.map((dataPoint, index) => (
               <View key={index} className="items-center flex-1">
                 <Text className="text-xs font-bold text-[#38bdf8] mb-1 h-4">{dataPoint.count > 0 ? dataPoint.count : ""}</Text>
-                <View className="w-6 h-32 bg-white/10 rounded-full justify-end overflow-hidden">
+                <View className="w-6 h-32 bg-white/10 rounded-full justify-end overflow-hidden border border-white/5">
                   <View
-                    className="bg-[#38bdf8] w-full rounded-full"
+                    className="bg-gradient-to-t from-blue-600 to-cyan-400 w-full rounded-full bg-cyan-400"
                     style={{ height: `${dataPoint.heightPercentage}%` }}
                   />
                 </View>

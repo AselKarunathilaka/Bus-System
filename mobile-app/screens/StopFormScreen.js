@@ -15,6 +15,7 @@ import { AuthContext } from "../context/AuthContext";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
 import GlassButton from "../components/GlassButton";
+import GlassInput from "../components/GlassInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const StopFormScreen = ({ route, navigation }) => {
@@ -122,41 +123,40 @@ const StopFormScreen = ({ route, navigation }) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center mb-6">
+          <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center flex-1">
             <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
               <Ionicons name="arrow-back" size={24} color="#ffffff" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">
+            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
               {stopData ? "Edit Stop" : "Add Stop"}
             </Text>
           </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={20} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
 
           <GlassCard className="mb-6">
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="pin"
               placeholder="Stop Name"
-              placeholderTextColor="#94a3b8"
               value={stopName}
               onChangeText={(text) => setStopName(sanitizeNameField(text))}
               returnKeyType="next"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="map"
               placeholder="Location"
-              placeholderTextColor="#94a3b8"
               value={location}
               onChangeText={(text) => setLocation(sanitizeNameField(text))}
               returnKeyType="next"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="list"
               placeholder="Order"
-              placeholderTextColor="#94a3b8"
               value={order}
               onChangeText={(text) => setOrder(sanitizeNumericField(text))}
               keyboardType="numeric"

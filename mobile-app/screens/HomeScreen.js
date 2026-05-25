@@ -34,14 +34,14 @@ const HomeScreen = ({ navigation }) => {
         
         {/* Hero Banner (Glass style) */}
         <GlassCard className="mb-6">
-          <View className="bg-white/10 self-start px-3 py-1.5 rounded-full mb-3 border border-white/10">
-            <Text className="text-white text-xs font-bold">QuickBus Portal</Text>
+          <View className="bg-purple-500/20 self-start px-3 py-1.5 rounded-full mb-3 border border-purple-500/30">
+            <Text className="text-purple-300 text-xs font-bold tracking-widest uppercase">QuickBus Portal</Text>
           </View>
-          <Text className="text-2xl font-bold text-white mb-2 tracking-tight">
-            Welcome Back, {user?.fullName?.split(" ")[0] || "User"}
+          <Text className="text-3xl font-extrabold text-white mb-2 tracking-tight">
+            Welcome, {user?.fullName?.split(" ")[0] || "User"}
           </Text>
           <Text className="text-sm text-slate-300 font-medium leading-relaxed">
-            The all-new dark glass interface. Sleek, fast, and stunningly modern.
+            Experience the all-new vibrant glass interface. Sleek, fast, and stunningly colorful.
           </Text>
         </GlassCard>
 
@@ -90,9 +90,9 @@ const HomeScreen = ({ navigation }) => {
             <GlassButton
               title={isAdmin ? "Routes" : "Routes"}
               variant="glass"
-              className="flex-col h-32"
-              textClassName="mt-3 text-base"
-              icon={<View className="bg-[#007AFF]/20 p-3 rounded-full border border-[#007AFF]/30"><Ionicons name="map" size={28} color="#38bdf8" /></View>}
+              className="flex-col h-32 border-[#0ea5e9]/30 bg-[#0ea5e9]/5"
+              textClassName="mt-3 text-base text-white"
+              icon={<View className="bg-[#0ea5e9]/20 p-3 rounded-full border border-[#0ea5e9]/40"><Ionicons name="map" size={28} color="#7dd3fc" /></View>}
               onPress={() => navigation.navigate("Routes")}
             />
           </View>
@@ -101,9 +101,9 @@ const HomeScreen = ({ navigation }) => {
             <GlassButton
               title={isAdmin ? "Buses" : "Buses"}
               variant="glass"
-              className="flex-col h-32"
-              textClassName="mt-3 text-base"
-              icon={<View className="bg-[#007AFF]/20 p-3 rounded-full border border-[#007AFF]/30"><Ionicons name="bus" size={28} color="#38bdf8" /></View>}
+              className="flex-col h-32 border-[#a855f7]/30 bg-[#a855f7]/5"
+              textClassName="mt-3 text-base text-white"
+              icon={<View className="bg-[#a855f7]/20 p-3 rounded-full border border-[#a855f7]/40"><Ionicons name="bus" size={28} color="#d8b4fe" /></View>}
               onPress={() => navigation.navigate("Buses")}
             />
           </View>
@@ -113,9 +113,9 @@ const HomeScreen = ({ navigation }) => {
               <GlassButton
                 title="Schedules"
                 variant="glass"
-                className="flex-col h-32"
-                textClassName="mt-3 text-base"
-                icon={<View className="bg-[#007AFF]/20 p-3 rounded-full border border-[#007AFF]/30"><Ionicons name="calendar" size={28} color="#38bdf8" /></View>}
+                className="flex-col h-32 border-[#f43f5e]/30 bg-[#f43f5e]/5"
+                textClassName="mt-3 text-base text-white"
+                icon={<View className="bg-[#f43f5e]/20 p-3 rounded-full border border-[#f43f5e]/40"><Ionicons name="calendar" size={28} color="#fda4af" /></View>}
                 onPress={() => navigation.navigate("ScheduleList")}
               />
             </View>
@@ -125,9 +125,9 @@ const HomeScreen = ({ navigation }) => {
             <GlassButton
               title="Book Ticket"
               variant="glass"
-              className="flex-col h-32"
-              textClassName="mt-3 text-base"
-              icon={<View className="bg-[#007AFF]/20 p-3 rounded-full border border-[#007AFF]/30"><Ionicons name="ticket" size={28} color="#38bdf8" /></View>}
+              className="flex-col h-32 border-[#10b981]/30 bg-[#10b981]/5"
+              textClassName="mt-3 text-base text-white"
+              icon={<View className="bg-[#10b981]/20 p-3 rounded-full border border-[#10b981]/40"><Ionicons name="ticket" size={28} color="#6ee7b7" /></View>}
               onPress={() => navigation.navigate("UserScheduleList")}
             />
           </View>
@@ -136,9 +136,9 @@ const HomeScreen = ({ navigation }) => {
             <GlassButton
               title={isAdmin ? "Bookings" : "Bookings"}
               variant="glass"
-              className="flex-col h-32"
-              textClassName="mt-3 text-base"
-              icon={<View className="bg-[#007AFF]/20 p-3 rounded-full border border-[#007AFF]/30"><Ionicons name="receipt" size={28} color="#38bdf8" /></View>}
+              className="flex-col h-32 border-[#f59e0b]/30 bg-[#f59e0b]/5"
+              textClassName="mt-3 text-base text-white"
+              icon={<View className="bg-[#f59e0b]/20 p-3 rounded-full border border-[#f59e0b]/40"><Ionicons name="receipt" size={28} color="#fcd34d" /></View>}
               onPress={() => navigation.navigate("BookingsTab")}
             />
           </View>
@@ -148,9 +148,9 @@ const HomeScreen = ({ navigation }) => {
               <GlassButton
                 title="Analytics"
                 variant="glass"
-                className="flex-col h-32"
-                textClassName="mt-3 text-base text-center"
-                icon={<View className="bg-[#007AFF]/20 p-3 rounded-full border border-[#007AFF]/30"><Ionicons name="bar-chart" size={28} color="#38bdf8" /></View>}
+                className="flex-col h-32 border-[#3b82f6]/30 bg-[#3b82f6]/5"
+                textClassName="mt-3 text-base text-white text-center"
+                icon={<View className="bg-[#3b82f6]/20 p-3 rounded-full border border-[#3b82f6]/40"><Ionicons name="bar-chart" size={28} color="#93c5fd" /></View>}
                 onPress={() => navigation.navigate("AdminDashboard")}
               />
             </View>

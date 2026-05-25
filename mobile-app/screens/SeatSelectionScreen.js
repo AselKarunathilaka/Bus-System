@@ -111,11 +111,16 @@ const SeatSelectionScreen = ({ route, navigation }) => {
   return (
     <LiquidBackground>
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
-        <View className="flex-row items-center mb-6">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center flex-1">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            </TouchableOpacity>
+            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">Select Seats</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={20} color="#ffffff" />
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">Select Seats</Text>
         </View>
         
         <View className="flex-row bg-white/10 rounded-xl p-1 mb-5 border border-white/10">
@@ -137,26 +142,26 @@ const SeatSelectionScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row justify-around mb-6 bg-white/10 p-3 rounded-xl border border-white/10">
+        <View className="flex-row justify-around mb-6 bg-white/10 p-4 rounded-2xl border border-white/10 shadow-sm">
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded border-2 border-white/40 mr-2" />
-            <Text className="text-xs text-slate-400 font-bold uppercase">Available</Text>
+            <View className="w-4 h-4 rounded-full border-2 border-white/40 mr-2" />
+            <Text className="text-xs text-slate-300 font-bold uppercase tracking-widest">Available</Text>
           </View>
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded bg-[#10b981] mr-2" />
-            <Text className="text-xs text-slate-400 font-bold uppercase">Selected</Text>
+            <View className="w-4 h-4 rounded-full bg-[#10b981] mr-2 shadow-sm shadow-[#10b981]/50" />
+            <Text className="text-xs text-[#10b981] font-bold uppercase tracking-widest">Selected</Text>
           </View>
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded bg-[#ef4444] mr-2" />
-            <Text className="text-xs text-slate-400 font-bold uppercase">Booked</Text>
+            <View className="w-4 h-4 rounded-full bg-red-600/60 mr-2 border border-red-500/30" />
+            <Text className="text-xs text-red-500 font-bold uppercase tracking-widest">Booked</Text>
           </View>
         </View>
 
         <View className="items-center mb-6">
-          <View className="w-full max-w-[400px] bg-white/5 rounded-[40px] border-[6px] border-white/10 p-5 pt-8 shadow-sm">
+          <View className="w-full max-w-[400px] bg-slate-900/40 rounded-[40px] border-[4px] border-[#38bdf8]/20 p-5 pt-8 shadow-sm">
             <View className="items-end mb-8 pr-3 border-b-2 border-white/5 pb-5">
-              <View className="w-12 h-12 bg-white/10 rounded-full justify-center items-center border-2 border-white/10">
-                <Text className="text-xl">🚍</Text>
+              <View className="w-12 h-12 bg-emerald-500/10 rounded-full justify-center items-center border border-emerald-500/30">
+                <Text className="text-xl">👨‍✈️</Text>
               </View>
             </View>
             
@@ -180,14 +185,13 @@ const SeatSelectionScreen = ({ route, navigation }) => {
 
         <GlassCard className="flex-row justify-between items-center mb-10">
           <Text className="text-base font-bold text-white">
-            Selected: <Text className="text-[#10b981]">{selectedSeats.length}</Text> / {bookingType === "Single" ? 1 : 8}
+            Selected: <Text className="text-[#38bdf8] font-black text-xl">{selectedSeats.length}</Text> <Text className="text-slate-400">/ {bookingType === "Single" ? 1 : 8}</Text>
           </Text>
-          <TouchableOpacity 
-            className="bg-[#10b981] px-6 py-3 rounded-xl shadow-sm"
+          <GlassButton 
+            title="Continue"
             onPress={handleContinue}
-          >
-            <Text className="text-slate-900 font-bold text-sm uppercase">Continue</Text>
-          </TouchableOpacity>
+            className="w-1/2"
+          />
         </GlassCard>
       </ScrollView>
     </LiquidBackground>
@@ -211,18 +215,18 @@ const styles = StyleSheet.create({
   },
   seatAvailable: {
     backgroundColor: "rgba(255,255,255,0.05)",
-    borderColor: "rgba(255,255,255,0.2)",
+    borderColor: "rgba(255,255,255,0.1)",
   },
   seatSelected: {
-    backgroundColor: "#10b981",
+    backgroundColor: "#059669",
     borderColor: "#10b981",
   },
   seatBooked: {
-    backgroundColor: "#ef4444",
-    borderColor: "#ef4444",
+    backgroundColor: "rgba(220, 38, 38, 0.2)",
+    borderColor: "rgba(220, 38, 38, 0.4)",
   },
   seatText: { fontWeight: "800", fontSize: 14 },
-  seatTextAvailable: { color: "#94a3b8" },
-  seatTextSelected: { color: "#0f172a" },
-  seatTextBooked: { color: "#ffffff" },
+  seatTextAvailable: { color: "#cbd5e1" },
+  seatTextSelected: { color: "#ffffff" },
+  seatTextBooked: { color: "#dc2626", opacity: 0.6 },
 });

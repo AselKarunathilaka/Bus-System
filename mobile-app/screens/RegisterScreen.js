@@ -13,6 +13,7 @@ import {
 import { AuthContext } from "../context/AuthContext";
 import GlassCard from "../components/GlassCard";
 import GlassButton from "../components/GlassButton";
+import GlassInput from "../components/GlassInput";
 import LiquidBackground from "../components/LiquidBackground";
 
 const RegisterScreen = ({ navigation }) => {
@@ -131,57 +132,41 @@ const RegisterScreen = ({ navigation }) => {
               Get Started
             </Text>
 
-            <View className="bg-black/40 border border-white/10 rounded-2xl px-4 mb-4">
-              <TextInput
-                className="py-4 text-base text-white font-semibold"
-                style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
-                placeholder="Full Name"
-                placeholderTextColor="#94a3b8"
-                value={fullName}
-                onChangeText={(text) => setFullName(sanitizeNameField(text))}
-                returnKeyType="next"
-              />
-            </View>
+            <GlassInput
+              icon="person"
+              placeholder="Full Name"
+              value={fullName}
+              onChangeText={(text) => setFullName(sanitizeNameField(text))}
+              returnKeyType="next"
+            />
 
-            <View className="bg-black/40 border border-white/10 rounded-2xl px-4 mb-4">
-              <TextInput
-                className="py-4 text-base text-white font-semibold"
-                style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
-                placeholder="Email Address"
-                placeholderTextColor="#94a3b8"
-                value={email}
-                onChangeText={setEmail}
-                autoCapitalize="none"
-                keyboardType="email-address"
-                returnKeyType="next"
-              />
-            </View>
+            <GlassInput
+              icon="mail"
+              placeholder="Email Address"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              returnKeyType="next"
+            />
 
-            <View className="bg-black/40 border border-white/10 rounded-2xl px-4 mb-4">
-              <TextInput
-                className="py-4 text-base text-white font-semibold"
-                style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
-                placeholder="Phone Number"
-                placeholderTextColor="#94a3b8"
-                value={phone}
-                onChangeText={(text) => setPhone(sanitizePhoneField(text))}
-                keyboardType="phone-pad"
-                returnKeyType="next"
-              />
-            </View>
+            <GlassInput
+              icon="call"
+              placeholder="Phone Number"
+              value={phone}
+              onChangeText={(text) => setPhone(sanitizePhoneField(text))}
+              keyboardType="phone-pad"
+              returnKeyType="next"
+            />
 
-            <View className="bg-black/40 border border-white/10 rounded-2xl px-4 mb-6">
-              <TextInput
-                className="py-4 text-base text-white font-semibold"
-                style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
-                placeholder="Password"
-                placeholderTextColor="#94a3b8"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                returnKeyType="done"
-              />
-            </View>
+            <GlassInput
+              icon="lock-closed"
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+              returnKeyType="done"
+            />
 
             <GlassButton
               title={loading ? "Creating Account..." : "Register"}

@@ -16,6 +16,7 @@ import { AuthContext } from "../context/AuthContext";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
 import GlassButton from "../components/GlassButton";
+import GlassInput from "../components/GlassInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const BUS_TYPES = ["Normal", "Semi Luxury", "Luxury", "Super Luxury"];
@@ -249,92 +250,81 @@ const BusFormScreen = ({ route, navigation }) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center mb-6">
+          <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center flex-1">
             <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
               <Ionicons name="arrow-back" size={24} color="#ffffff" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">
+            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
               {editingBus ? "Edit Bus" : "Add Bus"}
             </Text>
           </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={20} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
 
           <Text className="text-slate-400 text-sm font-semibold mb-6">
             Add bus details, assign a route, and set the bus status separately.
           </Text>
 
           <GlassCard className="mb-6">
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="bus"
               placeholder="Bus Name"
-              placeholderTextColor="#94a3b8"
               value={busName}
               onChangeText={setBusName}
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="card"
               placeholder="License Number"
-              placeholderTextColor="#94a3b8"
               value={licenseNumber}
               onChangeText={(text) => setLicenseNumber(sanitizeLicense(text))}
               autoCapitalize="characters"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="person"
               placeholder="Driver Name"
-              placeholderTextColor="#94a3b8"
               value={driverName}
               onChangeText={(text) => setDriverName(sanitizeTextOnly(text))}
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="id-card"
               placeholder="Driver NIC"
-              placeholderTextColor="#94a3b8"
               value={driverNIC}
               onChangeText={(text) => setDriverNIC(sanitizeNIC(text))}
               autoCapitalize="characters"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="person-add"
               placeholder="Conductor Name"
-              placeholderTextColor="#94a3b8"
               value={conductorName}
               onChangeText={(text) => setConductorName(sanitizeTextOnly(text))}
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="id-card-outline"
               placeholder="Conductor NIC"
-              placeholderTextColor="#94a3b8"
               value={conductorNIC}
               onChangeText={(text) => setConductorNIC(sanitizeNIC(text))}
               autoCapitalize="characters"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="call"
               placeholder="Bus Contact Number"
-              placeholderTextColor="#94a3b8"
               value={busContactNumber}
               onChangeText={(text) => setBusContactNumber(sanitizePhone(text))}
               keyboardType="phone-pad"
             />
 
-            <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base"
-              style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
+            <GlassInput
+              icon="people"
               placeholder="Seat Count"
-              placeholderTextColor="#94a3b8"
               value={seatCount}
               onChangeText={(text) => setSeatCount(sanitizeNumber(text))}
               keyboardType="numeric"

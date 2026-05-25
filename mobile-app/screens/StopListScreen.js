@@ -95,8 +95,8 @@ const StopListScreen = ({ route, navigation }) => {
     return (
       <LiquidBackground>
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#38bdf8" />
-          <Text className="mt-3 text-slate-400 font-semibold">Loading stops...</Text>
+          <ActivityIndicator size="large" color="#a855f7" />
+          <Text className="mt-3 text-purple-300 font-semibold">Loading stops...</Text>
         </View>
       </LiquidBackground>
     );
@@ -104,14 +104,19 @@ const StopListScreen = ({ route, navigation }) => {
 
   const renderHeader = () => (
     <>
-      <View className="flex-row items-center mb-5">
-        <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-          <Ionicons name="arrow-back" size={24} color="#ffffff" />
-        </TouchableOpacity>
-        <Text className="text-3xl font-bold text-white shadow-sm flex-1 tracking-tight">
+      <View className="flex-row items-center justify-between mb-5">
+          <View className="flex-row items-center flex-1">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            </TouchableOpacity>
+            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
           {routeName} Stops
         </Text>
-      </View>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
+            <Ionicons name="home" size={20} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
 
       <GlassCard className="mb-4">
         <Text className="text-slate-400 text-sm leading-relaxed mb-4">
@@ -142,7 +147,11 @@ const StopListScreen = ({ route, navigation }) => {
         ListHeaderComponent={renderHeader}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          <Text className="text-center mt-10 text-slate-400 font-medium">No stops found for this route</Text>
+          <View className="items-center justify-center mt-16 opacity-80">
+            <Ionicons name="location-outline" size={64} color="#0ea5e9" />
+            <Text className="text-cyan-200 mt-4 font-bold text-lg">No stops found</Text>
+            <Text className="text-slate-400 text-sm mt-1 text-center">There are no stops assigned to this route yet.</Text>
+          </View>
         }
         renderItem={({ item }) => (
           <GlassCard className="mb-4">

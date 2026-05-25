@@ -14,6 +14,7 @@ import api from "../services/api";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
 import GlassButton from "../components/GlassButton";
+import StatusBadge from "../components/StatusBadge";
 import { Ionicons } from "@expo/vector-icons";
 
 const ScheduleListScreen = ({ navigation }) => {
@@ -83,12 +84,10 @@ const ScheduleListScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <GlassCard className="mb-4 p-4">
       <View className="flex-row justify-between mb-3">
-        <Text className="text-lg font-bold text-white tracking-tight">
+        <Text className="text-lg font-bold text-white tracking-tight flex-1 pr-3 leading-6">
           {item.routeId?.startLocation} to {item.routeId?.endLocation}
         </Text>
-        <Text className="bg-[#007AFF]/20 text-[#38bdf8] px-2 py-1 rounded border border-[#007AFF]/30 text-xs font-bold overflow-hidden">
-          {item.status}
-        </Text>
+        <StatusBadge status={item.status} />
       </View>
       <Text className="text-sm text-slate-400 mb-1 font-semibold">Bus: {item.busId?.licenseNumber}</Text>
       <Text className="text-sm text-slate-400 mb-1 font-semibold">
@@ -133,9 +132,16 @@ const ScheduleListScreen = ({ navigation }) => {
           variant="secondary"
         />
         {loading ? (
-          <ActivityIndicator size="large" color="#38bdf8" style={{ marginTop: 20 }} />
+          <View className="flex-1 justify-center items-center mt-10">
+            <ActivityIndicator size="large" color="#a855f7" />
+            <Text className="mt-3 text-purple-300 font-semibold">Loading schedules...</Text>
+          </View>
         ) : schedules.length === 0 ? (
-          <Text className="text-center text-slate-400 mt-5 font-semibold text-base">No schedules found</Text>
+          <View className="items-center justify-center mt-16 opacity-80">
+            <Ionicons name="calendar-outline" size={64} color="#0ea5e9" />
+            <Text className="text-cyan-200 mt-4 font-bold text-lg">No schedules found</Text>
+            <Text className="text-slate-400 text-sm mt-1 text-center">Create a schedule to start assigning buses to routes.</Text>
+          </View>
         ) : (
           <FlatList
             data={schedules}
