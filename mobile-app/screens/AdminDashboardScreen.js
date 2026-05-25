@@ -147,13 +147,21 @@ const AdminDashboardScreen = ({ navigation }) => {
   useEffect(() => {
     fetchDashboardData();
 
+    // Refresh instantly when screen is focused
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchDashboardData(true);
+    });
+
     // Poll every 15 seconds silently
     const interval = setInterval(() => {
       fetchDashboardData(true);
     }, 15000);
 
-    return () => clearInterval(interval);
-  }, [fetchDashboardData]);
+    return () => {
+      clearInterval(interval);
+      unsubscribe();
+    };
+  }, [fetchDashboardData, navigation]);
 
   // Re-process when dates change without refetching
   useEffect(() => {
@@ -427,7 +435,7 @@ const AdminDashboardScreen = ({ navigation }) => {
 
         <Text className="text-lg font-bold text-white mb-3 mt-2 tracking-tight">Quick Actions</Text>
         <View className="flex-row flex-wrap justify-between mb-6">
-          <View className="w-[31%]">
+          <View className="w-[31%] mb-3">
             <GlassButton
               title="Routes"
               variant="glass"
@@ -437,7 +445,7 @@ const AdminDashboardScreen = ({ navigation }) => {
               onPress={() => navigation.navigate("Routes")}
             />
           </View>
-          <View className="w-[31%]">
+          <View className="w-[31%] mb-3">
             <GlassButton
               title="Buses"
               variant="glass"
@@ -447,7 +455,7 @@ const AdminDashboardScreen = ({ navigation }) => {
               onPress={() => navigation.navigate("Buses")}
             />
           </View>
-          <View className="w-[31%]">
+          <View className="w-[31%] mb-3">
             <GlassButton
               title="Schedules"
               variant="glass"
@@ -529,27 +537,35 @@ const AdminDashboardScreen = ({ navigation }) => {
         </GlassCard>
 
         <View className="flex-row flex-wrap justify-between mb-2">
-          <GlassCard className="w-[48%] mb-4 border border-emerald-400/40 bg-emerald-400/10" style={{ shadowColor: "#34d399" }}>
-            <Text className="text-emerald-300 text-xs font-bold mb-2 uppercase tracking-widest">Revenue</Text>
-            <Text className="text-white text-2xl font-black">
-              <Text className="text-sm font-semibold text-emerald-300/80">LKR</Text> {metrics.totalRevenue.toLocaleString()}
-            </Text>
-          </GlassCard>
+          <View className="w-[48%] mb-4">
+            <GlassCard className="h-full border border-emerald-400/40 bg-emerald-400/10" style={{ shadowColor: "#34d399" }}>
+              <Text className="text-emerald-300 text-xs font-bold mb-2 uppercase tracking-widest">Revenue</Text>
+              <Text className="text-white text-2xl font-black">
+                <Text className="text-sm font-semibold text-emerald-300/80">LKR</Text> {metrics.totalRevenue.toLocaleString()}
+              </Text>
+            </GlassCard>
+          </View>
 
-          <GlassCard className="w-[48%] mb-4 border border-blue-400/40 bg-blue-400/10" style={{ shadowColor: "#60a5fa" }}>
-            <Text className="text-blue-300 text-xs font-bold mb-2 uppercase tracking-widest">Bookings</Text>
-            <Text className="text-white text-2xl font-black">{metrics.totalBookings}</Text>
-          </GlassCard>
+          <View className="w-[48%] mb-4">
+            <GlassCard className="h-full border border-blue-400/40 bg-blue-400/10" style={{ shadowColor: "#60a5fa" }}>
+              <Text className="text-blue-300 text-xs font-bold mb-2 uppercase tracking-widest">Bookings</Text>
+              <Text className="text-white text-2xl font-black">{metrics.totalBookings}</Text>
+            </GlassCard>
+          </View>
 
-          <GlassCard className="w-[48%] mb-4 border border-amber-400/40 bg-amber-400/10" style={{ shadowColor: "#fbbf24" }}>
-            <Text className="text-amber-300 text-xs font-bold mb-2 uppercase tracking-widest">Active Routes</Text>
-            <Text className="text-white text-2xl font-black">{metrics.activeRoutes}</Text>
-          </GlassCard>
+          <View className="w-[48%] mb-4">
+            <GlassCard className="h-full border border-amber-400/40 bg-amber-400/10" style={{ shadowColor: "#fbbf24" }}>
+              <Text className="text-amber-300 text-xs font-bold mb-2 uppercase tracking-widest">Active Routes</Text>
+              <Text className="text-white text-2xl font-black">{metrics.activeRoutes}</Text>
+            </GlassCard>
+          </View>
 
-          <GlassCard className="w-[48%] mb-4 border border-violet-400/40 bg-violet-400/10" style={{ shadowColor: "#a78bfa" }}>
-            <Text className="text-violet-300 text-xs font-bold mb-2 uppercase tracking-widest">Total Buses</Text>
-            <Text className="text-white text-2xl font-black">{metrics.totalBuses}</Text>
-          </GlassCard>
+          <View className="w-[48%] mb-4">
+            <GlassCard className="h-full border border-violet-400/40 bg-violet-400/10" style={{ shadowColor: "#a78bfa" }}>
+              <Text className="text-violet-300 text-xs font-bold mb-2 uppercase tracking-widest">Total Buses</Text>
+              <Text className="text-white text-2xl font-black">{metrics.totalBuses}</Text>
+            </GlassCard>
+          </View>
         </View>
 
         <GlassCard className="mb-5">

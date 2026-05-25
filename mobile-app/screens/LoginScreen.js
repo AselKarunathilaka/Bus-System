@@ -7,6 +7,7 @@ import {
   Platform,
   ScrollView,
   View,
+  TouchableOpacity,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import GlassCard from "../components/GlassCard";
@@ -92,6 +93,13 @@ const LoginScreen = ({ navigation }) => {
               secureTextEntry
               returnKeyType="done"
             />
+
+            <TouchableOpacity 
+              className="self-end mb-6 mr-1"
+              onPress={() => navigation.navigate("ForgotPassword")}
+            >
+              <Text className="text-[#38bdf8] font-bold text-sm tracking-wide">Forgot Password?</Text>
+            </TouchableOpacity>
 
             <GlassButton
               title={loading ? "Authenticating..." : "Login to Dashboard"}

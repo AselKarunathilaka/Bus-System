@@ -27,6 +27,7 @@ import AdminBookingListScreen from "../screens/AdminBookingListScreen";
 import AdminDashboardScreen from "../screens/AdminDashboardScreen";
 import AdminGuideScreen from "../screens/AdminGuideScreen";
 import UserGuideScreen from "../screens/UserGuideScreen";
+import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -119,6 +120,7 @@ const AppNavigator = () => {
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Register" component={RegisterScreen} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
           </>
         )}
       </Stack.Navigator>
