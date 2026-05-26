@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AuthContext } from "../context/AuthContext";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import LoginScreen from "../screens/LoginScreen";
@@ -87,8 +87,16 @@ const MainTabs = () => {
 };
 
 const AppNavigator = () => {
-  const { token, userToken } = useContext(AuthContext);
+  const { token, userToken, loading } = useContext(AuthContext);
   const authToken = token || userToken;
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#F0F8FF" }}>
+        <ActivityIndicator size="large" color="#2F80ED" />
+      </View>
+    );
+  }
 
   return (
     <NavigationContainer>
