@@ -59,19 +59,19 @@ const LoginScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           <GlassCard className="mb-6 items-center">
-            <View className="bg-white/10 px-4 py-2 rounded-full border border-white/10 mb-4">
-              <Text className="text-white text-xs font-bold">QuickBus Connect</Text>
+            <View className="bg-[rgba(255,255,255,0.4)] px-4 py-2 rounded-full border border-[rgba(255,255,255,0.5)] mb-4">
+              <Text className="text-primary text-xs font-bold">QuickBus Connect</Text>
             </View>
-            <Text className="text-3xl font-bold text-white mb-2 text-center">
+            <Text className="text-3xl font-bold text-textDark mb-2 text-center">
               Login
             </Text>
-            <Text className="text-sm text-slate-300 text-center leading-relaxed">
+            <Text className="text-sm text-textMuted text-center leading-relaxed">
               Welcome back to the minimalist QuickBus portal.
             </Text>
           </GlassCard>
 
           <GlassCard className="mb-6">
-            <Text className="text-xl font-bold text-white mb-6 text-center">
+            <Text className="text-xl font-bold text-textDark mb-6 text-center">
               Account Access
             </Text>
 
@@ -98,7 +98,7 @@ const LoginScreen = ({ navigation }) => {
               className="self-end mb-6 mr-1"
               onPress={() => navigation.navigate("ForgotPassword")}
             >
-              <Text className="text-[#38bdf8] font-bold text-sm tracking-wide">Forgot Password?</Text>
+              <Text className="text-primary font-bold text-sm tracking-wide">Forgot Password?</Text>
             </TouchableOpacity>
 
             <GlassButton

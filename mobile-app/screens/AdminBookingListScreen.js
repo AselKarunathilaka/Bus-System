@@ -110,10 +110,10 @@ const AdminBookingListScreen = ({ navigation }) => {
     return (
       <GlassCard className="mb-6 p-0 overflow-hidden">
         {/* Header */}
-        <View className="bg-white/10 p-5 border-b border-white/10 flex-row justify-between items-center">
+        <View className="bg-[rgba(255,255,255,0.4)] p-5 border-b border-[rgba(255,255,255,0.5)] flex-row justify-between items-center">
           <View>
-            <Text className="text-xl font-black text-white tracking-tight">{item.userId?.fullName || "Unknown User"}</Text>
-            <Text className="text-xs text-[#38bdf8] font-bold uppercase tracking-widest mt-1">
+            <Text className="text-xl font-black text-textDark tracking-tight">{item.userId?.fullName || "Unknown User"}</Text>
+            <Text className="text-xs text-primary font-bold uppercase tracking-widest mt-1">
               ID: {item.bookingId || "N/A"}
             </Text>
           </View>
@@ -124,50 +124,50 @@ const AdminBookingListScreen = ({ navigation }) => {
         <View className="p-5">
           <View className="flex-row justify-between mb-4">
             <View>
-              <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Route</Text>
-              <Text className="text-sm font-bold text-white">{item.scheduleId?.routeId?.startLocation} to {item.scheduleId?.routeId?.endLocation}</Text>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Route</Text>
+              <Text className="text-sm font-bold text-textDark">{item.scheduleId?.routeId?.startLocation} to {item.scheduleId?.routeId?.endLocation}</Text>
             </View>
             <View className="items-end">
-              <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Bus</Text>
-              <Text className="text-sm font-bold text-white">{item.scheduleId?.busId?.licenseNumber}</Text>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Bus</Text>
+              <Text className="text-sm font-bold text-textDark">{item.scheduleId?.busId?.licenseNumber}</Text>
             </View>
           </View>
 
           <View className="flex-row justify-between mb-4">
             <View>
-              <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Date</Text>
-              <Text className="text-sm font-bold text-white">
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Date</Text>
+              <Text className="text-sm font-bold text-textDark">
                 {new Date(item.scheduleId?.departureDate).toLocaleDateString()}
               </Text>
             </View>
             <View className="items-end">
-              <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Seats ({item.bookingType})</Text>
-              <Text className="text-sm font-bold text-emerald-400">{formattedSeats}</Text>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Seats ({item.bookingType})</Text>
+              <Text className="text-sm font-bold text-[#059669]">{formattedSeats}</Text>
             </View>
           </View>
 
           {item.contactNumber && (
             <View className="flex-row justify-between mb-4">
               <View>
-                <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Contact</Text>
-                <Text className="text-sm font-bold text-white">{item.contactNumber}</Text>
+                <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Contact</Text>
+                <Text className="text-sm font-bold text-textDark">{item.contactNumber}</Text>
               </View>
             </View>
           )}
 
           <View className="flex-row justify-between pt-1">
             <View>
-              <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Booked On</Text>
-              <Text className="text-sm font-bold text-slate-300">{new Date(item.bookingDate).toLocaleDateString()}</Text>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Booked On</Text>
+              <Text className="text-sm font-bold text-textMuted">{new Date(item.bookingDate).toLocaleDateString()}</Text>
             </View>
           </View>
         </View>
 
         {/* Footer */}
-        <View className="bg-gradient-to-r from-blue-600/30 to-cyan-500/20 p-5 border-t border-white/10 flex-row justify-between items-center">
+        <View className="bg-[rgba(255,255,255,0.6)] p-5 border-t border-[rgba(255,255,255,0.5)] flex-row justify-between items-center">
           <View>
-            <Text className="text-[10px] text-cyan-200 font-bold uppercase tracking-widest mb-1">Total</Text>
-            <Text className="text-2xl font-black text-white">LKR {item.totalPrice}</Text>
+            <Text className="text-[10px] text-primary font-bold uppercase tracking-widest mb-1">Total</Text>
+            <Text className="text-2xl font-black text-textDark">LKR {item.totalPrice}</Text>
           </View>
           <View className="flex-row">
             {item.status !== "Cancelled" && (
@@ -195,26 +195,26 @@ const AdminBookingListScreen = ({ navigation }) => {
       <View className="flex-1 p-5">
         <View className="flex-row items-center justify-between mb-5">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white tracking-tight">All Bookings</Text>
+            <Text className="text-3xl font-bold text-textDark tracking-tight">All Bookings</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="home" size={20} color="#ffffff" />
+          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="home" size={20} color="#2F80ED" />
           </TouchableOpacity>
         </View>
         
         {loading ? (
           <View className="flex-1 justify-center items-center mt-10">
-            <ActivityIndicator size="large" color="#a855f7" />
-            <Text className="mt-3 text-purple-300 font-semibold">Loading bookings...</Text>
+            <ActivityIndicator size="large" color="#2F80ED" />
+            <Text className="mt-3 text-primary font-semibold">Loading bookings...</Text>
           </View>
         ) : bookings.length === 0 ? (
           <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="folder-open-outline" size={64} color="#0ea5e9" />
-            <Text className="text-cyan-200 mt-4 font-bold text-lg">No bookings found</Text>
-            <Text className="text-slate-400 text-sm mt-1 text-center">System booking records will appear here.</Text>
+            <Ionicons name="folder-open-outline" size={64} color="#2F80ED" />
+            <Text className="text-primary mt-4 font-bold text-lg">No bookings found</Text>
+            <Text className="text-textMuted text-sm mt-1 text-center">System booking records will appear here.</Text>
           </View>
         ) : (
           <FlatList

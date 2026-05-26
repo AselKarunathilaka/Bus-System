@@ -84,24 +84,24 @@ const ScheduleListScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <GlassCard className="mb-4 p-4">
       <View className="flex-row justify-between mb-3">
-        <Text className="text-lg font-bold text-white tracking-tight flex-1 pr-3 leading-6">
+        <Text className="text-lg font-bold text-textDark tracking-tight flex-1 pr-3 leading-6">
           {item.routeId?.startLocation} to {item.routeId?.endLocation}
         </Text>
         <StatusBadge status={item.status} />
       </View>
-      <Text className="text-sm text-slate-400 mb-1 font-semibold">Bus: {item.busId?.licenseNumber}</Text>
-      <Text className="text-sm text-slate-400 mb-1 font-semibold">
+      <Text className="text-sm text-textMuted mb-1 font-semibold">Bus: {item.busId?.licenseNumber}</Text>
+      <Text className="text-sm text-textMuted mb-1 font-semibold">
         Date: {new Date(item.departureDate).toLocaleDateString()}
       </Text>
-      <Text className="text-sm text-slate-400 mb-3 font-semibold">
+      <Text className="text-sm text-textMuted mb-3 font-semibold">
         Time: {item.departureTime} - {item.arrivalTime}
       </Text>
       <View className="flex-row justify-end mt-2">
         <TouchableOpacity
-          className="bg-white/10 px-4 py-2 rounded-lg border border-white/10 mr-3"
+          className="bg-[rgba(255,255,255,0.4)] px-4 py-2 rounded-lg border border-[rgba(255,255,255,0.5)] mr-3"
           onPress={() => navigation.navigate("ScheduleForm", { schedule: item })}
         >
-          <Text className="text-white font-bold text-sm">Edit</Text>
+          <Text className="text-textDark font-bold text-sm">Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
           className="bg-red-500/20 px-4 py-2 rounded-lg border border-red-500/30"
@@ -117,12 +117,12 @@ const ScheduleListScreen = ({ navigation }) => {
     <LiquidBackground>
       <View className="flex-1 p-5">
         <View className="flex-row items-center mb-5">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="arrow-back" size={24} color="#2F80ED" />
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-white tracking-tight flex-1">Manage Schedules</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs", { screen: "HomeTab" })} className="bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="home" size={22} color="#38bdf8" />
+          <Text className="text-3xl font-bold text-textDark tracking-tight flex-1">Manage Schedules</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs", { screen: "HomeTab" })} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="home" size={22} color="#2F80ED" />
           </TouchableOpacity>
         </View>
         <View className="mb-6 px-1 mt-2">
@@ -136,14 +136,14 @@ const ScheduleListScreen = ({ navigation }) => {
         </View>
         {loading ? (
           <View className="flex-1 justify-center items-center mt-10">
-            <ActivityIndicator size="large" color="#a855f7" />
-            <Text className="mt-3 text-purple-300 font-semibold">Loading schedules...</Text>
+            <ActivityIndicator size="large" color="#2F80ED" />
+            <Text className="mt-3 text-primary font-semibold">Loading schedules...</Text>
           </View>
         ) : schedules.length === 0 ? (
           <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="calendar-outline" size={64} color="#0ea5e9" />
-            <Text className="text-cyan-200 mt-4 font-bold text-lg">No schedules found</Text>
-            <Text className="text-slate-400 text-sm mt-1 text-center">Create a schedule to start assigning buses to routes.</Text>
+            <Ionicons name="calendar-outline" size={64} color="#2F80ED" />
+            <Text className="text-primary mt-4 font-bold text-lg">No schedules found</Text>
+            <Text className="text-textMuted text-sm mt-1 text-center">Create a schedule to start assigning buses to routes.</Text>
           </View>
         ) : (
           <FlatList

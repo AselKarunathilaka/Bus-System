@@ -179,15 +179,15 @@ const RouteFormScreen = ({ route, navigation }) => {
         >
           <View className="flex-row items-center justify-between mb-6">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
+            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">
               {editingRoute ? "Edit Route" : "Add Route"}
             </Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="home" size={20} color="#ffffff" />
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="home" size={20} color="#2F80ED" />
           </TouchableOpacity>
         </View>
 
@@ -243,10 +243,10 @@ const RouteFormScreen = ({ route, navigation }) => {
             />
 
             <TextInput
-              className="bg-white/10 border border-white/10 text-white p-4 rounded-xl mb-4 font-semibold text-base min-h-[100px]"
+              className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] text-textDark p-4 rounded-xl mb-4 font-semibold text-base min-h-[100px]"
               style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
               placeholder="Description"
-              placeholderTextColor="#94a3b8"
+              placeholderTextColor="#5C7185"
               value={description}
               onChangeText={setDescription}
               multiline
@@ -267,17 +267,17 @@ const RouteFormScreen = ({ route, navigation }) => {
             <GlassButton
               title={loading ? (editingRoute ? "Updating..." : "Creating...") : (editingRoute ? "Update Route" : "Create Route")}
               onPress={handleSubmit}
-              className={`mb-4 border-white/10 ${loading ? 'opacity-70' : ''}`}
+              className={`mb-4 border-[rgba(255,255,255,0.5)] ${loading ? 'opacity-70' : ''}`}
               textClassName="text-white font-bold"
               disabled={loading}
             />
 
             <TouchableOpacity
-              className="bg-white/5 border border-white/10 p-4 rounded-xl items-center"
+              className="bg-[rgba(255,255,255,0.2)] border border-[rgba(255,255,255,0.5)] p-4 rounded-xl items-center"
               onPress={() => navigation.goBack()}
               disabled={loading}
             >
-              <Text className="text-slate-400 font-bold text-base">Cancel</Text>
+              <Text className="text-textMuted font-bold text-base">Cancel</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

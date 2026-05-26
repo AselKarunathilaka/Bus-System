@@ -58,14 +58,14 @@ const ForgotPasswordScreen = ({ navigation }) => {
               onPress={() => navigation.goBack()}
               className="mb-6 flex-row items-center"
             >
-              <Ionicons name="arrow-back" size={20} color="#38bdf8" />
-              <Text className="text-[#38bdf8] font-bold ml-2">Back to Login</Text>
+              <Ionicons name="arrow-back" size={20} color="#2F80ED" />
+              <Text className="text-primary font-bold ml-2">Back to Login</Text>
             </TouchableOpacity>
 
-            <Text className="text-2xl font-bold text-white mb-2">
+            <Text className="text-2xl font-bold text-textDark mb-2">
               Reset Password
             </Text>
-            <Text className="text-sm text-slate-300 leading-relaxed mb-6">
+            <Text className="text-sm text-textMuted leading-relaxed mb-6">
               Enter your email address and we'll send you a link to reset your password.
             </Text>
 

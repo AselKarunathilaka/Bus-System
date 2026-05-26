@@ -9,7 +9,7 @@ const LiquidBackground = ({ children }) => {
     <View style={styles.container}>
       {/* Base Vibrant Gradient */}
       <LinearGradient
-        colors={["#020617", "#0f172a", "#020617"]}
+        colors={["#BDE7FF", "#DFF5FF", "#F7FCFF"]}
         style={StyleSheet.absoluteFillObject}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -31,7 +31,7 @@ export default LiquidBackground;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0f172a", // Fallback color
+    backgroundColor: "#EAF6FF", // Fallback color
   },
   orb1: {
     position: "absolute",
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     height: width * 0.8,
     borderRadius: width * 0.4,
-    backgroundColor: "rgba(56, 189, 248, 0.6)", // Bright Cyan
+    backgroundColor: "rgba(86, 204, 242, 0.4)", // Cyan
     transform: [{ scaleX: 1.2 }, { rotate: "45deg" }],
     filter: "blur(90px)",
   },
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     height: width * 0.9,
     borderRadius: width * 0.45,
-    backgroundColor: "rgba(168, 85, 247, 0.55)", // Vibrant Purple
+    backgroundColor: "rgba(47, 128, 237, 0.3)", // Primary Blue
     filter: "blur(110px)",
   },
   orb3: {
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     width: width * 0.6,
     height: width * 0.6,
     borderRadius: width * 0.3,
-    backgroundColor: "rgba(244, 63, 94, 0.45)", // Soft Rose
+    backgroundColor: "rgba(189, 231, 255, 0.5)", // Light Blue
     filter: "blur(100px)",
   },
 });

@@ -196,41 +196,41 @@ const BusFormScreen = ({ route, navigation }) => {
   };
 
   const renderOptionList = (items, selectedValue, onSelect) => (
-    <View className="bg-white/10 rounded-xl border border-white/10 mb-4 overflow-hidden">
+    <View className="bg-[rgba(255,255,255,0.4)] rounded-xl border border-[rgba(255,255,255,0.5)] mb-4 overflow-hidden">
       {items.map((item) => (
         <TouchableOpacity
           key={item}
-          className={`p-4 border-b border-white/10 ${selectedValue === item ? 'bg-white/20' : ''}`}
+          className={`p-4 border-b border-[rgba(255,255,255,0.5)] ${selectedValue === item ? 'bg-[rgba(255,255,255,0.6)]' : ''}`}
           onPress={() => onSelect(item)}
         >
-          <Text className="text-white text-sm font-bold">{item}</Text>
+          <Text className="text-textDark text-sm font-bold">{item}</Text>
         </TouchableOpacity>
       ))}
     </View>
   );
 
   const renderRouteOptions = () => (
-    <View className="bg-white/10 rounded-xl border border-white/10 mb-4 overflow-hidden">
+    <View className="bg-[rgba(255,255,255,0.4)] rounded-xl border border-[rgba(255,255,255,0.5)] mb-4 overflow-hidden">
       <TouchableOpacity
-        className={`p-4 border-b border-white/10 ${!assignedRoute ? 'bg-white/20' : ''}`}
+        className={`p-4 border-b border-[rgba(255,255,255,0.5)] ${!assignedRoute ? 'bg-[rgba(255,255,255,0.6)]' : ''}`}
         onPress={() => {
           setAssignedRoute("");
           setOpenRoute(false);
         }}
       >
-        <Text className="text-white text-sm font-bold">No route assigned</Text>
+        <Text className="text-textDark text-sm font-bold">No route assigned</Text>
       </TouchableOpacity>
 
       {routes.map((item) => (
         <TouchableOpacity
           key={item._id}
-          className={`p-4 border-b border-white/10 ${assignedRoute === item._id ? 'bg-white/20' : ''}`}
+          className={`p-4 border-b border-[rgba(255,255,255,0.5)] ${assignedRoute === item._id ? 'bg-[rgba(255,255,255,0.6)]' : ''}`}
           onPress={() => {
             setAssignedRoute(item._id);
             setOpenRoute(false);
           }}
         >
-          <Text className="text-white text-sm font-bold">
+          <Text className="text-textDark text-sm font-bold">
             {item.routeName} ({item.startLocation} → {item.endLocation})
           </Text>
         </TouchableOpacity>
@@ -252,19 +252,19 @@ const BusFormScreen = ({ route, navigation }) => {
         >
           <View className="flex-row items-center justify-between mb-6">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
+            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">
               {editingBus ? "Edit Bus" : "Add Bus"}
             </Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="home" size={20} color="#ffffff" />
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="home" size={20} color="#2F80ED" />
           </TouchableOpacity>
         </View>
 
-          <Text className="text-slate-400 text-sm font-semibold mb-6">
+          <Text className="text-textMuted text-sm font-semibold mb-6">
             Add bus details, assign a route, and set the bus status separately.
           </Text>
 
@@ -330,13 +330,13 @@ const BusFormScreen = ({ route, navigation }) => {
               keyboardType="numeric"
             />
 
-            <Text className="text-white text-sm font-bold mb-2 mt-2 uppercase">Bus Type</Text>
+            <Text className="text-primary text-sm font-bold mb-2 mt-2 uppercase">Bus Type</Text>
             <TouchableOpacity
-              className="bg-white/10 border border-white/10 rounded-xl p-4 mb-4 flex-row justify-between items-center"
+              className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl p-4 mb-4 flex-row justify-between items-center"
               onPress={() => setOpenBusType(!openBusType)}
             >
-              <Text className="text-white text-base font-bold">{busType}</Text>
-              <Ionicons name={openBusType ? "chevron-up" : "chevron-down"} size={20} color="#ffffff" />
+              <Text className="text-textDark text-base font-bold">{busType}</Text>
+              <Ionicons name={openBusType ? "chevron-up" : "chevron-down"} size={20} color="#5C7185" />
             </TouchableOpacity>
 
             {openBusType &&
@@ -345,35 +345,35 @@ const BusFormScreen = ({ route, navigation }) => {
                 setOpenBusType(false);
               })}
 
-            <Text className="text-white text-sm font-bold mb-2 mt-2 uppercase">Assign Route</Text>
+            <Text className="text-primary text-sm font-bold mb-2 mt-2 uppercase">Assign Route</Text>
 
             {loadingRoutes ? (
-              <View className="bg-white/10 rounded-xl p-4 mb-4 items-center border border-white/10">
-                <ActivityIndicator color="#38bdf8" />
-                <Text className="mt-2 text-slate-400 font-bold">Loading routes...</Text>
+              <View className="bg-[rgba(255,255,255,0.4)] rounded-xl p-4 mb-4 items-center border border-[rgba(255,255,255,0.5)]">
+                <ActivityIndicator color="#2F80ED" />
+                <Text className="mt-2 text-textMuted font-bold">Loading routes...</Text>
               </View>
             ) : (
               <>
                 <TouchableOpacity
-                  className="bg-white/10 border border-white/10 rounded-xl p-4 mb-4 flex-row justify-between items-center"
+                  className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl p-4 mb-4 flex-row justify-between items-center"
                   onPress={() => setOpenRoute(!openRoute)}
                 >
-                  <Text className="text-white text-base font-bold" numberOfLines={1}>{selectedRouteLabel()}</Text>
-                  <Ionicons name={openRoute ? "chevron-up" : "chevron-down"} size={20} color="#ffffff" />
+                  <Text className="text-textDark text-base font-bold" numberOfLines={1}>{selectedRouteLabel()}</Text>
+                  <Ionicons name={openRoute ? "chevron-up" : "chevron-down"} size={20} color="#5C7185" />
                 </TouchableOpacity>
 
                 {openRoute && renderRouteOptions()}
               </>
             )}
 
-            <Text className="text-white text-sm font-bold mb-2 mt-2 uppercase">Bus Status</Text>
+            <Text className="text-primary text-sm font-bold mb-2 mt-2 uppercase">Bus Status</Text>
 
             <TouchableOpacity
-              className="bg-white/10 border border-white/10 rounded-xl p-4 mb-4 flex-row justify-between items-center"
+              className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl p-4 mb-4 flex-row justify-between items-center"
               onPress={() => setOpenStatus(!openStatus)}
             >
-              <Text className="text-white text-base font-bold">{status}</Text>
-              <Ionicons name={openStatus ? "chevron-up" : "chevron-down"} size={20} color="#ffffff" />
+              <Text className="text-textDark text-base font-bold">{status}</Text>
+              <Ionicons name={openStatus ? "chevron-up" : "chevron-down"} size={20} color="#5C7185" />
             </TouchableOpacity>
 
             {openStatus &&
@@ -387,17 +387,17 @@ const BusFormScreen = ({ route, navigation }) => {
             <GlassButton
               title={saving ? "Saving..." : editingBus ? "Update Bus" : "Create Bus"}
               onPress={handleSubmit}
-              className={`mb-4 border-white/10 ${saving ? 'opacity-70' : ''}`}
+              className={`mb-4 border-[rgba(255,255,255,0.5)] ${saving ? 'opacity-70' : ''}`}
               textClassName="text-white font-bold"
               disabled={saving}
             />
 
             <TouchableOpacity
-              className="bg-white/5 border border-white/10 p-4 rounded-xl items-center"
+              className="bg-[rgba(255,255,255,0.2)] border border-[rgba(255,255,255,0.5)] p-4 rounded-xl items-center"
               onPress={() => navigation.goBack()}
               disabled={saving}
             >
-              <Text className="text-slate-400 font-bold text-base">Cancel</Text>
+              <Text className="text-textMuted font-bold text-base">Cancel</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

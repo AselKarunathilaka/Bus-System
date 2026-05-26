@@ -101,26 +101,26 @@ const ScheduleFormScreen = ({ route, navigation }) => {
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 120 }}>
         <View className="flex-row items-center justify-between mb-6">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
+            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">
             {existingSchedule ? "Edit Schedule" : "Add Schedule"}
           </Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="home" size={20} color="#ffffff" />
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="home" size={20} color="#2F80ED" />
           </TouchableOpacity>
         </View>
 
         <GlassCard className="mb-6">
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Select Route</Text>
-          <View className="bg-white/10 border border-white/10 rounded-xl mb-4 overflow-hidden">
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Select Route</Text>
+          <View className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl mb-4 overflow-hidden">
             {Platform.OS === 'web' ? (
               <select
                 value={routeId}
                 onChange={(e) => setRouteId(e.target.value)}
-                style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 0, backgroundColor: "transparent", color: "#ffffff", outlineWidth: 0, cursor: "pointer" }}
+                style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 0, backgroundColor: "transparent", color: "#0f172a", outlineWidth: 0, cursor: "pointer" }}
               >
                 <option value="" style={{color:"#0f172a"}}>-- Select a Route --</option>
                 {routesList.map((r) => (
@@ -130,7 +130,7 @@ const ScheduleFormScreen = ({ route, navigation }) => {
                 ))}
               </select>
             ) : (
-              <Picker selectedValue={routeId} onValueChange={(v) => setRouteId(v)} dropdownIconColor="#ffffff" style={{color:"#ffffff"}}>
+              <Picker selectedValue={routeId} onValueChange={(v) => setRouteId(v)} dropdownIconColor="#5C7185" style={{color:"#0f172a"}}>
                 <Picker.Item label="-- Select a Route --" value="" />
                 {routesList.map((r) => (
                   <Picker.Item key={r._id} label={`${r.startLocation} to ${r.endLocation}`} value={r._id} />
@@ -139,13 +139,13 @@ const ScheduleFormScreen = ({ route, navigation }) => {
             )}
           </View>
 
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Select Bus</Text>
-          <View className="bg-white/10 border border-white/10 rounded-xl mb-4 overflow-hidden">
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Select Bus</Text>
+          <View className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl mb-4 overflow-hidden">
             {Platform.OS === 'web' ? (
               <select
                 value={busId}
                 onChange={(e) => setBusId(e.target.value)}
-                style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 0, backgroundColor: "transparent", color: "#ffffff", outlineWidth: 0, cursor: "pointer" }}
+                style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 0, backgroundColor: "transparent", color: "#0f172a", outlineWidth: 0, cursor: "pointer" }}
                 disabled={!routeId}
               >
                 <option value="" style={{color:"#0f172a"}}>-- Select a Bus --</option>
@@ -156,7 +156,7 @@ const ScheduleFormScreen = ({ route, navigation }) => {
                 ))}
               </select>
             ) : (
-              <Picker selectedValue={busId} onValueChange={(v) => setBusId(v)} enabled={!!routeId} dropdownIconColor="#ffffff" style={{color:"#ffffff"}}>
+              <Picker selectedValue={busId} onValueChange={(v) => setBusId(v)} enabled={!!routeId} dropdownIconColor="#5C7185" style={{color:"#0f172a"}}>
                 <Picker.Item label="-- Select a Bus --" value="" />
                 {filteredBuses.map((b) => (
                   <Picker.Item key={b._id} label={`${b.busName} (${b.licenseNumber})`} value={b._id} />
@@ -165,13 +165,13 @@ const ScheduleFormScreen = ({ route, navigation }) => {
             )}
           </View>
 
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Departure Date</Text>
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Departure Date</Text>
           {Platform.OS === 'web' ? (
             <input
               type="date"
               value={departureDate}
               onChange={(e) => setDepartureDate(e.target.value)}
-              style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.1)", marginBottom: 16, color: "#ffffff", outlineWidth: 0 }}
+              style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.5)", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.4)", marginBottom: 16, color: "#0f172a", outlineWidth: 0 }}
             />
           ) : (
             <GlassInput
@@ -182,13 +182,13 @@ const ScheduleFormScreen = ({ route, navigation }) => {
             />
           )}
 
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Departure Time</Text>
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Departure Time</Text>
           {Platform.OS === 'web' ? (
             <input
               type="time"
               value={departureTime}
               onChange={(e) => setDepartureTime(e.target.value)}
-              style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.1)", marginBottom: 16, color: "#ffffff", outlineWidth: 0 }}
+              style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.5)", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.4)", marginBottom: 16, color: "#0f172a", outlineWidth: 0 }}
             />
           ) : (
             <GlassInput
@@ -199,13 +199,13 @@ const ScheduleFormScreen = ({ route, navigation }) => {
             />
           )}
 
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Arrival Time</Text>
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Arrival Time</Text>
           {Platform.OS === 'web' ? (
             <input
               type="time"
               value={arrivalTime}
               onChange={(e) => setArrivalTime(e.target.value)}
-              style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.1)", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.1)", marginBottom: 16, color: "#ffffff", outlineWidth: 0 }}
+              style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 1, borderColor: "rgba(255,255,255,0.5)", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.4)", marginBottom: 16, color: "#0f172a", outlineWidth: 0 }}
             />
           ) : (
             <GlassInput
@@ -216,20 +216,20 @@ const ScheduleFormScreen = ({ route, navigation }) => {
             />
           )}
 
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Status</Text>
-          <View className="bg-white/10 border border-white/10 rounded-xl mb-4 overflow-hidden">
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Status</Text>
+          <View className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl mb-4 overflow-hidden">
             {Platform.OS === 'web' ? (
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 0, backgroundColor: "transparent", color: "#ffffff", outlineWidth: 0, cursor: "pointer" }}
+                style={{ width: "100%", padding: 16, fontSize: 16, borderWidth: 0, backgroundColor: "transparent", color: "#0f172a", outlineWidth: 0, cursor: "pointer" }}
               >
                 <option value="Scheduled" style={{color:"#0f172a"}}>Scheduled</option>
                 <option value="Completed" style={{color:"#0f172a"}}>Completed</option>
                 <option value="Cancelled" style={{color:"#0f172a"}}>Cancelled</option>
               </select>
             ) : (
-              <Picker selectedValue={status} onValueChange={(v) => setStatus(v)} dropdownIconColor="#ffffff" style={{color:"#ffffff"}}>
+              <Picker selectedValue={status} onValueChange={(v) => setStatus(v)} dropdownIconColor="#5C7185" style={{color:"#0f172a"}}>
                 <Picker.Item label="Scheduled" value="Scheduled" />
                 <Picker.Item label="Completed" value="Completed" />
                 <Picker.Item label="Cancelled" value="Cancelled" />
@@ -242,15 +242,15 @@ const ScheduleFormScreen = ({ route, navigation }) => {
           <GlassButton
             title="Save Schedule"
             onPress={handleSave}
-            className="mb-4 border-white/10"
+            className="mb-4 border-[rgba(255,255,255,0.5)]"
             textClassName="text-white font-bold"
           />
 
           <TouchableOpacity 
-            className="bg-white/5 border border-white/10 p-4 rounded-xl items-center"
+            className="bg-[rgba(255,255,255,0.2)] border border-[rgba(255,255,255,0.5)] p-4 rounded-xl items-center"
             onPress={() => navigation.goBack()}
           >
-            <Text className="text-slate-400 font-bold text-base">Cancel</Text>
+            <Text className="text-textMuted font-bold text-base">Cancel</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

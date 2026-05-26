@@ -54,18 +54,18 @@ const ProfileScreen = ({ navigation }) => {
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
         <View className="flex-row items-center justify-between mb-6">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">My Profile</Text>
+            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">My Profile</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="home" size={20} color="#ffffff" />
+          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="home" size={20} color="#2F80ED" />
           </TouchableOpacity>
         </View>
 
         <GlassCard className="mb-6">
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Full Name</Text>
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Full Name</Text>
           <GlassInput
             icon="person"
             value={fullName}
@@ -73,14 +73,14 @@ const ProfileScreen = ({ navigation }) => {
             placeholderTextColor="#94a3b8"
           />
 
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Email</Text>
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Email</Text>
           <GlassInput
             icon="mail"
             value={user?.email || ""}
             editable={false}
           />
 
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Phone</Text>
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Phone</Text>
           <GlassInput
             icon="call"
             value={phone}
@@ -89,7 +89,7 @@ const ProfileScreen = ({ navigation }) => {
             placeholderTextColor="#94a3b8"
           />
 
-          <Text className="text-sm font-bold text-slate-400 mb-2 uppercase">Role</Text>
+          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Role</Text>
           <GlassInput
             icon="shield-checkmark"
             value={user?.role || ""}
@@ -100,7 +100,7 @@ const ProfileScreen = ({ navigation }) => {
         <GlassButton
           title={loading ? "Updating..." : "Update Profile"}
           onPress={handleUpdate}
-          className="border-[#007AFF]/20"
+          className="border-[rgba(255,255,255,0.5)]"
           textClassName="text-white font-extrabold"
         />
       </ScrollView>

@@ -16,14 +16,14 @@ const GlassInput = ({
   return (
     <View className={`mb-4 ${containerClassName}`}>
       {label && (
-        <Text className="text-xs font-bold text-slate-300 uppercase mb-2 ml-1 tracking-wider">
+        <Text className="text-xs font-bold text-textDark uppercase mb-2 ml-1 tracking-wider">
           {label}
         </Text>
       )}
       <View
-        className={`flex-row items-center bg-white/10 border rounded-2xl px-4 py-1
-          ${isFocused ? "border-[#38bdf8] bg-white/15 shadow-sm shadow-[#38bdf8]/30" : "border-white/10"}
-          ${error ? "border-red-400 bg-red-400/10" : ""}
+        className={`flex-row items-center bg-[rgba(255,255,255,0.35)] border rounded-2xl px-4 py-1
+          ${isFocused ? "border-primary bg-[rgba(255,255,255,0.5)] shadow-sm shadow-primary/30" : "border-[rgba(255,255,255,0.55)]"}
+          ${error ? "border-danger bg-danger" : ""}
         `}
         style={styles.container}
       >
@@ -31,13 +31,13 @@ const GlassInput = ({
           <Ionicons
             name={icon}
             size={20}
-            color={error ? "#f87171" : isFocused ? "#38bdf8" : "#94a3b8"}
+            color={error ? "#f87171" : isFocused ? "#2F80ED" : "#5C7185"}
             className="mr-3"
           />
         )}
         <TextInput
-          placeholderTextColor="#94a3b8"
-          className={`flex-1 text-white font-semibold text-base py-3 h-14 ${className}`}
+          placeholderTextColor="#5C7185"
+          className={`flex-1 text-textDark font-semibold text-base py-3 h-14 ${className}`}
           style={[Platform.OS === "web" ? { outlineStyle: "none" } : {}, style]}
           onFocus={(e) => {
             setIsFocused(true);
@@ -51,7 +51,7 @@ const GlassInput = ({
         />
       </View>
       {error && (
-        <Text className="text-red-400 text-xs font-semibold mt-1.5 ml-1">
+        <Text className="text-red-500 text-xs font-semibold mt-1.5 ml-1">
           {error}
         </Text>
       )}

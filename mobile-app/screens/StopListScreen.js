@@ -12,7 +12,6 @@ import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 import LiquidBackground from "../components/LiquidBackground";
 import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
 import { Ionicons } from "@expo/vector-icons";
 
 const StopListScreen = ({ route, navigation }) => {
@@ -26,13 +25,11 @@ const StopListScreen = ({ route, navigation }) => {
   const fetchStops = useCallback(async () => {
     try {
       setLoading(true);
-
       const response = await api.get(`/stops/route/${routeId}`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
-
       setStops(response.data);
     } catch (error) {
       console.log("Fetch stops error:", error?.response?.data || error.message);
@@ -48,18 +45,14 @@ const StopListScreen = ({ route, navigation }) => {
   const handleDeleteStop = async (stopId) => {
     const doDelete = async () => {
       try {
-        console.log("Deleting stop:", stopId);
-
         await api.delete(`/stops/${stopId}`, {
           headers: {
             Authorization: `Bearer ${authToken}`,
           },
         });
-
         Alert.alert("Success", "Stop deleted successfully");
         fetchStops();
       } catch (error) {
-        console.log("Delete stop error:", error?.response?.data || error.message);
         Alert.alert(
           "Error",
           error?.response?.data?.message || "Failed to delete stop"
@@ -94,79 +87,88 @@ const StopListScreen = ({ route, navigation }) => {
   if (loading) {
     return (
       <LiquidBackground>
-        <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#a855f7" />
-          <Text className="mt-3 text-purple-300 font-semibold">Loading stops...</Text>
+        <View className="flex-1 justify-center items-center mt-10">
+          <ActivityIndicator size="large" color="#2F80ED" />
+          <Text className="mt-3 text-primary font-semibold">Loading stops...</Text>
         </View>
       </LiquidBackground>
     );
   }
 
   const renderHeader = () => (
-    <>
+    <View className="mb-4">
       <View className="flex-row items-center justify-between mb-5">
-          <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
-            </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
-          {routeName} Stops
-        </Text>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="home" size={20} color="#ffffff" />
+        <View className="flex-row items-center flex-1">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="arrow-back" size={24} color="#2F80ED" />
           </TouchableOpacity>
+          <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight flex-1">
+            {routeName} Stops
+          </Text>
         </View>
+        <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+          <Ionicons name="home" size={20} color="#2F80ED" />
+        </TouchableOpacity>
+      </View>
 
       <GlassCard className="mb-4">
-        <Text className="text-slate-400 text-sm leading-relaxed mb-4">
+        <Text className="text-textMuted text-sm leading-relaxed mb-4">
           {user?.role === "admin"
             ? "Add, edit, and remove stops for this route"
             : "View all stops available in this route"}
         </Text>
 
         {user?.role === "admin" && (
-          <View className="mt-4 px-1 w-full">
-            <TouchableOpacity 
-              className="flex-row items-center justify-center bg-emerald-500/20 py-4 rounded-2xl border border-emerald-500/40 shadow-sm"
-              onPress={() => navigation.navigate("StopForm", { routeId })}
-            >
-              <Ionicons name="add-circle" size={24} color="#34d399" style={{ marginRight: 8 }} />
-              <Text className="text-emerald-300 font-black text-lg tracking-widest uppercase">Add Stop</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity 
+            className="flex-row items-center justify-center bg-[rgba(255,255,255,0.6)] py-4 rounded-2xl border border-[rgba(255,255,255,0.8)] shadow-sm"
+            onPress={() => navigation.navigate("StopForm", { routeId })}
+          >
+            <Ionicons name="add-circle" size={24} color="#059669" style={{ marginRight: 8 }} />
+            <Text className="text-[#059669] font-black text-lg tracking-widest uppercase">Add Stop</Text>
+          </TouchableOpacity>
         )}
       </GlassCard>
-    </>
+    </View>
   );
 
   return (
     <LiquidBackground>
       <FlatList
         data={stops}
-        className="flex-1"
         keyExtractor={(item) => item._id}
-        contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
         ListHeaderComponent={renderHeader}
-        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ padding: 20 }}
         ListEmptyComponent={
-          <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="location-outline" size={64} color="#0ea5e9" />
-            <Text className="text-cyan-200 mt-4 font-bold text-lg">No stops found</Text>
-            <Text className="text-slate-400 text-sm mt-1 text-center">There are no stops assigned to this route yet.</Text>
+          <View className="items-center justify-center mt-10 opacity-80">
+            <Ionicons name="location-outline" size={64} color="#2F80ED" />
+            <Text className="text-primary mt-4 font-bold text-lg">No Stops Found</Text>
+            <Text className="text-textMuted text-sm mt-1 text-center">
+              There are no stops created for this route yet.
+            </Text>
           </View>
         }
         renderItem={({ item }) => (
           <GlassCard className="mb-4">
-            <Text className="text-lg font-bold text-white mb-1 tracking-tight">
-              {item.order}. {item.stopName}
-            </Text>
-            <Text className="text-sm font-medium text-slate-400 mb-4">Location: {item.location}</Text>
+            <View className="flex-row items-center justify-between mb-3 border-b border-[rgba(255,255,255,0.5)] pb-3">
+              <View className="flex-row items-center flex-1">
+                <View className="bg-[rgba(255,255,255,0.6)] p-2 rounded-full mr-3 border border-[rgba(255,255,255,0.8)]">
+                  <Ionicons name="location" size={20} color="#2F80ED" />
+                </View>
+                <View className="flex-1">
+                  <Text className="text-lg font-bold text-textDark tracking-tight">{item.stopName}</Text>
+                  <Text className="text-xs text-textMuted font-bold uppercase tracking-widest mt-1">Order: {item.order}</Text>
+                </View>
+              </View>
+            </View>
+
+            <View className="mb-4">
+              <Text className="text-textMuted text-sm leading-relaxed">{item.location}</Text>
+            </View>
 
             {user?.role === "admin" && (
-              <View className="flex-row gap-3">
+              <View className="flex-row justify-between pt-2 border-t border-[rgba(255,255,255,0.3)]">
                 <TouchableOpacity
-                  className="bg-amber-500/20 p-3 rounded-xl flex-1 border border-amber-500/30"
+                  className="bg-[rgba(255,255,255,0.4)] p-3 rounded-xl flex-1 mr-2 border border-[rgba(255,255,255,0.5)]"
                   onPress={() =>
                     navigation.navigate("StopForm", {
                       routeId,
@@ -174,14 +176,14 @@ const StopListScreen = ({ route, navigation }) => {
                     })
                   }
                 >
-                  <Text className="text-amber-400 font-bold text-center">Edit Stop</Text>
+                  <Text className="text-[#d97706] font-bold text-center">Edit Stop</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  className="bg-red-500/20 p-3 rounded-xl flex-1 border border-red-500/30"
+                  className="bg-[rgba(220,38,38,0.1)] p-3 rounded-xl flex-1 ml-2 border border-[rgba(220,38,38,0.3)]"
                   onPress={() => handleDeleteStop(item._id)}
                 >
-                  <Text className="text-red-400 font-bold text-center">Delete Stop</Text>
+                  <Text className="text-red-500 font-bold text-center">Delete Stop</Text>
                 </TouchableOpacity>
               </View>
             )}

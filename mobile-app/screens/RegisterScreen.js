@@ -116,19 +116,19 @@ const RegisterScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           <GlassCard className="mb-6 items-center">
-            <View className="bg-white/10 px-4 py-2 rounded-full border border-white/10 mb-4">
-              <Text className="text-white text-xs font-bold">QuickBus Portal</Text>
+            <View className="bg-[rgba(255,255,255,0.4)] px-4 py-2 rounded-full border border-[rgba(255,255,255,0.5)] mb-4">
+              <Text className="text-primary text-xs font-bold">QuickBus Portal</Text>
             </View>
-            <Text className="text-3xl font-bold text-white mb-2 text-center">
+            <Text className="text-3xl font-bold text-textDark mb-2 text-center">
               Create Account
             </Text>
-            <Text className="text-sm text-slate-300 text-center leading-relaxed">
+            <Text className="text-sm text-textMuted text-center leading-relaxed">
               Register to browse highway routes, view stops, and use the QuickBus system.
             </Text>
           </GlassCard>
 
           <GlassCard className="mb-6">
-            <Text className="text-xl font-bold text-white mb-6 text-center">
+            <Text className="text-xl font-bold text-textDark mb-6 text-center">
               Get Started
             </Text>
 

@@ -45,26 +45,26 @@ const UserScheduleListScreen = ({ navigation }) => {
 
     return (
       <GlassCard className="mb-4">
-        <View className="flex-row justify-between items-start mb-3 pb-3 border-b border-white/10">
-          <Text className="text-lg font-bold text-white flex-1 pr-3 leading-6">
+        <View className="flex-row justify-between items-start mb-3 pb-3 border-b border-[rgba(255,255,255,0.5)]">
+          <Text className="text-lg font-bold text-textDark flex-1 pr-3 leading-6">
             {item.routeId?.startLocation} to {item.routeId?.endLocation}
           </Text>
-          <Text className="bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-lg border border-emerald-500/30 text-xs font-bold overflow-hidden mt-1">
+          <Text className="bg-emerald-500/20 text-emerald-600 px-3 py-1.5 rounded-lg border border-emerald-500/30 text-xs font-bold overflow-hidden mt-1">
             LKR {item.routeId?.price}
           </Text>
         </View>
 
         <View className="mb-4">
-          <Text className="text-sm text-slate-400 font-semibold mb-1">
+          <Text className="text-sm text-textMuted font-semibold mb-1">
             Bus: {item.busId?.busType} ({item.busId?.licenseNumber})
           </Text>
-          <Text className="text-sm text-slate-400 font-semibold mb-1">
+          <Text className="text-sm text-textMuted font-semibold mb-1">
             Date: {new Date(item.departureDate).toLocaleDateString()}
           </Text>
-          <Text className="text-sm text-slate-400 font-semibold mb-1">
+          <Text className="text-sm text-textMuted font-semibold mb-1">
             Time: {item.departureTime} - {item.arrivalTime}
           </Text>
-          <Text className="text-sm text-white font-bold mt-2 bg-white/10 self-start px-3 py-1.5 rounded-lg border border-white/10">
+          <Text className="text-sm text-textDark font-bold mt-2 bg-[rgba(255,255,255,0.4)] self-start px-3 py-1.5 rounded-lg border border-[rgba(255,255,255,0.5)]">
             Available Seats: {availableSeats} / {totalSeats}
           </Text>
         </View>
@@ -84,26 +84,26 @@ const UserScheduleListScreen = ({ navigation }) => {
       <View className="flex-1 p-5">
         <View className="flex-row items-center justify-between mb-5">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white flex-1 tracking-tight">Available Trips</Text>
+            <Text className="text-3xl font-bold text-textDark flex-1 tracking-tight">Available Trips</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="home" size={20} color="#ffffff" />
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="home" size={20} color="#2F80ED" />
           </TouchableOpacity>
         </View>
 
         {loading ? (
           <View className="flex-1 justify-center items-center mt-10">
-            <ActivityIndicator size="large" color="#a855f7" />
-            <Text className="mt-3 text-purple-300 font-semibold">Loading available trips...</Text>
+            <ActivityIndicator size="large" color="#2F80ED" />
+            <Text className="mt-3 text-primary font-semibold">Loading available trips...</Text>
           </View>
         ) : schedules.length === 0 ? (
           <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="bus-outline" size={64} color="#0ea5e9" />
-            <Text className="text-cyan-200 mt-4 font-bold text-lg">No trips available</Text>
-            <Text className="text-slate-400 text-sm mt-1 text-center">There are currently no active bus schedules.</Text>
+            <Ionicons name="bus-outline" size={64} color="#2F80ED" />
+            <Text className="text-primary mt-4 font-bold text-lg">No trips available</Text>
+            <Text className="text-textMuted text-sm mt-1 text-center">There are currently no active bus schedules.</Text>
           </View>
         ) : (
           <FlatList

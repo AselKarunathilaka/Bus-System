@@ -115,34 +115,34 @@ const BusListScreen = ({ navigation }) => {
     <View className="mb-4 mt-2 px-3">
       <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-white/10 p-2 rounded-full border border-white/10">
-              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white shadow-sm tracking-tight">
+            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">
           {isAdmin ? "Bus Dashboard" : "Available Buses"}
         </Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-white/10 p-2 rounded-full border border-white/10">
-            <Ionicons name="home" size={20} color="#ffffff" />
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
+            <Ionicons name="home" size={20} color="#2F80ED" />
           </TouchableOpacity>
         </View>
 
       <GlassCard className="mb-4">
-        <Text className="text-slate-400 text-sm leading-relaxed mb-4">
+        <Text className="text-textMuted text-sm leading-relaxed mb-4">
           {isAdmin
             ? "View total buses, assigned buses, active buses, maintenance buses, and inactive buses."
             : "These are the buses available in the system."}
         </Text>
 
         <View className="flex-row flex-wrap gap-2 justify-between">
-          <View className="w-[31%] bg-white/10 rounded-xl py-3 px-2 items-center border border-white/10">
-            <Text className="text-2xl font-bold text-white">{totalBuses}</Text>
-            <Text className="text-xs text-slate-400 mt-1 text-center font-semibold">Total Buses</Text>
+          <View className="w-[31%] bg-[rgba(255,255,255,0.4)] rounded-xl py-3 px-2 items-center border border-[rgba(255,255,255,0.5)]">
+            <Text className="text-2xl font-bold text-textDark">{totalBuses}</Text>
+            <Text className="text-xs text-textMuted mt-1 text-center font-semibold">Total Buses</Text>
           </View>
 
-          <View className="w-[31%] bg-white/10 rounded-xl py-3 px-2 items-center border border-white/10">
-            <Text className="text-2xl font-bold text-white">{assignedCount}</Text>
-            <Text className="text-xs text-slate-400 mt-1 text-center font-semibold">Assigned</Text>
+          <View className="w-[31%] bg-[rgba(255,255,255,0.4)] rounded-xl py-3 px-2 items-center border border-[rgba(255,255,255,0.5)]">
+            <Text className="text-2xl font-bold text-textDark">{assignedCount}</Text>
+            <Text className="text-xs text-textMuted mt-1 text-center font-semibold">Assigned</Text>
           </View>
 
           <View className="w-[31%] bg-emerald-500/20 rounded-xl py-3 px-2 items-center border border-emerald-500/30">
@@ -178,10 +178,10 @@ const BusListScreen = ({ navigation }) => {
 
   const renderBus = ({ item }) => (
     <GlassCard className="mx-3 mb-4">
-      <View className="flex-row items-start justify-between mb-3 border-b border-white/10 pb-3">
+      <View className="flex-row items-start justify-between mb-3 border-b border-[rgba(255,255,255,0.5)] pb-3">
         <View className="flex-1 pr-3">
-          <Text className="text-xl font-bold text-white tracking-tight">{item.busName}</Text>
-          <Text className="text-sm font-semibold text-slate-400 mt-1">{item.licenseNumber}</Text>
+          <Text className="text-xl font-bold text-textDark tracking-tight">{item.busName}</Text>
+          <Text className="text-sm font-semibold text-textMuted mt-1">{item.licenseNumber}</Text>
         </View>
 
         <StatusBadge status={item.status} />
@@ -189,33 +189,33 @@ const BusListScreen = ({ navigation }) => {
 
       <View className="flex-row flex-wrap justify-between mb-3">
         <View className="w-[48%] mb-2">
-          <Text className="text-xs text-slate-400 font-semibold mb-1">Type</Text>
-          <Text className="text-sm text-white font-bold">{item.busType}</Text>
+          <Text className="text-xs text-textMuted font-semibold mb-1">Type</Text>
+          <Text className="text-sm text-textDark font-bold">{item.busType}</Text>
         </View>
         <View className="w-[48%] mb-2">
-          <Text className="text-xs text-slate-400 font-semibold mb-1">Seats</Text>
-          <Text className="text-sm text-white font-bold">{item.seatCount}</Text>
+          <Text className="text-xs text-textMuted font-semibold mb-1">Seats</Text>
+          <Text className="text-sm text-textDark font-bold">{item.seatCount}</Text>
         </View>
         <View className="w-[100%] mb-2">
-          <Text className="text-xs text-slate-400 font-semibold mb-1">Contact</Text>
-          <Text className="text-sm text-white font-bold">{item.busContactNumber}</Text>
+          <Text className="text-xs text-textMuted font-semibold mb-1">Contact</Text>
+          <Text className="text-sm text-textDark font-bold">{item.busContactNumber}</Text>
         </View>
       </View>
 
-      <View className="bg-white/10 rounded-xl p-3 mb-3 border border-white/10">
-        <Text className="text-xs font-bold text-white mb-2 uppercase">Crew Details</Text>
+      <View className="bg-[rgba(255,255,255,0.4)] rounded-xl p-3 mb-3 border border-[rgba(255,255,255,0.5)]">
+        <Text className="text-xs font-bold text-textDark mb-2 uppercase">Crew Details</Text>
         <View className="flex-row justify-between mb-2">
-          <Text className="text-xs text-slate-400 font-medium">Driver:</Text>
-          <Text className="text-xs text-white font-bold text-right flex-1 ml-2">{item.driverName} ({item.driverNIC})</Text>
+          <Text className="text-xs text-textMuted font-medium">Driver:</Text>
+          <Text className="text-xs text-textDark font-bold text-right flex-1 ml-2">{item.driverName} ({item.driverNIC})</Text>
         </View>
         <View className="flex-row justify-between">
-          <Text className="text-xs text-slate-400 font-medium">Conductor:</Text>
-          <Text className="text-xs text-white font-bold text-right flex-1 ml-2">{item.conductorName} ({item.conductorNIC})</Text>
+          <Text className="text-xs text-textMuted font-medium">Conductor:</Text>
+          <Text className="text-xs text-textDark font-bold text-right flex-1 ml-2">{item.conductorName} ({item.conductorNIC})</Text>
         </View>
       </View>
 
-      <View className="bg-blue-500/20 rounded-xl p-3 border border-blue-500/30">
-        <Text className="text-sm text-[#38bdf8] font-bold leading-relaxed">
+      <View className="bg-primary/10 rounded-xl p-3 border border-primary/20">
+        <Text className="text-sm text-primary font-bold leading-relaxed">
           {item.assignedRoute
             ? `Route: ${item.assignedRoute.routeName}\n${item.assignedRoute.startLocation} → ${item.assignedRoute.endLocation}`
             : "Route: Not Assigned"}
@@ -246,8 +246,8 @@ const BusListScreen = ({ navigation }) => {
     return (
       <LiquidBackground>
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#a855f7" />
-          <Text className="mt-3 text-purple-300 font-semibold">Loading vibrant buses...</Text>
+          <ActivityIndicator size="large" color="#2F80ED" />
+          <Text className="mt-3 text-primary font-semibold">Loading vibrant buses...</Text>
         </View>
       </LiquidBackground>
     );
@@ -265,9 +265,9 @@ const BusListScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="bus-outline" size={64} color="#0ea5e9" />
-            <Text className="text-cyan-200 mt-4 font-bold text-lg">No buses found</Text>
-            <Text className="text-slate-400 text-sm mt-1 text-center">Your fleet is currently empty.</Text>
+            <Ionicons name="bus-outline" size={64} color="#2F80ED" />
+            <Text className="text-primary mt-4 font-bold text-lg">No buses found</Text>
+            <Text className="text-textMuted text-sm mt-1 text-center">Your fleet is currently empty.</Text>
           </View>
         }
       />
