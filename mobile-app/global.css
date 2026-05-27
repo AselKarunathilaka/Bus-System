@@ -2,4 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
 
+@layer utilities {
+  .animate-orb1 {
+    animation: orb1-anim 20s infinite linear;
+  }
+  .animate-orb2 {
+    animation: orb2-anim 25s infinite linear;
+  }
+  .animate-orb3 {
+    animation: orb3-anim 22s infinite linear;
+  }
+}
+
+@keyframes orb1-anim {
+  0% { transform: translate(0px, 0px) scale(1) rotate(45deg); }
+  50% { transform: translate(40px, -30px) scale(1.15) rotate(225deg); }
+  100% { transform: translate(0px, 0px) scale(1) rotate(405deg); }
+}
+
+@keyframes orb2-anim {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(-50px, 40px) scale(1.1); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}
+
+@keyframes orb3-anim {
+  0% { transform: translate(0px, 0px) scale(1); }
+  50% { transform: translate(30px, 50px) scale(1.2); }
+  100% { transform: translate(0px, 0px) scale(1); }
+}

@@ -125,7 +125,7 @@ const SeatSelectionScreen = ({ route, navigation }) => {
         
         <View className="flex-row bg-[rgba(255,255,255,0.4)] rounded-xl p-1 mb-5 border border-[rgba(255,255,255,0.5)]">
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Single" ? 'bg-[rgba(255,255,255,0.6)] shadow-sm border border-[rgba(255,255,255,0.8)]' : ''}`}
+            className={`flex-1 py-3 items-center rounded-lg shadow-sm border ${bookingType === "Single" ? 'bg-[rgba(255,255,255,0.6)] border-[rgba(255,255,255,0.8)] shadow-black/5' : 'bg-transparent border-transparent shadow-transparent'}`}
             onPress={() => handleTypeChange("Single")}
           >
             <Text className={`font-bold ${bookingType === "Single" ? 'text-primary' : 'text-textMuted'}`}>
@@ -133,7 +133,7 @@ const SeatSelectionScreen = ({ route, navigation }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Family" ? 'bg-[rgba(255,255,255,0.6)] shadow-sm border border-[rgba(255,255,255,0.8)]' : ''}`}
+            className={`flex-1 py-3 items-center rounded-lg shadow-sm border ${bookingType === "Family" ? 'bg-[rgba(255,255,255,0.6)] border-[rgba(255,255,255,0.8)] shadow-black/5' : 'bg-transparent border-transparent shadow-transparent'}`}
             onPress={() => handleTypeChange("Family")}
           >
             <Text className={`font-bold ${bookingType === "Family" ? 'text-primary' : 'text-textMuted'}`}>

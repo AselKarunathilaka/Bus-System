@@ -90,49 +90,49 @@ const AppNavigator = () => {
   const { token, userToken, loading } = useContext(AuthContext);
   const authToken = token || userToken;
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#F0F8FF" }}>
-        <ActivityIndicator size="large" color="#2F80ED" />
-      </View>
-    );
-  }
-
   return (
-    <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        {authToken ? (
-          <>
-            <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
-            <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: "Admin Dashboard" }} />
-            <Stack.Screen name="AdminGuide" component={AdminGuideScreen} options={{ title: "Admin Guide" }} />
-            <Stack.Screen name="UserGuide" component={UserGuideScreen} options={{ title: "Help & Support" }} />
-            <Stack.Screen name="Routes" component={RouteListScreen} />
-            <Stack.Screen name="RouteForm" component={RouteFormScreen} />
-            <Stack.Screen name="StopList" component={StopListScreen} />
-            <Stack.Screen name="StopForm" component={StopFormScreen} />
-            <Stack.Screen name="Buses" component={BusListScreen} />
-            <Stack.Screen name="BusForm" component={BusFormScreen} />
-            
-            <Stack.Screen name="ScheduleList" component={ScheduleListScreen} />
-            <Stack.Screen name="ScheduleForm" component={ScheduleFormScreen} />
-            <Stack.Screen name="UserScheduleList" component={UserScheduleListScreen} />
-            <Stack.Screen name="SeatSelection" component={SeatSelectionScreen} />
-            <Stack.Screen name="BookingConfirmation" component={BookingConfirmationScreen} />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      {loading ? (
+        <Stack.Screen name="Loading" options={{ headerShown: false }}>
+          {() => (
+            <View style={{ flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#F0F8FF" }}>
+              <ActivityIndicator size="large" color="#2F80ED" />
+            </View>
+          )}
+        </Stack.Screen>
+      ) : authToken ? (
+        <>
+          <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
+          <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: "Admin Dashboard" }} />
+          <Stack.Screen name="AdminGuide" component={AdminGuideScreen} options={{ title: "Admin Guide" }} />
+          <Stack.Screen name="UserGuide" component={UserGuideScreen} options={{ title: "Help & Support" }} />
+          <Stack.Screen name="Routes" component={RouteListScreen} />
+          <Stack.Screen name="RouteForm" component={RouteFormScreen} />
+          <Stack.Screen name="StopList" component={StopListScreen} />
+          <Stack.Screen name="StopForm" component={StopFormScreen} />
+          <Stack.Screen name="Buses" component={BusListScreen} />
+          <Stack.Screen name="BusForm" component={BusFormScreen} />
+          
+          <Stack.Screen name="ScheduleList" component={ScheduleListScreen} />
+          <Stack.Screen name="ScheduleForm" component={ScheduleFormScreen} />
+          <Stack.Screen name="UserScheduleList" component={UserScheduleListScreen} />
+          <Stack.Screen name="SeatSelection" component={SeatSelectionScreen} />
+          <Stack.Screen name="BookingConfirmation" component={BookingConfirmationScreen} />
+          <Stack.Screen name="MyBookings" component={MyBookingsScreen} />
+          <Stack.Screen name="AdminBookingList" component={AdminBookingListScreen} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Register" component={RegisterScreen} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+        </>
+      )}
+    </Stack.Navigator>
   );
 };
 
