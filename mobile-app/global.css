@@ -2,11 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .shadow-neo-light {
-    box-shadow: 4px 4px 8px #a3b1c6, -4px -4px 8px #ffffff;
-  }
-  .shadow-neo-inner {
-    box-shadow: inset 4px 4px 8px #a3b1c6, inset -4px -4px 8px #ffffff;
-  }
-}
+
