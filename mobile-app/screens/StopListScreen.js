@@ -15,8 +15,7 @@ import GlassCard from "../components/GlassCard";
 import { Ionicons } from "@expo/vector-icons";
 
 const StopListScreen = ({ route, navigation }) => {
-  const { token, user, userToken } = useContext(AuthContext);
-  const authToken = token || userToken;
+  const { token } = useContext(AuthContext);
 
   const { routeId, routeName } = route.params;
   const [stops, setStops] = useState([]);
@@ -25,11 +24,7 @@ const StopListScreen = ({ route, navigation }) => {
   const fetchStops = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/stops/route/${routeId}`, {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const response = await api.get(`/stops/route/${routeId}`);
       setStops(response.data);
     } catch (error) {
       console.log("Fetch stops error:", error?.response?.data || error.message);
@@ -40,16 +35,12 @@ const StopListScreen = ({ route, navigation }) => {
     } finally {
       setLoading(false);
     }
-  }, [routeId, authToken]);
+  }, [routeId]);
 
   const handleDeleteStop = async (stopId) => {
     const doDelete = async () => {
       try {
-        await api.delete(`/stops/${stopId}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        await api.delete(`/stops/${stopId}`);
         Alert.alert("Success", "Stop deleted successfully");
         fetchStops();
       } catch (error) {

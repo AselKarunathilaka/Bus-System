@@ -9,19 +9,26 @@ module.exports = {
   presets: [require("nativewind/preset")],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["PlusJakartaSans-Regular", "sans-serif"],
+        medium: ["PlusJakartaSans-Medium", "sans-serif"],
+        semibold: ["PlusJakartaSans-SemiBold", "sans-serif"],
+        bold: ["PlusJakartaSans-Bold", "sans-serif"],
+        extrabold: ["PlusJakartaSans-ExtraBold", "sans-serif"],
+      },
       colors: {
         background: "#EAF6FF",
-        primary: "#2F80ED",
-        secondary: "#56CCF2",
-        accent: "#1E88E5",
-        textDark: "#102A43",
-        textMuted: "#5C7185",
-        glassBorder: "rgba(255, 255, 255, 0.45)",
-        glassSurface: "rgba(255, 255, 255, 0.25)",
+        primary: "#2563EB",
+        secondary: "#06B6D4",
+        accent: "#14B8A6",
+        textDark: "#0F172A",
+        textMuted: "#64748B",
+        glassBorder: "rgba(255, 255, 255, 0.55)",
+        glassSurface: "rgba(255, 255, 255, 0.55)",
         glassDeep: "rgba(173, 216, 255, 0.22)",
-        success: "rgba(134, 239, 172, 0.4)", // Soft green glass for badges
-        warning: "rgba(253, 224, 71, 0.4)", // Soft amber glass
-        danger: "rgba(252, 165, 165, 0.4)", // Soft red glass
+        success: "rgba(16, 185, 129, 0.4)",
+        warning: "rgba(245, 158, 11, 0.4)",
+        danger: "rgba(239, 68, 68, 0.4)",
       },
     },
   },

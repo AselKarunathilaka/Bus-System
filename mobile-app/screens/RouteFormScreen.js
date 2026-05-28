@@ -19,8 +19,7 @@ import GlassInput from "../components/GlassInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const RouteFormScreen = ({ route, navigation }) => {
-  const { token, userToken } = useContext(AuthContext);
-  const authToken = token || userToken;
+  const { token } = useContext(AuthContext);
 
   const editingRoute = route.params?.routeData;
 
@@ -143,14 +142,10 @@ const RouteFormScreen = ({ route, navigation }) => {
       setLoading(true);
 
       if (editingRoute) {
-        await api.put(`/routes/${editingRoute._id}`, payload, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+        await api.put(`/routes/${editingRoute._id}`, payload);
         Alert.alert("Success", "Route updated successfully.");
       } else {
-        await api.post("/routes", payload, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+        await api.post("/routes", payload);
         Alert.alert("Success", "Route created successfully.");
       }
 

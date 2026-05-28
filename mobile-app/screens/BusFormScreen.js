@@ -23,8 +23,7 @@ const BUS_TYPES = ["Normal", "Semi Luxury", "Luxury", "Super Luxury"];
 const BUS_STATUS = ["Available", "Maintenance", "Inactive"];
 
 const BusFormScreen = ({ route, navigation }) => {
-  const { token, userToken } = useContext(AuthContext);
-  const authToken = token || userToken;
+  const { token } = useContext(AuthContext);
 
   const editingBus = route.params?.busData;
 
@@ -73,11 +72,7 @@ const BusFormScreen = ({ route, navigation }) => {
     try {
       setLoadingRoutes(true);
 
-      const response = await api.get("/routes", {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const response = await api.get("/routes");
 
       setRoutes(response.data);
     } catch (error) {
@@ -157,19 +152,11 @@ const BusFormScreen = ({ route, navigation }) => {
       setSaving(true);
 
       if (editingBus) {
-        await api.put(`/buses/${editingBus._id}`, payload, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        await api.put(`/buses/${editingBus._id}`, payload);
 
         Alert.alert("Success", "Bus updated successfully.");
       } else {
-        await api.post("/buses", payload, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        await api.post("/buses", payload);
 
         Alert.alert("Success", "Bus created successfully.");
       }

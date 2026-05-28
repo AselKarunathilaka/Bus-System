@@ -24,8 +24,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 
 const BusListScreen = ({ navigation }) => {
-  const { token, user, userToken } = useContext(AuthContext);
-  const authToken = token || userToken;
+  const { token, user } = useContext(AuthContext);
 
   const [buses, setBuses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,11 +35,7 @@ const BusListScreen = ({ navigation }) => {
     try {
       setLoading(true);
 
-      const response = await api.get("/buses", {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const response = await api.get("/buses");
 
       setBuses(response.data);
     } catch (error) {
@@ -51,7 +46,7 @@ const BusListScreen = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
-  }, [authToken]);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", fetchBuses);
@@ -69,11 +64,7 @@ const BusListScreen = ({ navigation }) => {
         style: "destructive",
         onPress: async () => {
           try {
-            await api.delete(`/buses/${id}`, {
-              headers: {
-                Authorization: `Bearer ${authToken}`,
-              },
-            });
+            await api.delete(`/buses/${id}`);
 
             fetchBuses();
           } catch (error) {
@@ -114,62 +105,66 @@ const BusListScreen = ({ navigation }) => {
   const renderDashboardHeader = () => (
     <View className="mb-4 mt-2 px-3">
       <View className="flex-row items-center justify-between mb-4">
-          <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
-            </TouchableOpacity>
-            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">
-          {isAdmin ? "Bus Dashboard" : "Available Buses"}
-        </Text>
-          </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="home" size={20} color="#2F80ED" />
+        <View className="flex-row items-center flex-1">
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
+            <Ionicons name="arrow-back" size={24} color="#3b82f6" />
           </TouchableOpacity>
+          <Text className="text-2xl font-extrabold text-white tracking-tight">
+            {isAdmin ? "Bus Dashboard" : "Available Buses"}
+          </Text>
         </View>
+        <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
+          <Ionicons name="home" size={20} color="#60a5fa" />
+        </TouchableOpacity>
+      </View>
 
       <GlassCard className="mb-4">
-        <Text className="text-textMuted text-sm leading-relaxed mb-4">
+        <Text className="text-slate-200 text-sm font-medium leading-relaxed mb-4">
           {isAdmin
-            ? "View total buses, assigned buses, active buses, maintenance buses, and inactive buses."
+            ? "Manage and monitor the entire bus fleet from one place."
             : "These are the buses available in the system."}
         </Text>
 
-        <View className="flex-row flex-wrap gap-2 justify-between">
-          <View className="w-[31%] bg-[rgba(255,255,255,0.4)] rounded-xl py-3 px-2 items-center border border-[rgba(255,255,255,0.5)]">
-            <Text className="text-2xl font-bold text-textDark">{totalBuses}</Text>
-            <Text className="text-xs text-textMuted mt-1 text-center font-semibold">Total Buses</Text>
+        <View className="flex-row flex-wrap justify-between gap-y-3">
+          <View className="w-[31%] bg-blue-50 rounded-xl py-4 items-center border-[2px] border-blue-500 shadow-sm">
+            <Ionicons name="bus" size={20} color="#2563EB" className="mb-1" />
+            <Text className="text-2xl font-black text-[#0F172A]">{totalBuses}</Text>
+            <Text className="text-[11px] text-blue-700 mt-1 text-center font-extrabold uppercase tracking-widest">Total</Text>
           </View>
 
-          <View className="w-[31%] bg-[rgba(255,255,255,0.4)] rounded-xl py-3 px-2 items-center border border-[rgba(255,255,255,0.5)]">
-            <Text className="text-2xl font-bold text-textDark">{assignedCount}</Text>
-            <Text className="text-xs text-textMuted mt-1 text-center font-semibold">Assigned</Text>
+          <View className="w-[31%] bg-purple-50 rounded-xl py-4 items-center border-[2px] border-purple-500 shadow-sm">
+            <Ionicons name="git-merge" size={20} color="#9333EA" className="mb-1" />
+            <Text className="text-2xl font-black text-[#0F172A]">{assignedCount}</Text>
+            <Text className="text-[11px] text-purple-700 mt-1 text-center font-extrabold uppercase tracking-widest">Assigned</Text>
           </View>
 
-          <View className="w-[31%] bg-emerald-500/20 rounded-xl py-3 px-2 items-center border border-emerald-500/30">
-            <Text className="text-2xl font-bold text-emerald-400">{activeCount}</Text>
-            <Text className="text-xs text-emerald-400 mt-1 text-center font-semibold">Active</Text>
+          <View className="w-[31%] bg-green-50 rounded-xl py-4 items-center border-[2px] border-green-500 shadow-sm">
+            <Ionicons name="checkmark-circle" size={20} color="#16A34A" className="mb-1" />
+            <Text className="text-2xl font-black text-[#0F172A]">{activeCount}</Text>
+            <Text className="text-[11px] text-green-700 mt-1 text-center font-extrabold uppercase tracking-widest">Active</Text>
           </View>
 
-          <View className="w-[31%] bg-amber-500/20 rounded-xl py-3 px-2 items-center border border-amber-500/30">
-            <Text className="text-2xl font-bold text-amber-400">{maintenanceCount}</Text>
-            <Text className="text-xs text-amber-400 mt-1 text-center font-semibold">Maintenance</Text>
+          <View className="w-[48%] bg-amber-50 rounded-xl py-4 items-center border-[2px] border-amber-500 shadow-sm">
+            <Ionicons name="construct" size={20} color="#D97706" className="mb-1" />
+            <Text className="text-2xl font-black text-[#0F172A]">{maintenanceCount}</Text>
+            <Text className="text-[11px] text-amber-700 mt-1 text-center font-extrabold uppercase tracking-widest">Maintenance</Text>
           </View>
 
-          <View className="w-[31%] bg-red-500/20 rounded-xl py-3 px-2 items-center border border-red-500/30">
-            <Text className="text-2xl font-bold text-red-400">{inactiveCount}</Text>
-            <Text className="text-xs text-red-400 mt-1 text-center font-semibold">Inactive</Text>
+          <View className="w-[48%] bg-red-50 rounded-xl py-4 items-center border-[2px] border-red-500 shadow-sm">
+            <Ionicons name="close-circle" size={20} color="#DC2626" className="mb-1" />
+            <Text className="text-2xl font-black text-[#0F172A]">{inactiveCount}</Text>
+            <Text className="text-[11px] text-red-700 mt-1 text-center font-extrabold uppercase tracking-widest">Inactive</Text>
           </View>
         </View>
 
         {isAdmin && (
-          <View className="mt-5 px-1">
-            <TouchableOpacity 
-              className="flex-row items-center justify-center bg-emerald-500/20 py-4 rounded-2xl border border-emerald-500/40 shadow-sm"
+          <View className="mt-6">
+            <GlassButton
+              title="Add New Bus"
+              icon={<Ionicons name="add-circle" size={22} color="white" />}
               onPress={() => navigation.navigate("BusForm")}
-            >
-              <Ionicons name="add-circle" size={24} color="#34d399" style={{ marginRight: 8 }} />
-              <Text className="text-emerald-300 font-black text-lg tracking-widest uppercase">Add New Bus</Text>
-            </TouchableOpacity>
+              variant="primary"
+            />
           </View>
         )}
       </GlassCard>

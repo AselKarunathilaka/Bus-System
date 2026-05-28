@@ -164,7 +164,7 @@ const MyBookingsScreen = ({ navigation }) => {
             <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
               <Ionicons name="arrow-back" size={24} color="#2F80ED" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">My Bookings</Text>
+            <Text className="text-2xl font-extrabold text-white tracking-tight ml-2 mt-1">My Bookings</Text>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
             <Ionicons name="home" size={20} color="#2F80ED" />

@@ -54,13 +54,13 @@ const ProfileScreen = ({ navigation }) => {
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
         <View className="flex-row items-center justify-between mb-6">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
+              <Ionicons name="arrow-back" size={24} color="#3b82f6" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">My Profile</Text>
+            <Text className="text-2xl font-extrabold text-white tracking-tight">My Profile</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="home" size={20} color="#2F80ED" />
+          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
+            <Ionicons name="home" size={20} color="#60a5fa" />
           </TouchableOpacity>
         </View>
 

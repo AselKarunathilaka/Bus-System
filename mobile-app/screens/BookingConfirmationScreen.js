@@ -22,7 +22,9 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
   const { schedule, selectedSeats, bookingType } = route.params;
   const { token, user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-  const [contactNumber, setContactNumber] = useState("");
+  const [contactNumber, setContactNumber] = useState(user?.phone || "");
+  const [passengerName, setPassengerName] = useState(user?.fullName || "");
+  const [adminNote, setAdminNote] = useState("");
 
   const isAdmin = user?.role === "admin";
 
@@ -43,6 +45,10 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
       Alert.alert("Error", "Contact number is required for your booking.");
       return;
     }
+    if (!isAdmin && (!passengerName || passengerName.trim() === "")) {
+      Alert.alert("Error", "Passenger name is required for your booking.");
+      return;
+    }
 
     setLoading(true);
     try {
@@ -50,8 +56,11 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
         scheduleId: schedule._id,
         seatNumbers: selectedSeats,
         bookingType,
-        totalPrice,
+        totalPrice, // Note: Backend recalculates this securely
         contactNumber,
+        passengerName,
+        passengerPhone: contactNumber,
+        adminNote: isAdmin ? adminNote : undefined,
       };
 
       await api.post("/bookings", payload, {
@@ -163,18 +172,39 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
         </View>
 
         <GlassCard className="mb-8">
-          <Text className="text-base font-bold text-textDark mb-4 pb-2 border-b border-[rgba(255,255,255,0.5)]">Contact Information</Text>
+          <Text className="text-base font-bold text-textDark mb-4 pb-2 border-b border-[rgba(255,255,255,0.5)]">
+            {isAdmin ? "Passenger Information (Optional)" : "Passenger Information"}
+          </Text>
+          <GlassInput
+            icon="person"
+            placeholder={isAdmin ? "Customer Name (Optional)" : "Primary Passenger Name *"}
+            value={passengerName}
+            onChangeText={setPassengerName}
+            className="mb-3"
+            containerClassName="mb-3"
+          />
           <GlassInput
             icon="call"
-            placeholder="Enter Phone Number"
+            placeholder={isAdmin ? "Customer Phone Number (Optional)" : "Contact Phone Number *"}
             value={contactNumber}
             onChangeText={setContactNumber}
             keyboardType="phone-pad"
-            maxLength={12}
-            className="mb-0"
-            containerClassName="mb-0"
+            maxLength={15}
+            className={isAdmin ? "mb-3" : "mb-0"}
+            containerClassName={isAdmin ? "mb-3" : "mb-0"}
           />
-          {isAdmin && <Text className="text-xs font-bold text-textMuted mt-2 text-right">Optional for Admins</Text>}
+          {isAdmin && (
+            <GlassInput
+              icon="document-text"
+              placeholder="Admin Note (Optional)"
+              value={adminNote}
+              onChangeText={setAdminNote}
+              multiline
+              numberOfLines={2}
+              className="h-16 py-2 mb-0"
+              containerClassName="mb-0"
+            />
+          )}
         </GlassCard>
 
         <View className="mb-10">

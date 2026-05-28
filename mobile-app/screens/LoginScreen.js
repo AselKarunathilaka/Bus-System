@@ -59,19 +59,19 @@ const LoginScreen = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
         >
           <GlassCard className="mb-6 items-center">
-            <View className="bg-[rgba(255,255,255,0.4)] px-4 py-2 rounded-full border border-[rgba(255,255,255,0.5)] mb-4">
-              <Text className="text-primary text-xs font-bold">QuickBus Connect</Text>
+            <View className="bg-[rgba(255,255,255,0.4)] px-3 py-1.5 rounded-full border border-[rgba(255,255,255,0.5)] mb-3">
+              <Text className="text-primary font-sans text-[10px] font-bold tracking-widest uppercase">QuickBus Connect</Text>
             </View>
-            <Text className="text-3xl font-bold text-textDark mb-2 text-center">
+            <Text className="text-3xl font-sans font-extrabold text-textDark mb-1 text-center tracking-tight">
               Login
             </Text>
-            <Text className="text-sm text-textMuted text-center leading-relaxed">
+            <Text className="text-sm font-sans text-textMuted text-center leading-relaxed">
               Welcome back to the minimalist QuickBus portal.
             </Text>
           </GlassCard>
 
-          <GlassCard className="mb-6">
-            <Text className="text-xl font-bold text-textDark mb-6 text-center">
+          <GlassCard className="mb-6 p-4">
+            <Text className="text-lg font-sans font-bold text-textDark mb-4 text-center tracking-tight">
               Account Access
             </Text>
 
@@ -95,10 +95,10 @@ const LoginScreen = ({ navigation }) => {
             />
 
             <TouchableOpacity 
-              className="self-end mb-6 mr-1"
+              className="self-end mb-5 mr-1"
               onPress={() => navigation.navigate("ForgotPassword")}
             >
-              <Text className="text-primary font-bold text-sm tracking-wide">Forgot Password?</Text>
+              <Text className="text-primary font-sans font-bold text-xs tracking-wide">Forgot Password?</Text>
             </TouchableOpacity>
 
             <GlassButton

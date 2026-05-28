@@ -34,8 +34,7 @@ const DISTANCE_OPTIONS = [
 ];
 
 const RouteListScreen = ({ navigation }) => {
-  const { token, user, userToken } = useContext(AuthContext);
-  const authToken = token || userToken;
+  const { token, user } = useContext(AuthContext);
 
   const [routes, setRoutes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -54,11 +53,7 @@ const RouteListScreen = ({ navigation }) => {
     try {
       setLoading(true);
 
-      const response = await api.get("/routes", {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      });
+      const response = await api.get("/routes");
 
       setRoutes(response.data);
     } catch (error) {
@@ -70,16 +65,12 @@ const RouteListScreen = ({ navigation }) => {
     } finally {
       setLoading(false);
     }
-  }, [authToken]);
+  }, []);
 
   const handleDeleteRoute = async (routeId) => {
     const doDelete = async () => {
       try {
-        await api.delete(`/routes/${routeId}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        await api.delete(`/routes/${routeId}`);
 
         Alert.alert("Success", "Route deleted successfully");
         fetchRoutes();
@@ -200,27 +191,29 @@ const RouteListScreen = ({ navigation }) => {
     <View className="mb-3">
       <Text className="text-xs font-bold text-primary uppercase tracking-widest mb-1.5 ml-1">{title}</Text>
       <TouchableOpacity
-        className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] p-4 rounded-2xl flex-row justify-between items-center"
+        className="bg-white/90 border border-slate-300 p-4 rounded-2xl flex-row justify-between items-center"
         onPress={() => setOpenMenu(openMenu === fieldKey ? null : fieldKey)}
+        activeOpacity={0.7}
       >
-        <Text className="text-textDark font-semibold text-base">
+        <Text className="text-[#0F172A] font-extrabold text-lg">
           {getLabelFromOptions(options, value)}
         </Text>
         <Ionicons name="chevron-down" size={18} color="#5C7185" />
       </TouchableOpacity>
 
       {openMenu === fieldKey && (
-        <View className="mt-2 bg-[rgba(255,255,255,0.6)] rounded-xl border border-[rgba(255,255,255,0.8)] overflow-hidden shadow-sm">
+        <View className="mt-2 bg-white rounded-xl border border-slate-300 overflow-hidden shadow-md">
           {options.map((option) => (
             <TouchableOpacity
               key={option.value}
-              className="p-3 border-b border-[rgba(255,255,255,0.5)]"
+              className="p-4 border-b border-slate-200"
               onPress={() => {
                 onSelect(option.value);
                 setOpenMenu(null);
               }}
+              activeOpacity={0.7}
             >
-              <Text className="text-textDark font-medium">{option.label}</Text>
+              <Text className="text-[#0F172A] font-bold text-base">{option.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -248,15 +241,15 @@ const RouteListScreen = ({ navigation }) => {
     <>
       <View className="flex-row items-center justify-between mb-5">
         <View className="flex-row items-center flex-1">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
+            <Ionicons name="arrow-back" size={24} color="#3b82f6" />
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">
+          <Text className="text-2xl font-extrabold text-white tracking-tight">
             {user?.role === "admin" ? "Manage Routes" : "Available Routes"}
           </Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-          <Ionicons name="home" size={20} color="#2F80ED" />
+        <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
+          <Ionicons name="home" size={20} color="#60a5fa" />
         </TouchableOpacity>
       </View>
 
@@ -279,12 +272,12 @@ const RouteListScreen = ({ navigation }) => {
           </View>
 
           <View className="flex-row gap-2">
-            <TouchableOpacity className="bg-primary px-4 py-2 rounded-xl border border-primary/50 shadow-sm shadow-primary/40" onPress={applyFilters}>
-              <Text className="text-white font-bold text-xs tracking-wider uppercase">Apply</Text>
+            <TouchableOpacity className="bg-blue-600 px-6 py-3 rounded-xl shadow-md" onPress={applyFilters} activeOpacity={0.7}>
+              <Text className="text-white font-extrabold text-sm tracking-wider uppercase">Apply</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity className="bg-[rgba(255,255,255,0.4)] px-4 py-2 rounded-xl border border-[rgba(255,255,255,0.5)]" onPress={clearFilters}>
-              <Text className="text-textMuted font-bold text-xs tracking-wider uppercase">Clear</Text>
+            <TouchableOpacity className="bg-slate-600 px-6 py-3 rounded-xl shadow-md" onPress={clearFilters} activeOpacity={0.7}>
+              <Text className="text-white font-extrabold text-sm tracking-wider uppercase">Clear</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -295,14 +288,13 @@ const RouteListScreen = ({ navigation }) => {
       </GlassCard>
 
       {user?.role === "admin" && (
-        <View className="mb-6 px-1">
-          <TouchableOpacity 
-            className="flex-row items-center justify-center bg-emerald-500/20 py-4 rounded-2xl border border-emerald-500/40 shadow-sm"
+        <View className="mb-6">
+          <GlassButton
+            title="Add New Route"
+            icon={<Ionicons name="add-circle" size={22} color="white" />}
             onPress={() => navigation.navigate("RouteForm")}
-          >
-            <Ionicons name="add-circle" size={24} color="#34d399" style={{ marginRight: 8 }} />
-            <Text className="text-emerald-300 font-black text-lg tracking-widest uppercase">Add New Route</Text>
-          </TouchableOpacity>
+            variant="primary"
+          />
         </View>
       )}
     </>

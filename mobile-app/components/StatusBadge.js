@@ -75,7 +75,7 @@ const StatusBadge = ({ status, className = "" }) => {
   return (
     <View className={`flex-row items-center px-2.5 py-1 rounded-lg border ${config.bg} ${config.border} ${className}`}>
       <Ionicons name={config.icon} size={14} color={config.iconColor} style={{ marginRight: 4 }} />
-      <Text className={`text-xs font-bold uppercase tracking-wider ${config.textClass}`}>
+      <Text className={`font-sans text-xs font-bold uppercase tracking-wider ${config.textClass}`}>
         {status}
       </Text>
     </View>

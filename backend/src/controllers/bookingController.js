@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Booking = require("../models/Booking");
 const Schedule = require("../models/Schedule");
+const Route = require("../models/Route");
+const Bus = require("../models/Bus");
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
@@ -9,12 +11,12 @@ exports.createBooking = async (req, res) => {
   session.startTransaction();
 
   try {
-    const { scheduleId, seatNumbers, bookingType, totalPrice, contactNumber } = req.body;
+    const { scheduleId, seatNumbers, bookingType, contactNumber, passengerName, passengerPhone, adminNote } = req.body;
 
-    if (!scheduleId || !seatNumbers || !bookingType || totalPrice === undefined) {
+    if (!scheduleId || !seatNumbers || !bookingType) {
       await session.abortTransaction();
       session.endSession();
-      return res.status(400).json({ message: "All required fields must be provided" });
+      return res.status(400).json({ message: "Schedule ID, seat numbers, and booking type are required" });
     }
 
     if (!isValidObjectId(scheduleId)) {
@@ -27,6 +29,14 @@ exports.createBooking = async (req, res) => {
       await session.abortTransaction();
       session.endSession();
       return res.status(400).json({ message: "Seat numbers must be a non-empty array" });
+    }
+
+    // Check for duplicate seats in request
+    const uniqueSeats = [...new Set(seatNumbers)];
+    if (uniqueSeats.length !== seatNumbers.length) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "Duplicate seats in request" });
     }
 
     if (bookingType === "Single" && seatNumbers.length !== 1) {
@@ -48,6 +58,52 @@ exports.createBooking = async (req, res) => {
       return res.status(404).json({ message: "Schedule not found" });
     }
 
+    if (schedule.status !== "Scheduled") {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "This schedule is no longer active for booking" });
+    }
+
+    const scheduleDate = new Date(schedule.departureDate);
+    if (scheduleDate < new Date().setHours(0,0,0,0)) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "Cannot book a schedule in the past" });
+    }
+
+    const bus = await Bus.findById(schedule.busId).session(session);
+    if (!bus) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ message: "Assigned bus not found" });
+    }
+
+    if (bus.status !== "Available") {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "The assigned bus is not available" });
+    }
+
+    const invalidSeats = seatNumbers.filter(seat => seat < 1 || seat > bus.seatCapacity);
+    if (invalidSeats.length > 0) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: `Seats out of bounds. Bus has ${bus.seatCapacity} seats.` });
+    }
+
+    const route = await Route.findById(schedule.routeId).session(session);
+    if (!route) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ message: "Route not found" });
+    }
+
+    if (route.status !== "active") {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "This route is currently inactive" });
+    }
+
     // Check if any of the requested seats are already booked
     const alreadyBooked = seatNumbers.some((seat) => schedule.bookedSeats.includes(seat));
     if (alreadyBooked) {
@@ -55,6 +111,9 @@ exports.createBooking = async (req, res) => {
       session.endSession();
       return res.status(400).json({ message: "One or more selected seats are already booked" });
     }
+
+    // Server-side price calculation
+    const calculatedPrice = route.price * seatNumbers.length;
 
     // Generate unique booking ID
     const bookingId = `BKG-${Math.floor(100000 + Math.random() * 900000)}`;
@@ -68,8 +127,14 @@ exports.createBooking = async (req, res) => {
           scheduleId,
           seatNumbers,
           bookingType,
-          totalPrice,
+          totalPrice: calculatedPrice,
           contactNumber,
+          passengerName,
+          passengerPhone,
+          createdByRole: req.user.role,
+          createdBy: req.user._id,
+          isManualBooking: req.user.role === "admin",
+          adminNote: req.user.role === "admin" ? adminNote : undefined,
           status: "Confirmed",
         },
       ],

@@ -116,51 +116,51 @@ const SeatSelectionScreen = ({ route, navigation }) => {
             <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
               <Ionicons name="arrow-back" size={24} color="#2F80ED" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">Select Seats</Text>
+            <Text className="text-2xl font-extrabold text-white tracking-tight">Select Seats</Text>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
             <Ionicons name="home" size={20} color="#2F80ED" />
           </TouchableOpacity>
         </View>
         
-        <View className="flex-row bg-[rgba(255,255,255,0.4)] rounded-xl p-1 mb-5 border border-[rgba(255,255,255,0.5)]">
+        <View className="flex-row bg-[rgba(255,255,255,0.1)] rounded-xl p-1 mb-5 border border-[rgba(255,255,255,0.2)]">
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg shadow-sm border ${bookingType === "Single" ? 'bg-[rgba(255,255,255,0.6)] border-[rgba(255,255,255,0.8)] shadow-black/5' : 'bg-transparent border-transparent shadow-transparent'}`}
+            className={`flex-1 py-3 items-center rounded-lg shadow-sm border ${bookingType === "Single" ? 'bg-[#3b82f6] border-[#2563eb] shadow-blue-500/50' : 'bg-transparent border-transparent shadow-transparent'}`}
             onPress={() => handleTypeChange("Single")}
           >
-            <Text className={`font-bold ${bookingType === "Single" ? 'text-primary' : 'text-textMuted'}`}>
+            <Text className={`font-bold ${bookingType === "Single" ? 'text-white' : 'text-slate-300'}`}>
               Single (1 Seat)
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg shadow-sm border ${bookingType === "Family" ? 'bg-[rgba(255,255,255,0.6)] border-[rgba(255,255,255,0.8)] shadow-black/5' : 'bg-transparent border-transparent shadow-transparent'}`}
+            className={`flex-1 py-3 items-center rounded-lg shadow-sm border ${bookingType === "Family" ? 'bg-[#3b82f6] border-[#2563eb] shadow-blue-500/50' : 'bg-transparent border-transparent shadow-transparent'}`}
             onPress={() => handleTypeChange("Family")}
           >
-            <Text className={`font-bold ${bookingType === "Family" ? 'text-primary' : 'text-textMuted'}`}>
+            <Text className={`font-bold ${bookingType === "Family" ? 'text-white' : 'text-slate-300'}`}>
               Family (Up to 8)
             </Text>
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row justify-around mb-6 bg-[rgba(255,255,255,0.4)] p-4 rounded-2xl border border-[rgba(255,255,255,0.5)] shadow-sm">
+        <View className="flex-row justify-around mb-6 bg-[rgba(255,255,255,0.8)] p-4 rounded-2xl border border-[rgba(255,255,255,0.6)] shadow-sm">
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded-full border-2 border-[rgba(255,255,255,0.8)] mr-2 bg-[rgba(255,255,255,0.6)]" />
-            <Text className="text-xs text-textMuted font-bold uppercase tracking-widest">Available</Text>
+            <View className="w-4 h-4 rounded-full border border-[#3B82F6] mr-2 bg-[#DBEAFE]" />
+            <Text className="text-xs text-[#1E3A8A] font-bold uppercase tracking-widest">Available</Text>
           </View>
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded-full bg-[#10b981] mr-2 shadow-sm shadow-[#10b981]/50" />
-            <Text className="text-xs text-[#10b981] font-bold uppercase tracking-widest">Selected</Text>
+            <View className="w-4 h-4 rounded-full bg-[#059669] mr-2 shadow-sm border border-[#065F46]" />
+            <Text className="text-xs text-[#059669] font-bold uppercase tracking-widest">Selected</Text>
           </View>
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded-full bg-red-600/60 mr-2 border border-red-500/30" />
-            <Text className="text-xs text-red-500 font-bold uppercase tracking-widest">Booked</Text>
+            <View className="w-4 h-4 rounded-full bg-[#DC2626] mr-2 border border-[#7F1D1D]" />
+            <Text className="text-xs text-[#DC2626] font-bold uppercase tracking-widest">Booked</Text>
           </View>
         </View>
 
         <View className="items-center mb-6">
-          <View className="w-full max-w-[400px] bg-[rgba(255,255,255,0.3)] rounded-[40px] border-[4px] border-[rgba(255,255,255,0.6)] p-5 pt-8 shadow-sm">
-            <View className="items-end mb-8 pr-3 border-b-2 border-[rgba(255,255,255,0.5)] pb-5">
-              <View className="w-12 h-12 bg-emerald-500/10 rounded-full justify-center items-center border border-emerald-500/30">
+          <View className="w-full max-w-[400px] bg-[rgba(255,255,255,0.7)] rounded-[40px] border-[4px] border-[rgba(255,255,255,0.9)] p-5 pt-8 shadow-sm">
+            <View className="items-end mb-8 pr-3 border-b-2 border-[#CBD5E1] pb-5">
+              <View className="w-12 h-12 bg-slate-200 rounded-full justify-center items-center border border-slate-300 shadow-sm">
                 <Text className="text-xl">👨‍✈️</Text>
               </View>
             </View>
@@ -184,14 +184,17 @@ const SeatSelectionScreen = ({ route, navigation }) => {
         </View>
 
         <GlassCard className="flex-row justify-between items-center mb-10">
-          <Text className="text-base font-bold text-textDark">
-            Selected: <Text className="text-primary font-black text-xl">{selectedSeats.length}</Text> <Text className="text-textMuted">/ {bookingType === "Single" ? 1 : 8}</Text>
+          <Text className="text-base font-bold text-slate-200">
+            Selected: <Text className="text-white font-black text-xl">{selectedSeats.length}</Text> <Text className="text-slate-400">/ {bookingType === "Single" ? 1 : 8}</Text>
           </Text>
-          <GlassButton 
-            title="Continue"
-            onPress={handleContinue}
-            className="w-1/2"
-          />
+          <View className="flex-1 ml-4 items-end">
+            <GlassButton 
+              title="Continue"
+              onPress={handleContinue}
+              style={{ backgroundColor: "#10b981" }}
+              className="px-8 border-0"
+            />
+          </View>
         </GlassCard>
       </ScrollView>
     </LiquidBackground>
@@ -214,19 +217,19 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   seatAvailable: {
-    backgroundColor: "rgba(255,255,255,0.4)",
-    borderColor: "rgba(255,255,255,0.5)",
+    backgroundColor: "#DBEAFE",
+    borderColor: "#3B82F6",
   },
   seatSelected: {
     backgroundColor: "#059669",
-    borderColor: "#10b981",
+    borderColor: "#065F46",
   },
   seatBooked: {
-    backgroundColor: "rgba(220, 38, 38, 0.2)",
-    borderColor: "rgba(220, 38, 38, 0.4)",
+    backgroundColor: "#DC2626",
+    borderColor: "#7F1D1D",
   },
   seatText: { fontWeight: "800", fontSize: 14 },
-  seatTextAvailable: { color: "#5C7185" },
+  seatTextAvailable: { color: "#1E3A8A" },
   seatTextSelected: { color: "#ffffff" },
-  seatTextBooked: { color: "#dc2626", opacity: 0.6 },
+  seatTextBooked: { color: "#ffffff" },
 });

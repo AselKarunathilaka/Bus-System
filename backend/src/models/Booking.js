@@ -47,6 +47,35 @@ const bookingSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
+    passengerName: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    passengerPhone: {
+      type: String,
+      required: false,
+      trim: true,
+    },
+    createdByRole: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    isManualBooking: {
+      type: Boolean,
+      default: false,
+    },
+    adminNote: {
+      type: String,
+      required: false,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

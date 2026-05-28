@@ -120,7 +120,7 @@ const ScheduleListScreen = ({ navigation }) => {
           <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
             <Ionicons name="arrow-back" size={24} color="#2F80ED" />
           </TouchableOpacity>
-          <Text className="text-3xl font-bold text-textDark tracking-tight flex-1">Manage Schedules</Text>
+          <Text className="text-3xl font-bold text-white tracking-tight flex-1">Manage Schedules</Text>
           <TouchableOpacity onPress={() => navigation.navigate("MainTabs", { screen: "HomeTab" })} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
             <Ionicons name="home" size={22} color="#2F80ED" />
           </TouchableOpacity>

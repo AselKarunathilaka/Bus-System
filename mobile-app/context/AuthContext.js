@@ -43,11 +43,7 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      const response = await api.get("/auth/me", {
-        headers: {
-          Authorization: `Bearer ${savedToken}`,
-        },
-      });
+      const response = await api.get("/auth/me");
 
       setToken(savedToken);
       setUser(response.data);
@@ -63,22 +59,14 @@ export const AuthProvider = ({ children }) => {
   const getProfile = async () => {
     if (!token) return null;
 
-    const response = await api.get("/auth/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.get("/auth/me");
 
     setUser(response.data);
     return response.data;
   };
 
   const updateProfile = async (userId, updatedData) => {
-    const response = await api.put(`/users/${userId}`, updatedData, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await api.put(`/users/${userId}`, updatedData);
 
     setUser(response.data.user);
     return response.data;

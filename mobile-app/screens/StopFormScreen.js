@@ -19,8 +19,7 @@ import GlassInput from "../components/GlassInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const StopFormScreen = ({ route, navigation }) => {
-  const { token, userToken } = useContext(AuthContext);
-  const authToken = token || userToken;
+  const { token, user } = useContext(AuthContext);
 
   const routeId = route.params?.routeId;
   const stopData = route.params?.stopData;
@@ -89,14 +88,10 @@ const StopFormScreen = ({ route, navigation }) => {
       setLoading(true);
 
       if (stopData) {
-        await api.put(`/stops/${stopData._id}`, payload, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+        await api.put(`/stops/${stopData._id}`, payload);
         Alert.alert("Success", "Stop updated successfully.");
       } else {
-        await api.post("/stops", payload, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+        await api.post("/stops", payload);
         Alert.alert("Success", "Stop created successfully.");
       }
 
