@@ -172,17 +172,17 @@ const AdminBookingListScreen = ({ navigation }) => {
           <View className="flex-row">
             {item.status !== "Cancelled" && (
               <TouchableOpacity
-                className="bg-amber-500/30 px-4 py-2.5 rounded-xl ml-2 border border-amber-500/50 shadow-sm"
+                className="bg-amber-600 px-4 py-2.5 rounded-xl ml-2 shadow-sm"
                 onPress={() => handleCancel(item._id)}
               >
-                <Text className="text-amber-300 font-bold text-xs uppercase tracking-wider">Cancel</Text>
+                <Text className="text-white font-bold text-xs uppercase tracking-wider">Cancel</Text>
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              className="bg-red-500/30 px-4 py-2.5 rounded-xl ml-2 border border-red-500/50 shadow-sm"
+              className="bg-red-600 px-4 py-2.5 rounded-xl ml-2 shadow-sm"
               onPress={() => handleDelete(item._id)}
             >
-              <Text className="text-red-300 font-bold text-xs uppercase tracking-wider">Delete</Text>
+              <Text className="text-white font-bold text-xs uppercase tracking-wider">Delete</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -487,6 +487,16 @@ const AdminDashboardScreen = ({ navigation }) => {
               onPress={() => navigation.navigate("UserScheduleList")}
             />
           </View>
+          <View className="w-[31%] mb-3">
+            <GlassButton
+              title="Manage Crew"
+              className="flex-col h-24 border border-teal-400/30"
+              style={{ backgroundColor: "#14b8a6" }}
+              textClassName="mt-2 text-[11px] text-[#FFFFFF] font-bold text-center shadow-sm"
+              icon={<View className="bg-white/20 p-2 rounded-full"><Ionicons name="people" size={20} color="#FFFFFF" /></View>}
+              onPress={() => navigation.navigate("DriverManagement")}
+            />
+          </View>
         </View>
 
         <GlassCard className="mb-4">

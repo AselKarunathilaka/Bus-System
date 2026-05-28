@@ -375,10 +375,8 @@ const RouteListScreen = ({ navigation }) => {
             )}
 
             <Text className="text-lg font-bold text-textDark mb-2 tracking-tight">Stops</Text>
-            {renderStopsPreview(item.stops)}
-
-            <TouchableOpacity
-              className="bg-[rgba(255,255,255,0.4)] p-3 rounded-xl mt-1 border border-[rgba(255,255,255,0.5)]"
+            <TouchableOpacity 
+              activeOpacity={0.7}
               onPress={() =>
                 navigation.navigate("StopList", {
                   routeId: item._id,
@@ -386,29 +384,33 @@ const RouteListScreen = ({ navigation }) => {
                 })
               }
             >
-              <Text className="text-textDark text-center font-bold">
+              {renderStopsPreview(item.stops)}
+            </TouchableOpacity>
+
+            <View className="bg-white/10 py-1.5 px-3 rounded-md mt-1 self-center border border-white/20">
+              <Text className="text-blue-300 text-xs font-bold uppercase tracking-widest text-center">
                 {user?.role === "admin" ? "Manage Stops" : "View Route Stops"}
               </Text>
-            </TouchableOpacity>
+            </View>
 
             {user?.role === "admin" && (
               <View className="flex-row justify-between mt-3">
                 <TouchableOpacity
-                  className="bg-amber-500/20 p-3 rounded-xl flex-1 mr-2 border border-amber-500/30"
+                  className="bg-amber-600 p-3 rounded-xl flex-1 mr-2 shadow-sm border border-amber-500/20"
                   onPress={() =>
                     navigation.navigate("RouteForm", {
                       routeData: item,
                     })
                   }
                 >
-                  <Text className="text-amber-400 text-center font-bold">Edit Route</Text>
+                  <Text className="text-white text-center font-bold tracking-wide">Edit Route</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  className="bg-red-500/20 p-3 rounded-xl flex-1 ml-2 border border-red-500/30"
+                  className="bg-red-600 p-3 rounded-xl flex-1 ml-2 shadow-sm border border-red-500/20"
                   onPress={() => handleDeleteRoute(item._id)}
                 >
-                  <Text className="text-red-400 text-center font-bold">Delete</Text>
+                  <Text className="text-white text-center font-bold tracking-wide">Delete</Text>
                 </TouchableOpacity>
               </View>
             )}

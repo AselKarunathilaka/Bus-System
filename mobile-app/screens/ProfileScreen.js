@@ -65,7 +65,7 @@ const ProfileScreen = ({ navigation }) => {
         </View>
 
         <GlassCard className="mb-6">
-          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Full Name</Text>
+          <Text className="text-sm font-bold text-slate-300 mb-2 uppercase">Full Name</Text>
           <GlassInput
             icon="person"
             value={fullName}
@@ -73,14 +73,14 @@ const ProfileScreen = ({ navigation }) => {
             placeholderTextColor="#94a3b8"
           />
 
-          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Email</Text>
+          <Text className="text-sm font-bold text-slate-300 mb-2 uppercase">Email</Text>
           <GlassInput
             icon="mail"
             value={user?.email || ""}
             editable={false}
           />
 
-          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Phone</Text>
+          <Text className="text-sm font-bold text-slate-300 mb-2 uppercase">Phone</Text>
           <GlassInput
             icon="call"
             value={phone}
@@ -89,7 +89,7 @@ const ProfileScreen = ({ navigation }) => {
             placeholderTextColor="#94a3b8"
           />
 
-          <Text className="text-sm font-bold text-textMuted mb-2 uppercase">Role</Text>
+          <Text className="text-sm font-bold text-slate-300 mb-2 uppercase">Role</Text>
           <GlassInput
             icon="shield-checkmark"
             value={user?.role || ""}
@@ -100,7 +100,7 @@ const ProfileScreen = ({ navigation }) => {
         <GlassButton
           title={loading ? "Updating..." : "Update Profile"}
           onPress={handleUpdate}
-          className="border-[rgba(255,255,255,0.5)]"
+          className="border-[rgba(255,255,255,0.5)] mb-4"
           textClassName="text-white font-extrabold"
         />
       </ScrollView>

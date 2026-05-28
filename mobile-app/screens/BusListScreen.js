@@ -220,17 +220,17 @@ const BusListScreen = ({ navigation }) => {
       {isAdmin && (
         <View className="flex-row gap-3 mt-4">
           <TouchableOpacity
-            className="bg-amber-500/20 p-3 rounded-xl flex-1 border border-amber-500/30"
+            className="bg-amber-600 p-3 rounded-xl flex-1 shadow-sm border border-amber-500/20"
             onPress={() => navigation.navigate("BusForm", { busData: item })}
           >
-            <Text className="text-amber-400 font-bold text-center">Edit</Text>
+            <Text className="text-white font-bold text-center tracking-wide">Edit</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            className="bg-red-500/20 p-3 rounded-xl flex-1 border border-red-500/30"
+            className="bg-red-600 p-3 rounded-xl flex-1 shadow-sm border border-red-500/20"
             onPress={() => handleDeleteBus(item._id)}
           >
-            <Text className="text-red-400 font-bold text-center">Delete</Text>
+            <Text className="text-white font-bold text-center tracking-wide">Delete</Text>
           </TouchableOpacity>
         </View>
       )}

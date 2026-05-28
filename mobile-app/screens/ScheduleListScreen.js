@@ -98,16 +98,16 @@ const ScheduleListScreen = ({ navigation }) => {
       </Text>
       <View className="flex-row justify-end mt-2">
         <TouchableOpacity
-          className="bg-[rgba(255,255,255,0.4)] px-4 py-2 rounded-lg border border-[rgba(255,255,255,0.5)] mr-3"
+          className="bg-amber-600 px-4 py-2 rounded-lg shadow-sm border border-amber-500/20 mr-3"
           onPress={() => navigation.navigate("ScheduleForm", { schedule: item })}
         >
-          <Text className="text-textDark font-bold text-sm">Edit</Text>
+          <Text className="text-white font-bold text-sm tracking-wide">Edit</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          className="bg-red-500/20 px-4 py-2 rounded-lg border border-red-500/30"
+          className="bg-red-600 px-4 py-2 rounded-lg shadow-sm border border-red-500/20"
           onPress={() => handleDelete(item._id)}
         >
-          <Text className="text-red-400 font-bold text-sm">Delete</Text>
+          <Text className="text-white font-bold text-sm tracking-wide">Delete</Text>
         </TouchableOpacity>
       </View>
     </GlassCard>

@@ -27,6 +27,9 @@ import AdminBookingListScreen from "../screens/AdminBookingListScreen";
 import AdminDashboardScreen from "../screens/AdminDashboardScreen";
 import AdminGuideScreen from "../screens/AdminGuideScreen";
 import UserGuideScreen from "../screens/UserGuideScreen";
+import OffersScreen from "../screens/OffersScreen";
+import TravelStatsScreen from "../screens/TravelStatsScreen";
+import DriverManagementScreen from "../screens/DriverManagementScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 
 const Stack = createNativeStackNavigator();
@@ -124,6 +127,9 @@ const AppNavigator = () => {
           <Stack.Screen name="BookingConfirmation" component={BookingConfirmationScreen} />
           <Stack.Screen name="MyBookings" component={MyBookingsScreen} />
           <Stack.Screen name="AdminBookingList" component={AdminBookingListScreen} />
+          <Stack.Screen name="Offers" component={OffersScreen} options={{ title: "Offers & Deals" }} />
+          <Stack.Screen name="TravelStats" component={TravelStatsScreen} options={{ title: "Travel Stats" }} />
+          <Stack.Screen name="DriverManagement" component={DriverManagementScreen} options={{ title: "Drivers" }} />
         </>
       ) : (
         <>

@@ -144,10 +144,10 @@ const MyBookingsScreen = ({ navigation }) => {
             
             {item.status !== "Cancelled" && (
               <TouchableOpacity
-                className="bg-red-500/20 px-4 py-2 rounded-xl border border-red-500/30"
+                className="bg-amber-600 px-6 py-2.5 rounded-xl ml-2 shadow-sm"
                 onPress={() => handleCancel(item._id)}
               >
-                <Text className="text-red-400 font-bold text-xs">Cancel</Text>
+                <Text className="text-white font-bold text-xs uppercase tracking-wider">Cancel Booking</Text>
               </TouchableOpacity>
             )}
           </View>

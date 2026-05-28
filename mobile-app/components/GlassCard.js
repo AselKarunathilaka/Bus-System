@@ -10,13 +10,13 @@ const GlassCard = ({ children, className = "", style = {} }) => {
         className={`rounded-3xl overflow-hidden border border-white/60 shadow-lg ${className}`}
       >
         <BlurView
-          intensity={Platform.OS === "ios" ? 70 : 100}
+          intensity={Platform.OS === "ios" ? 40 : 60}
           tint="light"
           style={StyleSheet.absoluteFillObject}
-          className="bg-white/80"
+          className="bg-white/10"
         />
         {/* Strong top inner glow for glass edge effect */}
-        <View style={StyleSheet.absoluteFillObject} className="border-t-[1.5px] border-l-[0.5px] border-white/80 rounded-3xl" />
+        <View style={StyleSheet.absoluteFillObject} className="border-t border-l border-white/20 rounded-3xl" />
         <View className={className.includes('p-') ? "" : "p-6"}>
           {children}
         </View>

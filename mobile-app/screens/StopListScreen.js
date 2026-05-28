@@ -157,9 +157,9 @@ const StopListScreen = ({ route, navigation }) => {
             </View>
 
             {user?.role === "admin" && (
-              <View className="flex-row justify-between pt-2 border-t border-[rgba(255,255,255,0.3)]">
+              <View className="flex-row justify-between pt-2 mt-2 border-t border-white/10">
                 <TouchableOpacity
-                  className="bg-[rgba(255,255,255,0.4)] p-3 rounded-xl flex-1 mr-2 border border-[rgba(255,255,255,0.5)]"
+                  className="bg-amber-600 p-3 rounded-xl flex-1 mr-2 shadow-sm border border-amber-500/20"
                   onPress={() =>
                     navigation.navigate("StopForm", {
                       routeId,
@@ -167,14 +167,14 @@ const StopListScreen = ({ route, navigation }) => {
                     })
                   }
                 >
-                  <Text className="text-[#d97706] font-bold text-center">Edit Stop</Text>
+                  <Text className="text-white font-bold text-center tracking-wide">Edit Stop</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  className="bg-[rgba(220,38,38,0.1)] p-3 rounded-xl flex-1 ml-2 border border-[rgba(220,38,38,0.3)]"
+                  className="bg-red-600 p-3 rounded-xl flex-1 ml-2 shadow-sm border border-red-500/20"
                   onPress={() => handleDeleteStop(item._id)}
                 >
-                  <Text className="text-red-500 font-bold text-center">Delete Stop</Text>
+                  <Text className="text-white font-bold text-center tracking-wide">Delete Stop</Text>
                 </TouchableOpacity>
               </View>
             )}
