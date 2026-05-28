@@ -43,16 +43,18 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   return (
     <LiquidBackground>
-      <KeyboardAvoidingView
-        className="flex-1"
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={90}
-      >
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+      {Platform.OS === "ios" ? (
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior="padding"
+          keyboardVerticalOffset={90}
         >
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
           <GlassCard className="mb-6">
             <TouchableOpacity 
               onPress={() => navigation.goBack()}
@@ -86,8 +88,59 @@ const ForgotPasswordScreen = ({ navigation }) => {
               variant="primary"
             />
           </GlassCard>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <GlassCard className="mb-6 items-center">
+              <View className="bg-[rgba(255,255,255,0.4)] px-3 py-1.5 rounded-full border border-[rgba(255,255,255,0.5)] mb-3">
+                <Text className="text-primary font-sans text-[10px] font-bold tracking-widest uppercase">QuickBus Connect</Text>
+              </View>
+              <Text className="text-3xl font-sans font-extrabold text-textDark mb-1 text-center tracking-tight">
+                Reset Password
+              </Text>
+              <Text className="text-sm font-sans text-textMuted text-center leading-relaxed">
+                Enter your email address to receive password reset instructions.
+              </Text>
+            </GlassCard>
+
+            <GlassCard className="mb-6 p-4">
+              <Text className="text-lg font-sans font-bold text-textDark mb-4 text-center tracking-tight">
+                Account Details
+              </Text>
+
+              <GlassInput
+                icon="mail"
+                placeholder="Email Address"
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                keyboardType="email-address"
+                returnKeyType="done"
+              />
+
+              <GlassButton
+                title={loading ? "Sending..." : "Send Reset Link"}
+                onPress={handleResetPassword}
+                className="mt-2 mb-6"
+                variant="primary"
+              />
+
+              <GlassButton
+                title="Back to Login"
+                onPress={() => navigation.navigate("Login")}
+                variant="secondary"
+              />
+            </GlassCard>
+          </ScrollView>
+        </View>
+      )}
     </LiquidBackground>
   );
 };

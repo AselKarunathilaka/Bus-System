@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { BlurView } from "expo-blur";
 
 const GlassButton = ({ title, onPress, className = "", textClassName = "", icon, variant = "primary", disabled = false, style }) => {
@@ -34,14 +34,18 @@ const GlassButton = ({ title, onPress, className = "", textClassName = "", icon,
       className={`rounded-full overflow-hidden border ${borderColor} ${bgColor} ${disabled ? 'opacity-50' : ''} ${className}`}
     >
       {isSecondary && (
-        <BlurView intensity={20} tint="light" style={StyleSheet.absoluteFillObject} className="bg-white/20" />
+        Platform.OS === "ios" ? (
+          <BlurView intensity={20} tint="light" style={StyleSheet.absoluteFillObject} className="bg-white/20" />
+        ) : (
+          <View style={StyleSheet.absoluteFillObject} className="bg-[rgba(255,255,255,0.8)]" />
+        )
       )}
       
       {!isSecondary && (
         <View style={StyleSheet.absoluteFillObject} className="border-t border-white/30 rounded-full" />
       )}
       
-      <View className={`px-6 py-4 flex-row items-center justify-center h-full`}>
+      <View style={{ position: "relative", zIndex: 1 }} className={`px-6 py-4 flex-row items-center justify-center`}>
         {icon && icon}
         <Text
           className={`font-sans font-bold text-lg tracking-wide ${icon ? "ml-2" : ""} ${textColor} ${textClassName}`}

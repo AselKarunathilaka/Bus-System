@@ -31,7 +31,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <LiquidBackground>
-      <ScrollView className="flex-1" contentContainerStyle={{ padding: 20, paddingTop: Platform.OS === 'web' ? 20 : 50 }} showsVerticalScrollIndicator={false}>
+      <ScrollView className="flex-1" contentContainerStyle={{ padding: 20, paddingTop: Platform.OS === 'web' ? 20 : 50, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         
         {/* Hero Banner (Glass style) */}
         <GlassCard className="mb-4">

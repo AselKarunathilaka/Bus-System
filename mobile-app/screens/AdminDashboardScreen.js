@@ -411,7 +411,7 @@ const AdminDashboardScreen = ({ navigation }) => {
     <LiquidBackground>
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ padding: 16, paddingTop: Platform.OS === 'web' ? 16 : 50 }}
+        contentContainerStyle={{ padding: 16, paddingTop: Platform.OS === 'web' ? 16 : 50, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#ffffff" />

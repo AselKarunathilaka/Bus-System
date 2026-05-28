@@ -105,16 +105,18 @@ const RegisterScreen = ({ navigation }) => {
 
   return (
     <LiquidBackground>
-      <KeyboardAvoidingView
-        className="flex-1"
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={90}
-      >
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
+      {Platform.OS === "ios" ? (
+        <KeyboardAvoidingView
+          style={{ flex: 1 }}
+          behavior="padding"
+          keyboardVerticalOffset={90}
         >
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
           <GlassCard className="mb-6 items-center">
             <View className="bg-[rgba(255,255,255,0.4)] px-3 py-1.5 rounded-full border border-[rgba(255,255,255,0.5)] mb-3">
               <Text className="text-primary font-sans text-[10px] font-bold tracking-widest uppercase">QuickBus Portal</Text>
@@ -183,8 +185,85 @@ const RegisterScreen = ({ navigation }) => {
           </GlassCard>
 
           <View className="h-[30px]" />
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <ScrollView
+            style={{ flex: 1 }}
+            contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
+            <GlassCard className="mb-6 items-center">
+              <View className="bg-[rgba(255,255,255,0.4)] px-3 py-1.5 rounded-full border border-[rgba(255,255,255,0.5)] mb-3">
+                <Text className="text-primary font-sans text-[10px] font-bold tracking-widest uppercase">QuickBus Portal</Text>
+              </View>
+              <Text className="text-3xl font-sans font-extrabold text-textDark mb-1 text-center tracking-tight">
+                Create Account
+              </Text>
+              <Text className="text-sm font-sans text-textMuted text-center leading-relaxed">
+                Register to browse highway routes, view stops, and use the QuickBus system.
+              </Text>
+            </GlassCard>
+
+            <GlassCard className="mb-6 p-4">
+              <Text className="text-lg font-sans font-bold text-textDark mb-6 text-center tracking-tight">
+                Get Started
+              </Text>
+
+              <GlassInput
+                icon="person"
+                placeholder="Full Name"
+                value={fullName}
+                onChangeText={(text) => setFullName(sanitizeNameField(text))}
+                returnKeyType="next"
+              />
+
+              <GlassInput
+                icon="mail"
+                placeholder="Email Address"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                returnKeyType="next"
+              />
+
+              <GlassInput
+                icon="call"
+                placeholder="Phone Number"
+                value={phone}
+                onChangeText={setPhone}
+                keyboardType="phone-pad"
+                returnKeyType="next"
+              />
+
+              <GlassInput
+                icon="lock-closed"
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                returnKeyType="done"
+              />
+
+              <GlassButton
+                title={loading ? "Registering..." : "Create Account"}
+                onPress={handleRegister}
+                className="mt-2 mb-6"
+                variant="primary"
+              />
+
+              <GlassButton
+                title="Already have an account? Login"
+                onPress={() => navigation.navigate("Login")}
+                variant="secondary"
+              />
+            </GlassCard>
+          </ScrollView>
+        </View>
+      )}
     </LiquidBackground>
   );
 };
