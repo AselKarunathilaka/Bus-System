@@ -209,10 +209,6 @@ const HomeScreen = ({ navigation }) => {
                 <Ionicons name="map" size={24} color="#0ea5e9" />
                 <Text className="text-white font-bold mt-2">Routes</Text>
               </TouchableOpacity>
-              <TouchableOpacity className="w-[48%] bg-white/10 border border-white/30 rounded-2xl p-4 mb-3 items-center shadow-sm" onPress={() => navigation.navigate("ContactUs")} activeOpacity={0.7}>
-                <Ionicons name="help-buoy" size={24} color="#3b82f6" />
-                <Text className="text-white font-bold mt-2">Support</Text>
-              </TouchableOpacity>
             </View>
 
             <GlassCard className="mb-4 border-[1.5px] border-white/20 bg-[rgba(255,255,255,0.05)] p-5 items-center justify-center">
