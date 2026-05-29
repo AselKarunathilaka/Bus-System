@@ -62,6 +62,16 @@ The main objectives of the QuickBus system are:
 
 ---
 
+## ✨ New Features (Recent Updates)
+
+- **Modern Glassmorphism UI:** A completely redesigned, highly responsive mobile interface using advanced glassmorphism techniques, dynamic background animations, and polished micro-interactions.
+- **Cross-Platform Optimization:** Fully robust layout handling ensuring flawless rendering across both Web browsers and native Android (Expo Go) environments, circumventing native `BlurView` and `KeyboardAvoidingView` Android bugs.
+- **Advanced Admin Dashboard:** Real-time system analytics, fleet status breakdowns, and dynamic charting for 7-day booking trends.
+- **PDF Report Generation:** Administrators can now instantly export comprehensive lifetime or date-filtered analytic reports directly from the mobile app.
+- **Archival Date Filtering:** Dynamic date-range filtering for system metrics, bookings, and revenue tracking.
+
+---
+
 ## 🛠️ Technologies Used
 
 ### 📱 Frontend
@@ -106,22 +116,13 @@ Module: Login, Route Management and Stop Management
 Member 2: IT21009372 - Biyanwila B.D.K.P.S.  
 Module: Bus Management
 
-Member 3: IT21274220 - Wickramasinghe B.G.A.  
-Module: Bus Schedule Management
-
-Member 4: IT20666774 - Gayashan K.L.  
-Module: Booking Management
-
-Member 5: IT21335778 - Wijesinghe M.L.P.  
-Module: Admin Panel and Report Generation
-
 ---
 
 ## 🧩 System Modules
 
 ### 🔐 1. Login, Route Management and Stop Management
 
-This module is handled by Member 1.
+This module is handled by Member 1 (Karunathilaka K.W.A.A.S.).
 
 The login section allows users to register and log in to the system securely. It includes password hashing, JWT-based authentication, protected routes, and role-based access control. This ensures that normal users and administrators have different access levels.
 
@@ -150,7 +151,7 @@ Main features:
 
 ### 🚌 2. Bus Management
 
-This module is handled by Member 2.
+This module is handled by Member 2 (Biyanwila B.D.K.P.S.).
 
 The bus management module is responsible for managing all bus-related information in the system. Administrators can add new buses, view existing buses, update bus details, delete bus records, and assign buses to routes.
 
@@ -175,8 +176,6 @@ Main features:
 
 ### 🗓️ 3. Bus Schedule Management
 
-This module is handled by Member 3.
-
 The bus schedule management module is responsible for managing bus travel schedules. It connects routes and buses with specific travel dates and departure times.
 
 This module helps passengers find available trips and helps administrators organize bus operations more clearly.
@@ -197,8 +196,6 @@ Main features:
 
 ### 🎫 4. Booking Management
 
-This module is handled by Member 4.
-
 The booking management module allows passengers to reserve seats for available bus schedules. It connects users with schedules and stores booking details such as selected seat number, booking date, total amount, payment status, and booking status.
 
 This module helps reduce manual booking issues and allows passengers to view their booking information easily.
@@ -217,8 +214,6 @@ Main features:
 ---
 
 ### 📊 5. Admin Panel and Report Generation
-
-This module is handled by Member 5.
 
 The admin panel and report generation module provides administrators with a clear overview of the system. It helps administrators monitor users, routes, stops, buses, schedules, and bookings from one place.
 
@@ -247,12 +242,11 @@ The currently implemented source code mainly includes the following completed mo
 - Route Management
 - Stop Management
 - Bus Management
-
-The following modules are part of the full system plan and are handled by the remaining members:
-
+- Admin Panel and Report Generation (Dashboard & PDF Export)
 - Bus Schedule Management
 - Booking Management
-- Admin Panel and Report Generation
+
+The system is now fully integrated with the modern glassmorphism UI for all the modules mentioned above.
 
 ---
 
