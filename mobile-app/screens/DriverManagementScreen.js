@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { View, Text, FlatList, TouchableOpacity, Alert, Platform, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppBadge from "../components/ui/AppBadge";
+import AppButton from "../components/ui/AppButton";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
 
@@ -33,7 +35,7 @@ const DriverManagementScreen = ({ navigation }) => {
             phone: bus.busContactNumber || "N/A",
             status: bus.status || "Unknown",
             busName: bus.busName,
-            rating: "N/A" // Real rating not in schema yet
+            rating: "N/A"
           });
         }
         
@@ -67,18 +69,6 @@ const DriverManagementScreen = ({ navigation }) => {
     return unsubscribe;
   }, [navigation, fetchCrew]);
 
-  const getStatusColor = (status) => {
-    switch(status?.toLowerCase()) {
-      case "available": return "#10b981"; // Emerald
-      case "active": return "#10b981";
-      case "on trip": return "#3b82f6"; // Blue
-      case "maintenance": return "#f59e0b"; // Amber
-      case "inactive": return "#64748b"; // Slate
-      case "suspended": return "#ef4444"; // Red
-      default: return "#94a3b8";
-    }
-  };
-
   const handleEdit = (item) => {
     navigation.navigate("BusForm", { busData: item.busData });
   };
@@ -93,79 +83,73 @@ const DriverManagementScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <GlassCard className="mb-4">
-      <View className="flex-row justify-between items-start mb-3">
+    <AppCard className="mb-4">
+      <View className="flex-row justify-between items-start mb-4">
         <View className="flex-row items-center flex-1">
-          <View className="bg-[rgba(255,255,255,0.1)] w-12 h-12 rounded-full items-center justify-center mr-3 border border-white/20">
-            <Ionicons name={item.role === "Driver" ? "car-sport" : "ticket"} size={20} color="#fff" />
+          <View className="bg-primary/10 w-12 h-12 rounded-full items-center justify-center mr-3">
+            <Ionicons name={item.role === "Driver" ? "car-sport" : "ticket"} size={20} color="#2563EB" />
           </View>
           <View>
-            <Text className="text-white font-bold text-lg tracking-tight">{item.name}</Text>
+            <Text className="text-textDark font-bold text-lg tracking-tight">{item.name}</Text>
             <View className="flex-row items-center mt-1">
-              <Text className="text-teal-400 text-xs font-bold mr-2 uppercase tracking-widest">{item.role}</Text>
-              <Ionicons name="bus" size={12} color="#94a3b8" />
-              <Text className="text-slate-300 text-xs font-bold ml-1">{item.busName}</Text>
+              <Text className="text-teal-600 text-xs font-bold mr-2 uppercase tracking-widest">{item.role}</Text>
+              <Ionicons name="bus" size={12} color="#64748B" />
+              <Text className="text-textMuted text-xs font-bold ml-1">{item.busName}</Text>
             </View>
           </View>
         </View>
-        <View 
-          style={{ backgroundColor: getStatusColor(item.status) + '20', borderColor: getStatusColor(item.status) + '40' }} 
-          className="px-3 py-1 rounded-full border"
-        >
-          <Text style={{ color: getStatusColor(item.status) }} className="text-[10px] font-bold uppercase tracking-widest">{item.status}</Text>
-        </View>
+        <AppBadge status={item.status} />
       </View>
 
-      <View className="flex-row justify-between border-t border-white/10 pt-3 mt-1">
+      <View className="flex-row justify-between border-t border-border pt-4">
         <View>
-          <Text className="text-slate-400 text-[10px] uppercase font-bold tracking-widest mb-1">{item.role === "Driver" ? "License/NIC" : "ID No"}</Text>
-          <Text className="text-slate-200 font-bold">{item.license}</Text>
+          <Text className="text-textMuted text-[10px] uppercase font-bold tracking-widest mb-1">{item.role === "Driver" ? "License/NIC" : "ID No"}</Text>
+          <Text className="text-textDark font-bold text-sm">{item.license}</Text>
         </View>
         <View>
-          <Text className="text-slate-400 text-[10px] uppercase font-bold tracking-widest mb-1">Contact</Text>
-          <Text className="text-slate-200 font-bold">{item.phone}</Text>
+          <Text className="text-textMuted text-[10px] uppercase font-bold tracking-widest mb-1">Contact</Text>
+          <Text className="text-textDark font-bold text-sm">{item.phone}</Text>
         </View>
         <View className="flex-row gap-2 justify-center">
-          <TouchableOpacity onPress={() => handleEdit(item)} className="bg-amber-500/20 p-2 rounded-lg border border-amber-500/30">
-            <Ionicons name="pencil" size={16} color="#fbbf24" />
+          <TouchableOpacity onPress={() => handleEdit(item)} className="bg-amber-50 p-2 rounded-lg border border-amber-200 ml-2">
+            <Ionicons name="pencil" size={16} color="#D97706" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleDelete} className="bg-red-500/20 p-2 rounded-lg border border-red-500/30">
-            <Ionicons name="trash" size={16} color="#ef4444" />
+          <TouchableOpacity onPress={handleDelete} className="bg-danger-bg p-2 rounded-lg border border-danger/20 ml-2">
+            <Ionicons name="trash" size={16} color="#EF4444" />
           </TouchableOpacity>
         </View>
       </View>
-    </GlassCard>
+    </AppCard>
   );
 
   return (
-    <LiquidBackground>
-      <View className="flex-1 p-5">
-        <View className="flex-row items-center justify-between mb-5">
+    <AppLayout useSafeArea>
+      <View className="flex-1 p-6 max-w-4xl w-full self-center">
+        <View className="flex-row items-center justify-between mb-8">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+              <Ionicons name="arrow-back" size={24} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white tracking-tight flex-1">Crew Management</Text>
+            <Text className="text-2xl font-extrabold text-textDark tracking-tight flex-1">Crew Management</Text>
           </View>
-          <TouchableOpacity 
-            className="bg-primary/20 p-2 px-4 rounded-full border border-primary/30 flex-row items-center"
+          <AppButton
+            title="New"
+            icon={<Ionicons name="add" size={18} color="white" />}
             onPress={() => navigation.navigate("BusForm")}
-          >
-            <Ionicons name="add" size={18} color="#60a5fa" />
-            <Text className="text-blue-300 font-bold text-xs ml-1">New</Text>
-          </TouchableOpacity>
+            className="py-2 px-4"
+          />
         </View>
 
         {loading ? (
           <View className="flex-1 justify-center items-center">
-            <ActivityIndicator size="large" color="#2F80ED" />
-            <Text className="mt-3 text-white font-semibold">Loading crew data...</Text>
+            <ActivityIndicator size="large" color="#2563EB" />
+            <Text className="mt-4 text-textMuted font-medium">Loading crew data...</Text>
           </View>
         ) : crew.length === 0 ? (
-          <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="people-outline" size={64} color="#2F80ED" />
-            <Text className="text-white mt-4 font-bold text-lg">No Crew Found</Text>
-            <Text className="text-slate-300 text-sm mt-1 text-center">Add a bus to register new crew members.</Text>
+          <View className="items-center justify-center mt-20 opacity-80">
+            <Ionicons name="people-outline" size={64} color="#94A3B8" />
+            <Text className="text-textDark mt-4 font-bold text-lg">No Crew Found</Text>
+            <Text className="text-textMuted text-sm mt-1 text-center">Add a bus to register new crew members.</Text>
           </View>
         ) : (
           <FlatList
@@ -177,7 +161,7 @@ const DriverManagementScreen = ({ navigation }) => {
           />
         )}
       </View>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   ScrollView,
-  StyleSheet,
   ActivityIndicator,
   RefreshControl,
   TouchableOpacity,
@@ -16,9 +15,9 @@ import api from "../services/api";
 import { Ionicons } from "@expo/vector-icons";
 import * as Print from "expo-print";
 import * as Sharing from "expo-sharing";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
 import { getGreeting } from "../utils/timeUtils";
 
 const AdminDashboardScreen = ({ navigation }) => {
@@ -398,109 +397,89 @@ const AdminDashboardScreen = ({ navigation }) => {
 
   if (loading) {
     return (
-      <LiquidBackground>
+      <AppLayout>
         <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#2F80ED" />
+          <ActivityIndicator size="large" color="#2563EB" />
           <Text className="mt-4 text-textMuted font-bold text-base">Compiling Analytics...</Text>
         </View>
-      </LiquidBackground>
+      </AppLayout>
     );
   }
 
   return (
-    <LiquidBackground>
+    <AppLayout useSafeArea>
       <ScrollView
         className="flex-1"
-        contentContainerStyle={{ padding: 16, paddingTop: Platform.OS === 'web' ? 16 : 50, paddingBottom: 100 }}
+        contentContainerStyle={{ padding: 24, paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#ffffff" />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#2563EB" />
         }
       >
-        <View className="mb-6">
+        <View className="mb-8">
           <View className="flex-row justify-between items-center mb-4">
             <View className="flex-row items-center flex-1">
-              <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
-                <Ionicons name="arrow-back" size={24} color="#3b82f6" />
+              <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 p-2">
+                <Ionicons name="arrow-back" size={24} color="#64748B" />
               </TouchableOpacity>
               <View>
-                <Text className="text-2xl font-extrabold text-white tracking-tight">Admin Overview</Text>
-                <Text className="text-xs text-slate-300 mt-1 font-semibold">{getGreeting(user?.fullName)}</Text>
+                <Text className="text-2xl font-extrabold text-textDark tracking-tight">Analytics Overview</Text>
+                <Text className="text-xs text-textMuted mt-1 font-semibold">{getGreeting(user?.fullName)}</Text>
               </View>
             </View>
-            <TouchableOpacity className="bg-[rgba(255,255,255,0.2)] border border-[rgba(255,255,255,0.3)] flex-row items-center px-4 py-2 rounded-full" onPress={generatePDFReport}>
-              <Ionicons name="document-text" size={18} color="#60a5fa" />
-              <Text className="text-blue-300 font-bold ml-2">Export</Text>
-            </TouchableOpacity>
+            <AppButton 
+              title="Export" 
+              icon={<Ionicons name="document-text" size={16} color="#2563EB" />} 
+              variant="secondary"
+              className="py-2 px-4 shadow-sm"
+              textClassName="text-primary"
+              onPress={generatePDFReport} 
+            />
           </View>
         </View>
 
-        <Text className="text-lg font-sans font-bold text-white mb-3 mt-2 tracking-tight">Quick Actions</Text>
+        <Text className="text-lg font-sans font-bold text-textDark mb-4 tracking-tight">Quick Actions</Text>
         <View className="flex-row flex-wrap justify-between mb-4">
-          <View className="w-[31%] mb-3">
-            <GlassButton
-              title="Routes"
-              className="flex-col h-24 border border-blue-400/30"
-              style={{ backgroundColor: "#3b82f6" }}
-              textClassName="mt-2 text-sm text-[#FFFFFF] font-bold shadow-sm"
-              icon={<View className="bg-white/20 p-2 rounded-full"><Ionicons name="map" size={20} color="#FFFFFF" /></View>}
-              onPress={() => navigation.navigate("Routes")}
-            />
-          </View>
-          <View className="w-[31%] mb-3">
-            <GlassButton
-              title="Buses"
-              className="flex-col h-24 border border-purple-400/30"
-              style={{ backgroundColor: "#8b5cf6" }}
-              textClassName="mt-2 text-sm text-[#FFFFFF] font-bold shadow-sm"
-              icon={<View className="bg-white/20 p-2 rounded-full"><Ionicons name="bus" size={20} color="#FFFFFF" /></View>}
-              onPress={() => navigation.navigate("Buses")}
-            />
-          </View>
-          <View className="w-[31%] mb-3">
-            <GlassButton
-              title="Schedules"
-              className="flex-col h-24 border border-amber-400/30"
-              style={{ backgroundColor: "#f59e0b" }}
-              textClassName="mt-1 text-xs text-[#FFFFFF] font-bold shadow-sm"
-              icon={<View className="bg-white/20 p-1.5 rounded-full"><Ionicons name="calendar" size={18} color="#FFFFFF" /></View>}
-              onPress={() => navigation.navigate("ScheduleList")}
-            />
-          </View>
-          <View className="w-[31%] mb-3">
-            <GlassButton
-              title="Bookings"
-              className="flex-col h-24 border border-emerald-400/30"
-              style={{ backgroundColor: "#10b981" }}
-              textClassName="mt-2 text-sm text-[#FFFFFF] font-bold shadow-sm"
-              icon={<View className="bg-white/20 p-2 rounded-full"><Ionicons name="receipt" size={20} color="#FFFFFF" /></View>}
-              onPress={() => navigation.navigate("BookingsTab")}
-            />
-          </View>
-          <View className="w-[31%] mb-3">
-            <GlassButton
-              title="Book Ticket"
-              className="flex-col h-24 border border-sky-400/30"
-              style={{ backgroundColor: "#0ea5e9" }}
-              textClassName="mt-2 text-[11px] text-[#FFFFFF] font-bold text-center shadow-sm"
-              icon={<View className="bg-white/20 p-2 rounded-full"><Ionicons name="ticket" size={20} color="#FFFFFF" /></View>}
-              onPress={() => navigation.navigate("UserScheduleList")}
-            />
-          </View>
-          <View className="w-[31%] mb-3">
-            <GlassButton
-              title="Manage Crew"
-              className="flex-col h-24 border border-teal-400/30"
-              style={{ backgroundColor: "#14b8a6" }}
-              textClassName="mt-2 text-[11px] text-[#FFFFFF] font-bold text-center shadow-sm"
-              icon={<View className="bg-white/20 p-2 rounded-full"><Ionicons name="people" size={20} color="#FFFFFF" /></View>}
-              onPress={() => navigation.navigate("DriverManagement")}
-            />
-          </View>
+          <TouchableOpacity className="w-[31%] mb-4" onPress={() => navigation.navigate("Routes")} activeOpacity={0.7}>
+            <AppCard className="h-28 justify-center items-center">
+              <Ionicons name="map" size={24} color="#2563EB" className="mb-2" />
+              <Text className="text-xs font-sans text-textDark font-semibold">Routes</Text>
+            </AppCard>
+          </TouchableOpacity>
+          <TouchableOpacity className="w-[31%] mb-4" onPress={() => navigation.navigate("Buses")} activeOpacity={0.7}>
+            <AppCard className="h-28 justify-center items-center">
+              <Ionicons name="bus" size={24} color="#4F46E5" className="mb-2" />
+              <Text className="text-xs font-sans text-textDark font-semibold">Buses</Text>
+            </AppCard>
+          </TouchableOpacity>
+          <TouchableOpacity className="w-[31%] mb-4" onPress={() => navigation.navigate("ScheduleList")} activeOpacity={0.7}>
+            <AppCard className="h-28 justify-center items-center">
+              <Ionicons name="calendar" size={24} color="#D97706" className="mb-2" />
+              <Text className="text-xs font-sans text-textDark font-semibold">Schedules</Text>
+            </AppCard>
+          </TouchableOpacity>
+          <TouchableOpacity className="w-[31%] mb-4" onPress={() => navigation.navigate("BookingsTab")} activeOpacity={0.7}>
+            <AppCard className="h-28 justify-center items-center">
+              <Ionicons name="receipt" size={24} color="#059669" className="mb-2" />
+              <Text className="text-xs font-sans text-textDark font-semibold">Bookings</Text>
+            </AppCard>
+          </TouchableOpacity>
+          <TouchableOpacity className="w-[31%] mb-4" onPress={() => navigation.navigate("UserScheduleList")} activeOpacity={0.7}>
+            <AppCard className="h-28 justify-center items-center bg-slate-50 border-slate-200 border-dashed border-2">
+              <Ionicons name="add-circle-outline" size={24} color="#64748B" className="mb-2" />
+              <Text className="text-xs font-sans text-textMuted font-semibold">Book Ticket</Text>
+            </AppCard>
+          </TouchableOpacity>
+          <TouchableOpacity className="w-[31%] mb-4" onPress={() => navigation.navigate("DriverManagement")} activeOpacity={0.7}>
+            <AppCard className="h-28 justify-center items-center">
+              <Ionicons name="people" size={24} color="#0891B2" className="mb-2" />
+              <Text className="text-xs font-sans text-textDark font-semibold text-center">Manage Crew</Text>
+            </AppCard>
+          </TouchableOpacity>
         </View>
 
-        <GlassCard className="mb-4">
-          <Text className="text-sm font-sans font-bold text-textDark mb-2">Archival Date Filter</Text>
+        <AppCard className="mb-6">
+          <Text className="text-sm font-sans font-bold text-textDark mb-3">Archival Date Filter</Text>
           <View className="flex-row justify-between items-center mb-1">
             <View className="w-[48%]">
               <Text className="text-[10px] text-textMuted mb-1 font-semibold uppercase">Start Date</Text>
@@ -508,11 +487,11 @@ const AdminDashboardScreen = ({ navigation }) => {
                 <input 
                   type="date" 
                   style={{
-                    border: "1px solid rgba(255,255,255,0.55)",
+                    border: "1px solid #E2E8F0",
                     padding: "10px",
                     borderRadius: "8px",
-                    backgroundColor: "rgba(255,255,255,0.35)",
-                    color: "#102A43",
+                    backgroundColor: "#F8FAFC",
+                    color: "#0F172A",
                     width: "100%",
                     boxSizing: "border-box",
                     fontFamily: "inherit",
@@ -523,9 +502,9 @@ const AdminDashboardScreen = ({ navigation }) => {
                 />
               ) : (
                 <TextInput
-                  className="border border-[rgba(255,255,255,0.55)] p-2 rounded-lg bg-[rgba(255,255,255,0.35)] text-textDark text-sm font-sans"
+                  className="border border-border p-3 rounded-xl bg-background text-textDark text-sm font-sans"
                   placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#64748B"
+                  placeholderTextColor="#94A3B8"
                   value={startDate}
                   onChangeText={setStartDate}
                 />
@@ -537,11 +516,11 @@ const AdminDashboardScreen = ({ navigation }) => {
                 <input 
                   type="date" 
                   style={{
-                    border: "1px solid rgba(255,255,255,0.55)",
+                    border: "1px solid #E2E8F0",
                     padding: "10px",
                     borderRadius: "8px",
-                    backgroundColor: "rgba(255,255,255,0.35)",
-                    color: "#102A43",
+                    backgroundColor: "#F8FAFC",
+                    color: "#0F172A",
                     width: "100%",
                     boxSizing: "border-box",
                     fontFamily: "inherit",
@@ -552,9 +531,9 @@ const AdminDashboardScreen = ({ navigation }) => {
                 />
               ) : (
                 <TextInput
-                  className="border border-[rgba(255,255,255,0.55)] p-2 rounded-lg bg-[rgba(255,255,255,0.35)] text-textDark text-sm font-sans"
+                  className="border border-border p-3 rounded-xl bg-background text-textDark text-sm font-sans"
                   placeholder="YYYY-MM-DD"
-                  placeholderTextColor="#64748B"
+                  placeholderTextColor="#94A3B8"
                   value={endDate}
                   onChangeText={setEndDate}
                 />
@@ -562,90 +541,92 @@ const AdminDashboardScreen = ({ navigation }) => {
             </View>
           </View>
           {(startDate || endDate) && (
-            <TouchableOpacity className="items-center mt-2" onPress={() => { setStartDate(""); setEndDate(""); }}>
+            <TouchableOpacity className="items-center mt-4" onPress={() => { setStartDate(""); setEndDate(""); }}>
               <Text className="text-primary font-bold text-xs">Clear Filters (Show All Time)</Text>
             </TouchableOpacity>
           )}
-        </GlassCard>
+        </AppCard>
 
-        <Text className="text-lg font-sans font-bold text-white mb-3 tracking-tight">Performance Metrics</Text>
-        <View className="flex-row flex-wrap justify-between mb-2">
-          <View className="w-[48%] mb-3">
-            <GlassCard className="border-[2px] border-[#059669] bg-green-50 p-5">
+        <Text className="text-lg font-sans font-bold text-textDark mb-4 tracking-tight">Performance Metrics</Text>
+        <View className="flex-row flex-wrap justify-between mb-4">
+          <View className="w-[48%] mb-4">
+            <AppCard className="border-l-4 border-l-emerald-500 bg-white">
               <View className="flex-row items-center mb-2">
-                <Ionicons name="wallet" size={18} color="#059669" />
-                <Text className="text-[#059669] text-[11px] font-extrabold uppercase tracking-widest ml-2">Revenue</Text>
+                <Ionicons name="wallet" size={16} color="#10B981" />
+                <Text className="text-textMuted text-[10px] font-extrabold uppercase tracking-widest ml-2">Revenue</Text>
               </View>
-              <Text className="text-[#0F172A] text-2xl font-sans font-black">
-                <Text className="text-sm font-bold text-[#059669]">LKR</Text> {metrics.totalRevenue.toLocaleString()}
+              <Text className="text-textDark text-2xl font-sans font-black">
+                <Text className="text-sm font-bold text-emerald-500 mr-1">LKR</Text>{metrics.totalRevenue.toLocaleString()}
               </Text>
-            </GlassCard>
+            </AppCard>
           </View>
 
-          <View className="w-[48%] mb-3">
-            <GlassCard className="border-[2px] border-[#2563EB] bg-blue-50 p-5">
+          <View className="w-[48%] mb-4">
+            <AppCard className="border-l-4 border-l-blue-500 bg-white">
               <View className="flex-row items-center mb-2">
-                <Ionicons name="ticket" size={18} color="#2563EB" />
-                <Text className="text-[#2563EB] text-[11px] font-extrabold uppercase tracking-widest ml-2">Bookings</Text>
+                <Ionicons name="ticket" size={16} color="#3B82F6" />
+                <Text className="text-textMuted text-[10px] font-extrabold uppercase tracking-widest ml-2">Bookings</Text>
               </View>
-              <Text className="text-[#0F172A] text-2xl font-sans font-black">{metrics.totalBookings}</Text>
-            </GlassCard>
+              <Text className="text-textDark text-2xl font-sans font-black">{metrics.totalBookings}</Text>
+            </AppCard>
           </View>
 
-          <View className="w-[48%] mb-3">
-            <GlassCard className="border-[2px] border-[#0891B2] bg-cyan-50 p-5">
+          <View className="w-[48%] mb-4">
+            <AppCard className="border-l-4 border-l-cyan-500 bg-white">
               <View className="flex-row items-center mb-2">
-                <Ionicons name="map" size={18} color="#0891B2" />
-                <Text className="text-[#0891B2] text-[11px] font-extrabold uppercase tracking-widest ml-2">Routes</Text>
+                <Ionicons name="map" size={16} color="#06B6D4" />
+                <Text className="text-textMuted text-[10px] font-extrabold uppercase tracking-widest ml-2">Routes</Text>
               </View>
-              <Text className="text-[#0F172A] text-2xl font-sans font-black">{metrics.activeRoutes}</Text>
-            </GlassCard>
+              <Text className="text-textDark text-2xl font-sans font-black">{metrics.activeRoutes}</Text>
+            </AppCard>
           </View>
 
-          <View className="w-[48%] mb-3">
-            <GlassCard className="border-[2px] border-[#9333EA] bg-purple-50 p-5">
+          <View className="w-[48%] mb-4">
+            <AppCard className="border-l-4 border-l-purple-500 bg-white">
               <View className="flex-row items-center mb-2">
-                <Ionicons name="bus" size={18} color="#9333EA" />
-                <Text className="text-[#9333EA] text-[11px] font-extrabold uppercase tracking-widest ml-2">Buses</Text>
+                <Ionicons name="bus" size={16} color="#A855F7" />
+                <Text className="text-textMuted text-[10px] font-extrabold uppercase tracking-widest ml-2">Buses</Text>
               </View>
-              <Text className="text-[#0F172A] text-2xl font-sans font-black">{metrics.totalBuses}</Text>
-            </GlassCard>
+              <Text className="text-textDark text-2xl font-sans font-black">{metrics.totalBuses}</Text>
+            </AppCard>
           </View>
         </View>
 
-        <GlassCard className="mb-4 p-4">
-          <Text className="text-sm font-sans font-bold text-textDark mb-3 tracking-tight">Booking Volume (7 Days Ending in Filter)</Text>
+        <AppCard className="mb-6 p-5">
+          <Text className="text-sm font-sans font-bold text-textDark mb-4 tracking-tight">Booking Volume (7 Days Ending in Filter)</Text>
           <View className="flex-row justify-between items-end h-32 pt-2">
-                {chartData.map((dataPoint, index) => (
+            {chartData.map((dataPoint, index) => (
               <View key={index} className="items-center flex-1">
                 <Text className="text-[10px] font-bold text-primary mb-1 h-3">{dataPoint.count > 0 ? dataPoint.count : ""}</Text>
-                <View className="w-4 h-20 bg-[rgba(255,255,255,0.5)] rounded-full justify-end overflow-hidden border border-white/50">
+                <View className="w-6 h-20 bg-slate-100 rounded-t-sm justify-end overflow-hidden border border-slate-200">
                   <View
-                    className="bg-gradient-to-t from-[#2563EB] to-[#06B6D4] w-full rounded-full bg-[#06B6D4]"
+                    className="bg-primary w-full"
                     style={{ height: `${dataPoint.heightPercentage}%` }}
                   />
                 </View>
-                <Text className="text-[10px] text-textMuted font-sans font-semibold mt-1">{dataPoint.dayLabel}</Text>
+                <Text className="text-[10px] text-textMuted font-sans font-semibold mt-2">{dataPoint.dayLabel}</Text>
               </View>
             ))}
           </View>
-        </GlassCard>
+        </AppCard>
 
-        <GlassCard className="mb-6 p-4">
-          <Text className="text-sm font-sans font-bold text-textDark mb-2 tracking-tight">Fleet Status Breakdown</Text>
+        <AppCard className="mb-8 p-5">
+          <Text className="text-sm font-sans font-bold text-textDark mb-3 tracking-tight">Fleet Status Breakdown</Text>
           <View className="mt-1">
-            <View>
+            <View className="flex-row justify-between">
               <View className="flex-row items-center mb-2">
                 <View className="w-3 h-3 rounded-full mr-2 bg-emerald-500" />
-                <Text className="text-sm font-semibold text-slate-200">Available ({metrics.availableBuses})</Text>
+                <Text className="text-sm font-semibold text-textDark">Available</Text>
+                <Text className="text-sm font-bold text-textMuted ml-2">{metrics.availableBuses}</Text>
               </View>
               <View className="flex-row items-center mb-2">
                 <View className="w-3 h-3 rounded-full mr-2 bg-amber-500" />
-                <Text className="text-sm font-semibold text-slate-200">Maintenance ({metrics.maintenanceBuses})</Text>
+                <Text className="text-sm font-semibold text-textDark">Maintenance</Text>
+                <Text className="text-sm font-bold text-textMuted ml-2">{metrics.maintenanceBuses}</Text>
               </View>
             </View>
 
-            <View className="flex-row h-6 rounded-full overflow-hidden bg-[rgba(255,255,255,0.5)] mt-2">
+            <View className="flex-row h-3 rounded-full overflow-hidden bg-slate-100 mt-3">
               <View
                 className="bg-emerald-500"
                 style={{ flex: metrics.availableBuses || 1 }}
@@ -656,33 +637,35 @@ const AdminDashboardScreen = ({ navigation }) => {
               />
             </View>
           </View>
-        </GlassCard>
+        </AppCard>
 
         {recentBookings.length > 0 && (
-          <GlassCard className="mb-10 p-4 border-[1.5px] border-white/60 bg-white/95">
-            <Text className="text-base font-sans font-extrabold text-[#0F172A] mb-4 tracking-tight">Recent Bookings</Text>
-            {recentBookings.map((bk, index) => (
-              <View key={bk._id || index} className={`flex-row justify-between items-center py-3 ${index !== recentBookings.length - 1 ? 'border-b border-[#E2E8F0]' : ''}`}>
-                <View className="flex-1 pr-2">
-                  <Text className="text-[#0F172A] font-bold text-sm" numberOfLines={1}>{bk.schedule?.route?.routeName || "Unknown Route"}</Text>
-                  <Text className="text-[#64748B] text-xs font-semibold mt-0.5">{new Date(bk.createdAt).toLocaleDateString()} • {bk.seats?.length || 0} Seats</Text>
-                </View>
-                <View className="items-end">
-                  <Text className="text-[#059669] font-black text-sm">LKR {bk.totalPrice}</Text>
-                  <View className={`px-2 py-0.5 mt-1 rounded-full ${bk.status === 'Confirmed' ? 'bg-green-100' : 'bg-amber-100'}`}>
-                    <Text className={`text-[10px] font-extrabold uppercase ${bk.status === 'Confirmed' ? 'text-green-700' : 'text-amber-700'}`}>{bk.status}</Text>
+          <AppCard className="mb-10 p-0 overflow-hidden">
+            <View className="p-5 border-b border-border bg-slate-50">
+              <Text className="text-base font-sans font-extrabold text-textDark tracking-tight">Recent Bookings</Text>
+            </View>
+            <View className="p-2">
+              {recentBookings.map((bk, index) => (
+                <View key={bk._id || index} className={`flex-row justify-between items-center p-3 ${index !== recentBookings.length - 1 ? 'border-b border-border' : ''}`}>
+                  <View className="flex-1 pr-2">
+                    <Text className="text-textDark font-bold text-sm" numberOfLines={1}>{bk.schedule?.route?.routeName || "Unknown Route"}</Text>
+                    <Text className="text-textMuted text-xs font-medium mt-1">{new Date(bk.createdAt).toLocaleDateString()} • {bk.seats?.length || 0} Seats</Text>
+                  </View>
+                  <View className="items-end">
+                    <Text className="text-textDark font-black text-sm">LKR {bk.totalPrice}</Text>
+                    <View className={`px-2 py-1 mt-1.5 rounded-full ${bk.status === 'Confirmed' ? 'bg-success-bg' : 'bg-warning-bg'}`}>
+                      <Text className={`text-[9px] font-extrabold uppercase ${bk.status === 'Confirmed' ? 'text-success-text' : 'text-warning-text'}`}>{bk.status}</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            ))}
-          </GlassCard>
+              ))}
+            </View>
+          </AppCard>
         )}
 
       </ScrollView>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 
 export default AdminDashboardScreen;
-
-// We've moved styles to Tailwind classes!

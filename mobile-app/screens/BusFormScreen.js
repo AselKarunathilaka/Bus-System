@@ -2,10 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   Alert,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   View,
@@ -13,10 +11,10 @@ import {
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
-import GlassInput from "../components/GlassInput";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
+import AppInput from "../components/ui/AppInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const BUS_TYPES = ["Normal", "Semi Luxury", "Luxury", "Super Luxury"];
@@ -183,11 +181,11 @@ const BusFormScreen = ({ route, navigation }) => {
   };
 
   const renderOptionList = (items, selectedValue, onSelect) => (
-    <View className="bg-[rgba(255,255,255,0.4)] rounded-xl border border-[rgba(255,255,255,0.5)] mb-4 overflow-hidden">
+    <View className="bg-white rounded-xl border border-border mb-4 overflow-hidden shadow-sm">
       {items.map((item) => (
         <TouchableOpacity
           key={item}
-          className={`p-4 border-b border-[rgba(255,255,255,0.5)] ${selectedValue === item ? 'bg-[rgba(255,255,255,0.6)]' : ''}`}
+          className={`p-4 border-b border-slate-100 ${selectedValue === item ? 'bg-primary/5' : ''}`}
           onPress={() => onSelect(item)}
         >
           <Text className="text-textDark text-sm font-bold">{item}</Text>
@@ -197,9 +195,9 @@ const BusFormScreen = ({ route, navigation }) => {
   );
 
   const renderRouteOptions = () => (
-    <View className="bg-[rgba(255,255,255,0.4)] rounded-xl border border-[rgba(255,255,255,0.5)] mb-4 overflow-hidden">
+    <View className="bg-white rounded-xl border border-border mb-4 overflow-hidden shadow-sm">
       <TouchableOpacity
-        className={`p-4 border-b border-[rgba(255,255,255,0.5)] ${!assignedRoute ? 'bg-[rgba(255,255,255,0.6)]' : ''}`}
+        className={`p-4 border-b border-slate-100 ${!assignedRoute ? 'bg-primary/5' : ''}`}
         onPress={() => {
           setAssignedRoute("");
           setOpenRoute(false);
@@ -211,7 +209,7 @@ const BusFormScreen = ({ route, navigation }) => {
       {routes.map((item) => (
         <TouchableOpacity
           key={item._id}
-          className={`p-4 border-b border-[rgba(255,255,255,0.5)] ${assignedRoute === item._id ? 'bg-[rgba(255,255,255,0.6)]' : ''}`}
+          className={`p-4 border-b border-slate-100 ${assignedRoute === item._id ? 'bg-primary/5' : ''}`}
           onPress={() => {
             setAssignedRoute(item._id);
             setOpenRoute(false);
@@ -226,7 +224,7 @@ const BusFormScreen = ({ route, navigation }) => {
   );
 
   return (
-    <LiquidBackground>
+    <AppLayout useSafeArea>
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -237,159 +235,167 @@ const BusFormScreen = ({ route, navigation }) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center justify-between mb-6">
-          <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+          <View className="flex-row items-center justify-between mb-8 max-w-2xl w-full self-center">
+            <View className="flex-row items-center flex-1">
+              <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+                <Ionicons name="arrow-back" size={24} color="#64748B" />
+              </TouchableOpacity>
+              <Text className="text-2xl font-extrabold text-textDark tracking-tight">
+                {editingBus ? "Edit Bus" : "Add Bus"}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="p-2">
+              <Ionicons name="home-outline" size={24} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">
-              {editingBus ? "Edit Bus" : "Add Bus"}
-            </Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="home" size={20} color="#2F80ED" />
-          </TouchableOpacity>
-        </View>
 
-          <Text className="text-textMuted text-sm font-semibold mb-6">
-            Add bus details, assign a route, and set the bus status separately.
-          </Text>
+          <View className="max-w-2xl w-full self-center">
+            <Text className="text-textMuted text-sm font-semibold mb-6">
+              Add bus details, assign a route, and set the bus status separately.
+            </Text>
 
-          <GlassCard className="mb-6">
-            <GlassInput
-              icon="bus"
-              placeholder="Bus Name"
-              value={busName}
-              onChangeText={setBusName}
-            />
+            <AppCard className="mb-6">
+              <AppInput
+                icon="bus-outline"
+                placeholder="Bus Name"
+                value={busName}
+                onChangeText={setBusName}
+                containerClassName="mb-4"
+              />
 
-            <GlassInput
-              icon="card"
-              placeholder="License Number"
-              value={licenseNumber}
-              onChangeText={(text) => setLicenseNumber(sanitizeLicense(text))}
-              autoCapitalize="characters"
-            />
+              <AppInput
+                icon="card-outline"
+                placeholder="License Number"
+                value={licenseNumber}
+                onChangeText={(text) => setLicenseNumber(sanitizeLicense(text))}
+                autoCapitalize="characters"
+                containerClassName="mb-4"
+              />
 
-            <GlassInput
-              icon="person"
-              placeholder="Driver Name"
-              value={driverName}
-              onChangeText={(text) => setDriverName(sanitizeTextOnly(text))}
-            />
+              <AppInput
+                icon="person-outline"
+                placeholder="Driver Name"
+                value={driverName}
+                onChangeText={(text) => setDriverName(sanitizeTextOnly(text))}
+                containerClassName="mb-4"
+              />
 
-            <GlassInput
-              icon="id-card"
-              placeholder="Driver NIC"
-              value={driverNIC}
-              onChangeText={(text) => setDriverNIC(sanitizeNIC(text))}
-              autoCapitalize="characters"
-            />
+              <AppInput
+                icon="id-card-outline"
+                placeholder="Driver NIC"
+                value={driverNIC}
+                onChangeText={(text) => setDriverNIC(sanitizeNIC(text))}
+                autoCapitalize="characters"
+                containerClassName="mb-4"
+              />
 
-            <GlassInput
-              icon="person-add"
-              placeholder="Conductor Name"
-              value={conductorName}
-              onChangeText={(text) => setConductorName(sanitizeTextOnly(text))}
-            />
+              <AppInput
+                icon="person-add-outline"
+                placeholder="Conductor Name"
+                value={conductorName}
+                onChangeText={(text) => setConductorName(sanitizeTextOnly(text))}
+                containerClassName="mb-4"
+              />
 
-            <GlassInput
-              icon="id-card-outline"
-              placeholder="Conductor NIC"
-              value={conductorNIC}
-              onChangeText={(text) => setConductorNIC(sanitizeNIC(text))}
-              autoCapitalize="characters"
-            />
+              <AppInput
+                icon="id-card-outline"
+                placeholder="Conductor NIC"
+                value={conductorNIC}
+                onChangeText={(text) => setConductorNIC(sanitizeNIC(text))}
+                autoCapitalize="characters"
+                containerClassName="mb-4"
+              />
 
-            <GlassInput
-              icon="call"
-              placeholder="Bus Contact Number"
-              value={busContactNumber}
-              onChangeText={(text) => setBusContactNumber(sanitizePhone(text))}
-              keyboardType="phone-pad"
-            />
+              <AppInput
+                icon="call-outline"
+                placeholder="Bus Contact Number"
+                value={busContactNumber}
+                onChangeText={(text) => setBusContactNumber(sanitizePhone(text))}
+                keyboardType="phone-pad"
+                containerClassName="mb-4"
+              />
 
-            <GlassInput
-              icon="people"
-              placeholder="Seat Count"
-              value={seatCount}
-              onChangeText={(text) => setSeatCount(sanitizeNumber(text))}
-              keyboardType="numeric"
-            />
+              <AppInput
+                icon="people-outline"
+                placeholder="Seat Count"
+                value={seatCount}
+                onChangeText={(text) => setSeatCount(sanitizeNumber(text))}
+                keyboardType="numeric"
+                containerClassName="mb-4"
+              />
 
-            <Text className="text-primary text-sm font-bold mb-2 mt-2 uppercase">Bus Type</Text>
-            <TouchableOpacity
-              className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl p-4 mb-4 flex-row justify-between items-center"
-              onPress={() => setOpenBusType(!openBusType)}
-            >
-              <Text className="text-textDark text-base font-bold">{busType}</Text>
-              <Ionicons name={openBusType ? "chevron-up" : "chevron-down"} size={20} color="#5C7185" />
-            </TouchableOpacity>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 mt-4 ml-1">Bus Type</Text>
+              <TouchableOpacity
+                className="bg-background border border-border rounded-xl p-4 mb-4 flex-row justify-between items-center"
+                onPress={() => setOpenBusType(!openBusType)}
+              >
+                <Text className="text-textDark text-base font-bold">{busType}</Text>
+                <Ionicons name={openBusType ? "chevron-up" : "chevron-down"} size={20} color="#94A3B8" />
+              </TouchableOpacity>
 
-            {openBusType &&
-              renderOptionList(BUS_TYPES, busType, (value) => {
-                setBusType(value);
-                setOpenBusType(false);
-              })}
+              {openBusType &&
+                renderOptionList(BUS_TYPES, busType, (value) => {
+                  setBusType(value);
+                  setOpenBusType(false);
+                })}
 
-            <Text className="text-primary text-sm font-bold mb-2 mt-2 uppercase">Assign Route</Text>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 mt-4 ml-1">Assign Route</Text>
 
-            {loadingRoutes ? (
-              <View className="bg-[rgba(255,255,255,0.4)] rounded-xl p-4 mb-4 items-center border border-[rgba(255,255,255,0.5)]">
-                <ActivityIndicator color="#2F80ED" />
-                <Text className="mt-2 text-textMuted font-bold">Loading routes...</Text>
-              </View>
-            ) : (
-              <>
-                <TouchableOpacity
-                  className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl p-4 mb-4 flex-row justify-between items-center"
-                  onPress={() => setOpenRoute(!openRoute)}
-                >
-                  <Text className="text-textDark text-base font-bold" numberOfLines={1}>{selectedRouteLabel()}</Text>
-                  <Ionicons name={openRoute ? "chevron-up" : "chevron-down"} size={20} color="#5C7185" />
-                </TouchableOpacity>
+              {loadingRoutes ? (
+                <View className="bg-slate-50 rounded-xl p-4 mb-4 items-center border border-border">
+                  <ActivityIndicator color="#2563EB" />
+                  <Text className="mt-2 text-textMuted font-bold">Loading routes...</Text>
+                </View>
+              ) : (
+                <>
+                  <TouchableOpacity
+                    className="bg-background border border-border rounded-xl p-4 mb-4 flex-row justify-between items-center"
+                    onPress={() => setOpenRoute(!openRoute)}
+                  >
+                    <Text className="text-textDark text-base font-bold" numberOfLines={1}>{selectedRouteLabel()}</Text>
+                    <Ionicons name={openRoute ? "chevron-up" : "chevron-down"} size={20} color="#94A3B8" />
+                  </TouchableOpacity>
 
-                {openRoute && renderRouteOptions()}
-              </>
-            )}
+                  {openRoute && renderRouteOptions()}
+                </>
+              )}
 
-            <Text className="text-primary text-sm font-bold mb-2 mt-2 uppercase">Bus Status</Text>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2 mt-4 ml-1">Bus Status</Text>
 
-            <TouchableOpacity
-              className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl p-4 mb-4 flex-row justify-between items-center"
-              onPress={() => setOpenStatus(!openStatus)}
-            >
-              <Text className="text-textDark text-base font-bold">{status}</Text>
-              <Ionicons name={openStatus ? "chevron-up" : "chevron-down"} size={20} color="#5C7185" />
-            </TouchableOpacity>
+              <TouchableOpacity
+                className="bg-background border border-border rounded-xl p-4 mb-2 flex-row justify-between items-center"
+                onPress={() => setOpenStatus(!openStatus)}
+              >
+                <Text className="text-textDark text-base font-bold">{status}</Text>
+                <Ionicons name={openStatus ? "chevron-up" : "chevron-down"} size={20} color="#94A3B8" />
+              </TouchableOpacity>
 
-            {openStatus &&
-              renderOptionList(BUS_STATUS, status, (value) => {
-                setStatus(value);
-                setOpenStatus(false);
-              })}
-          </GlassCard>
+              {openStatus &&
+                renderOptionList(BUS_STATUS, status, (value) => {
+                  setStatus(value);
+                  setOpenStatus(false);
+                })}
+            </AppCard>
 
-          <View className="mb-10">
-            <GlassButton
-              title={saving ? "Saving..." : editingBus ? "Update Bus" : "Create Bus"}
-              onPress={handleSubmit}
-              className={`mb-4 border-[rgba(255,255,255,0.5)] ${saving ? 'opacity-70' : ''}`}
-              textClassName="text-white font-bold"
-              disabled={saving}
-            />
+            <View className="mb-10 gap-3">
+              <AppButton
+                title={saving ? "Saving..." : editingBus ? "Update Bus" : "Create Bus"}
+                onPress={handleSubmit}
+                disabled={saving}
+                variant="primary"
+              />
 
-            <TouchableOpacity
-              className="bg-[rgba(255,255,255,0.2)] border border-[rgba(255,255,255,0.5)] p-4 rounded-xl items-center"
-              onPress={() => navigation.goBack()}
-              disabled={saving}
-            >
-              <Text className="text-textMuted font-bold text-base">Cancel</Text>
-            </TouchableOpacity>
+              <AppButton
+                title="Cancel"
+                onPress={() => navigation.goBack()}
+                disabled={saving}
+                variant="secondary"
+              />
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 

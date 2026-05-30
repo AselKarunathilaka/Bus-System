@@ -17,18 +17,31 @@ module.exports = {
         extrabold: ["PlusJakartaSans-ExtraBold", "sans-serif"],
       },
       colors: {
-        background: "#EAF6FF",
-        primary: "#2563EB",
-        secondary: "#06B6D4",
-        accent: "#14B8A6",
+        background: "#F8FAFC",
+        surface: "#FFFFFF",
+        primary: {
+          DEFAULT: "#2563EB",
+          light: "#60A5FA",
+          dark: "#1D4ED8",
+        },
+        border: "#E2E8F0",
         textDark: "#0F172A",
         textMuted: "#64748B",
-        glassBorder: "rgba(255, 255, 255, 0.55)",
-        glassSurface: "rgba(255, 255, 255, 0.55)",
-        glassDeep: "rgba(173, 216, 255, 0.22)",
-        success: "rgba(16, 185, 129, 0.4)",
-        warning: "rgba(245, 158, 11, 0.4)",
-        danger: "rgba(239, 68, 68, 0.4)",
+        success: {
+          DEFAULT: "#22C55E",
+          bg: "#DCFCE7",
+          text: "#15803D"
+        },
+        warning: {
+          DEFAULT: "#F59E0B",
+          bg: "#FEF3C7",
+          text: "#B45309"
+        },
+        danger: {
+          DEFAULT: "#EF4444",
+          bg: "#FEE2E2",
+          text: "#B91C1C"
+        },
       },
     },
   },

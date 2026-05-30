@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
 
 const offers = [
   {
@@ -41,47 +41,49 @@ const offers = [
 
 const OffersScreen = ({ navigation }) => {
   return (
-    <LiquidBackground>
-      <View className="flex-1 p-5">
-        <View className="flex-row items-center justify-between mb-5">
+    <AppLayout useSafeArea>
+      <View className="flex-1 self-center w-full max-w-4xl p-6">
+        <View className="flex-row items-center justify-between mb-6">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+              <Ionicons name="arrow-back" size={24} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-white tracking-tight">Offers & Deals</Text>
+            <Text className="text-2xl font-extrabold text-textDark tracking-tight">Offers & Deals</Text>
           </View>
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
-          <Text className="text-slate-300 text-sm mb-6 leading-relaxed">
+          <Text className="text-textMuted font-medium mb-8 leading-relaxed max-w-2xl">
             Apply these exclusive promo codes at checkout to save on your upcoming journeys with QuickBus!
           </Text>
 
-          {offers.map((offer) => (
-            <GlassCard key={offer.id} className="mb-4">
-              <View className="flex-row items-center mb-3 border-b border-white/20 pb-3">
-                <View 
-                  className="w-10 h-10 rounded-full items-center justify-center mr-3 border border-white/30"
-                  style={{ backgroundColor: offer.color + '40' }} // 40 hex is 25% opacity
-                >
-                  <Ionicons name={offer.icon} size={20} color={offer.color} />
+          <View className="flex-row flex-wrap gap-4">
+            {offers.map((offer) => (
+              <AppCard key={offer.id} className="mb-4 flex-1 min-w-[300px]">
+                <View className="flex-row items-center mb-4 border-b border-border pb-4">
+                  <View 
+                    className="w-10 h-10 rounded-full items-center justify-center mr-4"
+                    style={{ backgroundColor: offer.color + '15' }}
+                  >
+                    <Ionicons name={offer.icon} size={20} color={offer.color} />
+                  </View>
+                  <Text className="text-lg font-bold text-textDark flex-1">{offer.title}</Text>
                 </View>
-                <Text className="text-lg font-bold text-white flex-1">{offer.title}</Text>
-              </View>
-              
-              <Text className="text-slate-300 text-sm leading-relaxed mb-4">
-                {offer.description}
-              </Text>
-              
-              <View className="bg-slate-900/50 rounded-xl p-3 flex-row items-center justify-between border border-white/10">
-                <Text className="text-slate-400 text-xs uppercase font-bold tracking-widest">Promo Code</Text>
-                <Text className="text-white font-black text-lg tracking-widest">{offer.code}</Text>
-              </View>
-            </GlassCard>
-          ))}
+                
+                <Text className="text-textMuted text-sm leading-relaxed mb-6">
+                  {offer.description}
+                </Text>
+                
+                <View className="bg-slate-50 rounded-xl p-4 flex-row items-center justify-between border border-border">
+                  <Text className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Promo Code</Text>
+                  <Text className="text-textDark font-black text-base tracking-widest">{offer.code}</Text>
+                </View>
+              </AppCard>
+            ))}
+          </View>
         </ScrollView>
       </View>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 

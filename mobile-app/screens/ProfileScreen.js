@@ -2,18 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   Alert,
-  StyleSheet,
-  Platform,
   View,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
-import GlassInput from "../components/GlassInput";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
+import AppInput from "../components/ui/AppInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const ProfileScreen = ({ navigation }) => {
@@ -50,64 +47,69 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   return (
-    <LiquidBackground>
+    <AppLayout useSafeArea>
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
-        <View className="flex-row items-center justify-between mb-6">
+        <View className="flex-row items-center justify-between mb-8 max-w-md w-full self-center">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
-              <Ionicons name="arrow-back" size={24} color="#3b82f6" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+              <Ionicons name="arrow-back" size={24} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-2xl font-extrabold text-white tracking-tight">My Profile</Text>
+            <Text className="text-2xl font-extrabold text-textDark tracking-tight">My Profile</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
-            <Ionicons name="home" size={20} color="#60a5fa" />
+          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="p-2">
+            <Ionicons name="home-outline" size={24} color="#64748B" />
           </TouchableOpacity>
         </View>
 
-        <GlassCard className="mb-6">
-          <Text className="text-sm font-bold text-slate-300 mb-2 uppercase">Full Name</Text>
-          <GlassInput
-            icon="person"
+        <AppCard className="mb-8 max-w-md w-full self-center">
+          <View className="items-center mb-8 pb-6 border-b border-border">
+            <View className="w-24 h-24 bg-primary/10 rounded-full items-center justify-center mb-4 border border-primary/20">
+              <Text className="text-4xl">👤</Text>
+            </View>
+            <Text className="text-xl font-bold text-textDark">{user?.fullName || "User"}</Text>
+            <Text className="text-sm font-medium text-textMuted mt-1">{user?.email}</Text>
+            <View className="bg-slate-100 px-3 py-1 rounded-full mt-3 border border-slate-200">
+              <Text className="text-xs font-bold text-slate-600 uppercase tracking-widest">{user?.role || "User"}</Text>
+            </View>
+          </View>
+
+          <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Full Name</Text>
+          <AppInput
+            icon="person-outline"
             value={fullName}
             onChangeText={setFullName}
-            placeholderTextColor="#94a3b8"
+            containerClassName="mb-4"
           />
 
-          <Text className="text-sm font-bold text-slate-300 mb-2 uppercase">Email</Text>
-          <GlassInput
-            icon="mail"
+          <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Email</Text>
+          <AppInput
+            icon="mail-outline"
             value={user?.email || ""}
             editable={false}
+            containerClassName="mb-4 opacity-70"
           />
 
-          <Text className="text-sm font-bold text-slate-300 mb-2 uppercase">Phone</Text>
-          <GlassInput
-            icon="call"
+          <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Phone</Text>
+          <AppInput
+            icon="call-outline"
             value={phone}
             onChangeText={setPhone}
             keyboardType="phone-pad"
-            placeholderTextColor="#94a3b8"
+            containerClassName="mb-4"
           />
+        </AppCard>
 
-          <Text className="text-sm font-bold text-slate-300 mb-2 uppercase">Role</Text>
-          <GlassInput
-            icon="shield-checkmark"
-            value={user?.role || ""}
-            editable={false}
+        <View className="max-w-md w-full self-center mb-10">
+          <AppButton
+            title={loading ? "Updating..." : "Update Profile"}
+            onPress={handleUpdate}
+            disabled={loading}
+            variant="primary"
           />
-        </GlassCard>
-
-        <GlassButton
-          title={loading ? "Updating..." : "Update Profile"}
-          onPress={handleUpdate}
-          className="border-[rgba(255,255,255,0.5)] mb-4"
-          textClassName="text-white font-extrabold"
-        />
+        </View>
       </ScrollView>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 
 export default ProfileScreen;
-
-// We've moved styles to Tailwind classes!

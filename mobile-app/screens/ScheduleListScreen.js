@@ -3,7 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
   TouchableOpacity,
   Alert,
   ActivityIndicator,
@@ -11,10 +10,10 @@ import {
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
-import StatusBadge from "../components/StatusBadge";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
+import AppBadge from "../components/ui/AppBadge";
 import { Ionicons } from "@expo/vector-icons";
 
 const ScheduleListScreen = ({ navigation }) => {
@@ -82,67 +81,83 @@ const ScheduleListScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => (
-    <GlassCard className="mb-4 p-4">
-      <View className="flex-row justify-between mb-3">
-        <Text className="text-lg font-bold text-textDark tracking-tight flex-1 pr-3 leading-6">
-          {item.routeId?.startLocation} to {item.routeId?.endLocation}
-        </Text>
-        <StatusBadge status={item.status} />
+    <AppCard className="mb-4">
+      <View className="flex-row justify-between mb-4 border-b border-border pb-4">
+        <View className="flex-1 pr-3">
+          <Text className="text-lg font-bold text-textDark tracking-tight leading-6">
+            {item.routeId?.startLocation} to {item.routeId?.endLocation}
+          </Text>
+        </View>
+        <AppBadge status={item.status} />
       </View>
-      <Text className="text-sm text-textMuted mb-1 font-semibold">Bus: {item.busId?.licenseNumber}</Text>
-      <Text className="text-sm text-textMuted mb-1 font-semibold">
-        Date: {new Date(item.departureDate).toLocaleDateString()}
-      </Text>
-      <Text className="text-sm text-textMuted mb-3 font-semibold">
-        Time: {item.departureTime} - {item.arrivalTime}
-      </Text>
-      <View className="flex-row justify-end mt-2">
-        <TouchableOpacity
-          className="bg-amber-600 px-4 py-2 rounded-lg shadow-sm border border-amber-500/20 mr-3"
+      
+      <View className="flex-row flex-wrap justify-between mb-4">
+        <View className="w-[48%] mb-3">
+          <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Bus</Text>
+          <Text className="text-sm text-textDark font-bold">{item.busId?.licenseNumber}</Text>
+        </View>
+        <View className="w-[48%] mb-3">
+          <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Date</Text>
+          <Text className="text-sm text-textDark font-bold">
+            {new Date(item.departureDate).toLocaleDateString()}
+          </Text>
+        </View>
+        <View className="w-[100%] mb-1">
+          <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Time</Text>
+          <Text className="text-sm text-textDark font-bold">
+            {item.departureTime} - {item.arrivalTime}
+          </Text>
+        </View>
+      </View>
+      
+      <View className="flex-row justify-end mt-4 gap-3">
+        <AppButton
+          title="Edit"
+          variant="secondary"
           onPress={() => navigation.navigate("ScheduleForm", { schedule: item })}
-        >
-          <Text className="text-white font-bold text-sm tracking-wide">Edit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          className="bg-red-600 px-4 py-2 rounded-lg shadow-sm border border-red-500/20"
+        />
+        <AppButton
+          title="Delete"
+          variant="danger"
           onPress={() => handleDelete(item._id)}
-        >
-          <Text className="text-white font-bold text-sm tracking-wide">Delete</Text>
-        </TouchableOpacity>
+        />
       </View>
-    </GlassCard>
+    </AppCard>
   );
 
   return (
-    <LiquidBackground>
-      <View className="flex-1 p-5">
-        <View className="flex-row items-center mb-5">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="arrow-back" size={24} color="#2F80ED" />
-          </TouchableOpacity>
-          <Text className="text-3xl font-bold text-white tracking-tight flex-1">Manage Schedules</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs", { screen: "HomeTab" })} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="home" size={22} color="#2F80ED" />
+    <AppLayout useSafeArea>
+      <View className="flex-1 self-center w-full max-w-4xl p-6">
+        <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center flex-1">
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+              <Ionicons name="arrow-back" size={24} color="#64748B" />
+            </TouchableOpacity>
+            <Text className="text-2xl font-extrabold text-textDark tracking-tight flex-1">Manage Schedules</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs", { screen: "HomeTab" })} className="p-2">
+            <Ionicons name="home-outline" size={24} color="#64748B" />
           </TouchableOpacity>
         </View>
-        <View className="mb-6 px-1 mt-2">
-          <TouchableOpacity 
-            className="flex-row items-center justify-center bg-emerald-500/20 py-4 rounded-2xl border border-emerald-500/40 shadow-sm"
+        
+        <View className="mb-6">
+          <AppButton
+            title="Add New Schedule"
+            icon={<Ionicons name="add" size={20} color="white" />}
             onPress={() => navigation.navigate("ScheduleForm")}
-          >
-            <Ionicons name="add-circle" size={24} color="#34d399" style={{ marginRight: 8 }} />
-            <Text className="text-emerald-300 font-black text-lg tracking-widest uppercase">Add New Schedule</Text>
-          </TouchableOpacity>
+            variant="primary"
+          />
         </View>
+        
         {loading ? (
           <View className="flex-1 justify-center items-center mt-10">
-            <ActivityIndicator size="large" color="#2F80ED" />
-            <Text className="mt-3 text-primary font-semibold">Loading schedules...</Text>
+            <ActivityIndicator size="large" color="#2563EB" />
+            <Text className="mt-4 text-textMuted font-medium">Loading schedules...</Text>
           </View>
         ) : schedules.length === 0 ? (
-          <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="calendar-outline" size={64} color="#2F80ED" />
-            <Text className="text-primary mt-4 font-bold text-lg">No schedules found</Text>
+          <View className="items-center justify-center mt-20 opacity-80">
+            <Ionicons name="calendar-outline" size={64} color="#94A3B8" />
+            <Text className="text-textDark mt-4 font-bold text-lg">No schedules found</Text>
             <Text className="text-textMuted text-sm mt-1 text-center">Create a schedule to start assigning buses to routes.</Text>
           </View>
         ) : (
@@ -150,15 +165,13 @@ const ScheduleListScreen = ({ navigation }) => {
             data={schedules}
             keyExtractor={(item) => item._id}
             renderItem={renderItem}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={{ paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
           />
         )}
       </View>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 
 export default ScheduleListScreen;
-
-// We've moved styles to Tailwind classes!

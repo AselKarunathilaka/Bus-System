@@ -1,20 +1,17 @@
 import React, { useContext, useState } from "react";
 import {
   Text,
-  TextInput,
-  TouchableOpacity,
   Alert,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   View,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
-import GlassInput from "../components/GlassInput";
-import LiquidBackground from "../components/LiquidBackground";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
+import AppInput from "../components/ui/AppInput";
+import AppLayout from "../components/ui/AppLayout";
 
 const RegisterScreen = ({ navigation }) => {
   const { register } = useContext(AuthContext);
@@ -25,72 +22,48 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const sanitizeNameField = (text) => {
-    return text.replace(/[^A-Za-z\s.'-]/g, "");
-  };
-
-  const sanitizePhoneField = (text) => {
-    return text.replace(/[^0-9]/g, "");
-  };
+  const sanitizeNameField = (text) => text.replace(/[^A-Za-z\s.'-]/g, "");
+  const sanitizePhoneField = (text) => text.replace(/[^0-9]/g, "");
 
   const validateForm = () => {
     if (!fullName.trim() || !email.trim() || !phone.trim() || !password.trim()) {
       Alert.alert("Validation Error", "Please fill all fields.");
       return false;
     }
-
     if (!/^[A-Za-z\s.'-]+$/.test(fullName.trim())) {
-      Alert.alert(
-        "Validation Error",
-        "Full name can only contain letters, spaces, and simple punctuation."
-      );
+      Alert.alert("Validation Error", "Full name can only contain letters, spaces, and simple punctuation.");
       return false;
     }
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(email.trim())) {
       Alert.alert("Validation Error", "Please enter a valid email address.");
       return false;
     }
-
     if (!/^\d+$/.test(phone.trim())) {
       Alert.alert("Validation Error", "Phone number must contain numbers only.");
       return false;
     }
-
     if (phone.trim().length < 10 || phone.trim().length > 12) {
-      Alert.alert(
-        "Validation Error",
-        "Phone number should be between 10 and 12 digits."
-      );
+      Alert.alert("Validation Error", "Phone number should be between 10 and 12 digits.");
       return false;
     }
-
     if (password.length < 6) {
-      Alert.alert(
-        "Validation Error",
-        "Password must be at least 6 characters long."
-      );
+      Alert.alert("Validation Error", "Password must be at least 6 characters long.");
       return false;
     }
-
     return true;
   };
 
   const handleRegister = async () => {
     if (!validateForm()) return;
-
     try {
       setLoading(true);
-
       await register({
         fullName: fullName.trim(),
         email: email.trim().toLowerCase(),
         phone: phone.trim(),
         password,
       });
-
       Alert.alert("Success", "Registration successful.");
       navigation.navigate("Login");
     } catch (error) {
@@ -103,171 +76,95 @@ const RegisterScreen = ({ navigation }) => {
     }
   };
 
+  const content = (
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ flexGrow: 1, padding: 24, justifyContent: "center", alignItems: Platform.OS === 'web' ? 'center' : 'stretch' }}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
+      <View className={Platform.OS === 'web' ? "w-full max-w-md" : ""}>
+        <View className="mb-8 items-center">
+          <View className="bg-primary/10 px-3 py-1 rounded-full mb-4">
+            <Text className="text-primary font-sans text-xs font-bold tracking-widest uppercase">QuickBus Portal</Text>
+          </View>
+          <Text className="text-3xl font-sans font-extrabold text-textDark mb-2 text-center tracking-tight">
+            Create Account
+          </Text>
+          <Text className="text-base font-sans text-textMuted text-center leading-relaxed">
+            Register to browse routes, view stops, and book tickets.
+          </Text>
+        </View>
+
+        <AppCard className="mb-6">
+          <AppInput
+            label="Full Name"
+            icon="person-outline"
+            placeholder="John Doe"
+            value={fullName}
+            onChangeText={(text) => setFullName(sanitizeNameField(text))}
+            returnKeyType="next"
+          />
+
+          <AppInput
+            label="Email Address"
+            icon="mail-outline"
+            placeholder="name@example.com"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            returnKeyType="next"
+          />
+
+          <AppInput
+            label="Phone Number"
+            icon="call-outline"
+            placeholder="0712345678"
+            value={phone}
+            onChangeText={(text) => setPhone(sanitizePhoneField(text))}
+            keyboardType="phone-pad"
+            returnKeyType="next"
+          />
+
+          <AppInput
+            label="Password"
+            icon="lock-closed-outline"
+            placeholder="••••••••"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            returnKeyType="done"
+          />
+
+          <AppButton
+            title="Create Account"
+            onPress={handleRegister}
+            loading={loading}
+            className="mt-4 mb-4"
+          />
+
+          <AppButton
+            title="Already have an account? Login"
+            onPress={() => navigation.navigate("Login")}
+            variant="ghost"
+          />
+        </AppCard>
+      </View>
+    </ScrollView>
+  );
+
   return (
-    <LiquidBackground>
+    <AppLayout useSafeArea>
       {Platform.OS === "ios" ? (
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior="padding"
-          keyboardVerticalOffset={90}
-        >
-          <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-          <GlassCard className="mb-6 items-center">
-            <View className="bg-[rgba(255,255,255,0.4)] px-3 py-1.5 rounded-full border border-[rgba(255,255,255,0.5)] mb-3">
-              <Text className="text-primary font-sans text-[10px] font-bold tracking-widest uppercase">QuickBus Portal</Text>
-            </View>
-            <Text className="text-3xl font-sans font-extrabold text-textDark mb-1 text-center tracking-tight">
-              Create Account
-            </Text>
-            <Text className="text-sm font-sans text-textMuted text-center leading-relaxed">
-              Register to browse highway routes, view stops, and use the QuickBus system.
-            </Text>
-          </GlassCard>
-
-          <GlassCard className="mb-6 p-4">
-            <Text className="text-lg font-sans font-bold text-textDark mb-6 text-center tracking-tight">
-              Get Started
-            </Text>
-
-            <GlassInput
-              icon="person"
-              placeholder="Full Name"
-              value={fullName}
-              onChangeText={(text) => setFullName(sanitizeNameField(text))}
-              returnKeyType="next"
-            />
-
-            <GlassInput
-              icon="mail"
-              placeholder="Email Address"
-              value={email}
-              onChangeText={setEmail}
-              autoCapitalize="none"
-              keyboardType="email-address"
-              returnKeyType="next"
-            />
-
-            <GlassInput
-              icon="call"
-              placeholder="Phone Number"
-              value={phone}
-              onChangeText={(text) => setPhone(sanitizePhoneField(text))}
-              keyboardType="phone-pad"
-              returnKeyType="next"
-            />
-
-            <GlassInput
-              icon="lock-closed"
-              placeholder="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              returnKeyType="done"
-            />
-
-            <GlassButton
-              title={loading ? "Creating Account..." : "Register"}
-              onPress={handleRegister}
-              className="mb-6"
-              variant="primary"
-            />
-
-            <GlassButton
-              title="Already have an account? Login"
-              onPress={() => navigation.navigate("Login")}
-              variant="secondary"
-            />
-          </GlassCard>
-
-          <View className="h-[30px]" />
-          </ScrollView>
+        <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding" keyboardVerticalOffset={10}>
+          {content}
         </KeyboardAvoidingView>
       ) : (
-        <View style={{ flex: 1 }}>
-          <ScrollView
-            style={{ flex: 1 }}
-            contentContainerStyle={{ flexGrow: 1, padding: 20, justifyContent: "center" }}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-            <GlassCard className="mb-6 items-center">
-              <View className="bg-[rgba(255,255,255,0.4)] px-3 py-1.5 rounded-full border border-[rgba(255,255,255,0.5)] mb-3">
-                <Text className="text-primary font-sans text-[10px] font-bold tracking-widest uppercase">QuickBus Portal</Text>
-              </View>
-              <Text className="text-3xl font-sans font-extrabold text-textDark mb-1 text-center tracking-tight">
-                Create Account
-              </Text>
-              <Text className="text-sm font-sans text-textMuted text-center leading-relaxed">
-                Register to browse highway routes, view stops, and use the QuickBus system.
-              </Text>
-            </GlassCard>
-
-            <GlassCard className="mb-6 p-4">
-              <Text className="text-lg font-sans font-bold text-textDark mb-6 text-center tracking-tight">
-                Get Started
-              </Text>
-
-              <GlassInput
-                icon="person"
-                placeholder="Full Name"
-                value={fullName}
-                onChangeText={(text) => setFullName(sanitizeNameField(text))}
-                returnKeyType="next"
-              />
-
-              <GlassInput
-                icon="mail"
-                placeholder="Email Address"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                returnKeyType="next"
-              />
-
-              <GlassInput
-                icon="call"
-                placeholder="Phone Number"
-                value={phone}
-                onChangeText={setPhone}
-                keyboardType="phone-pad"
-                returnKeyType="next"
-              />
-
-              <GlassInput
-                icon="lock-closed"
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-                returnKeyType="done"
-              />
-
-              <GlassButton
-                title={loading ? "Registering..." : "Create Account"}
-                onPress={handleRegister}
-                className="mt-2 mb-6"
-                variant="primary"
-              />
-
-              <GlassButton
-                title="Already have an account? Login"
-                onPress={() => navigation.navigate("Login")}
-                variant="secondary"
-              />
-            </GlassCard>
-          </ScrollView>
-        </View>
+        content
       )}
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 
 export default RegisterScreen;
-
-// We've moved styles to Tailwind classes!

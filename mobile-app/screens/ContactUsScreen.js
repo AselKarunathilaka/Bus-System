@@ -1,10 +1,10 @@
 import React, { useState, useContext } from "react";
-import { View, Text, ScrollView, TouchableOpacity, Alert, Platform } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassInput from "../components/GlassInput";
-import GlassButton from "../components/GlassButton";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppInput from "../components/ui/AppInput";
+import AppButton from "../components/ui/AppButton";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
 
@@ -77,85 +77,90 @@ const ContactUsScreen = ({ navigation }) => {
   };
 
   return (
-    <LiquidBackground>
+    <AppLayout useSafeArea>
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 16 }} showsVerticalScrollIndicator={false}>
         
-        <View className="flex-row items-center justify-between mb-6 mt-2">
+        <View className="flex-row items-center justify-between mb-8 max-w-2xl w-full self-center">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
-              <Ionicons name="arrow-back" size={24} color="#3b82f6" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+              <Ionicons name="arrow-back" size={24} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-2xl font-extrabold text-white tracking-tight">Contact Us</Text>
+            <Text className="text-2xl font-extrabold text-textDark tracking-tight">Contact Us</Text>
           </View>
         </View>
 
-        <GlassCard className="mb-4">
-          <Text className="text-xs font-bold text-primary bg-[rgba(255,255,255,0.4)] self-start px-3 py-1 rounded-full mb-3 border border-[rgba(255,255,255,0.5)]">
-            24/7 Support
-          </Text>
-          <Text className="text-slate-200 text-sm leading-relaxed mb-4">
+        <AppCard className="mb-6 max-w-2xl w-full self-center">
+          <View className="bg-primary/10 self-start px-3 py-1 rounded-full mb-4 border border-primary/20">
+            <Text className="text-xs font-bold text-primary tracking-widest uppercase">
+              24/7 Support
+            </Text>
+          </View>
+          <Text className="text-textMuted text-sm leading-relaxed mb-6">
             Have a question or facing an issue? Send us a message and our support team will help you as soon as possible.
           </Text>
 
-          <View className="flex-row items-center mb-2">
-            <Ionicons name="mail" size={16} color="#3b82f6" className="mr-2" />
-            <Text className="text-white font-semibold">support@quickbus.com</Text>
+          <View className="flex-row items-center mb-3">
+            <Ionicons name="mail-outline" size={18} color="#2563EB" className="mr-3" />
+            <Text className="text-textDark font-semibold">support@quickbus.com</Text>
           </View>
-          <View className="flex-row items-center mb-2">
-            <Ionicons name="call" size={16} color="#3b82f6" className="mr-2" />
-            <Text className="text-white font-semibold">+94 11 234 5678</Text>
+          <View className="flex-row items-center mb-3">
+            <Ionicons name="call-outline" size={18} color="#2563EB" className="mr-3" />
+            <Text className="text-textDark font-semibold">+94 11 234 5678</Text>
           </View>
-          <View className="flex-row items-center mb-2">
-            <Ionicons name="location" size={16} color="#3b82f6" className="mr-2" />
-            <Text className="text-white font-semibold">123 Transport Avenue, Colombo 03</Text>
+          <View className="flex-row items-center">
+            <Ionicons name="location-outline" size={18} color="#2563EB" className="mr-3" />
+            <Text className="text-textDark font-semibold">123 Transport Avenue, Colombo 03</Text>
           </View>
-        </GlassCard>
+        </AppCard>
 
-        <GlassCard className="mb-8">
-          <Text className="text-lg font-bold text-white mb-4">Send a Message</Text>
+        <AppCard className="mb-10 max-w-2xl w-full self-center">
+          <Text className="text-lg font-bold text-textDark mb-6 border-b border-border pb-4">Send a Message</Text>
 
-          <GlassInput
-            label="Full Name *"
-            icon="person"
+          <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Full Name *</Text>
+          <AppInput
+            icon="person-outline"
             value={name}
             onChangeText={setName}
-            error={errors.name}
+            containerClassName="mb-4"
           />
+          {errors.name && <Text className="text-red-500 text-xs ml-1 -mt-2 mb-3">{errors.name}</Text>}
 
-          <GlassInput
-            label="Email Address *"
-            icon="mail"
+          <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Email Address *</Text>
+          <AppInput
+            icon="mail-outline"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
-            error={errors.email}
+            containerClassName="mb-4"
           />
+          {errors.email && <Text className="text-red-500 text-xs ml-1 -mt-2 mb-3">{errors.email}</Text>}
 
-          <GlassInput
-            label="Phone Number (Optional)"
-            icon="call"
+          <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Phone Number (Optional)</Text>
+          <AppInput
+            icon="call-outline"
             value={phone}
             onChangeText={setPhone}
             keyboardType="phone-pad"
+            containerClassName="mb-4"
           />
 
           <View className="mb-4">
-            <Text className="text-xs font-bold font-sans text-white uppercase mb-2 ml-1 tracking-wider">Category *</Text>
+            <Text className="text-[10px] font-bold text-textMuted uppercase mb-2 ml-1 tracking-widest">Category *</Text>
             <TouchableOpacity
-              className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] p-4 rounded-3xl flex-row justify-between items-center"
+              className="bg-background border border-border p-4 rounded-xl flex-row justify-between items-center"
               onPress={() => setOpenCategory(!openCategory)}
             >
               <Text className="text-textDark font-semibold text-base">{category}</Text>
-              <Ionicons name={openCategory ? "chevron-up" : "chevron-down"} size={18} color="#5C7185" />
+              <Ionicons name={openCategory ? "chevron-up" : "chevron-down"} size={20} color="#94A3B8" />
             </TouchableOpacity>
 
             {openCategory && (
-              <View className="mt-2 bg-[rgba(255,255,255,0.8)] rounded-xl border border-[rgba(255,255,255,0.8)] overflow-hidden shadow-sm">
+              <View className="mt-2 bg-white rounded-xl border border-border overflow-hidden shadow-sm">
                 {CATEGORIES.map((cat) => (
                   <TouchableOpacity
                     key={cat}
-                    className="p-3 border-b border-[rgba(255,255,255,0.5)]"
+                    className="p-4 border-b border-slate-100"
                     onPress={() => {
                       setCategory(cat);
                       setOpenCategory(false);
@@ -168,44 +173,47 @@ const ContactUsScreen = ({ navigation }) => {
             )}
           </View>
 
-          <GlassInput
-            label="Subject *"
-            icon="document-text"
+          <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Subject *</Text>
+          <AppInput
+            icon="document-text-outline"
             value={subject}
             onChangeText={setSubject}
-            error={errors.subject}
+            containerClassName="mb-4"
           />
+          {errors.subject && <Text className="text-red-500 text-xs ml-1 -mt-2 mb-3">{errors.subject}</Text>}
 
-          <GlassInput
-            label="Message *"
-            icon="chatbubble"
+          <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Message *</Text>
+          <AppInput
+            icon="chatbubble-outline"
             value={message}
             onChangeText={setMessage}
             multiline
             numberOfLines={4}
-            className="h-24 py-3"
-            error={errors.message}
+            containerClassName="mb-4"
           />
+          {errors.message && <Text className="text-red-500 text-xs ml-1 -mt-2 mb-3">{errors.message}</Text>}
 
-          <View className="flex-row gap-3 mt-4">
-            <GlassButton
-              title="Clear"
-              variant="secondary"
-              className="flex-1"
-              onPress={handleReset}
-            />
-            <GlassButton
-              title={isSubmitting ? "Sending..." : "Submit"}
-              variant="primary"
-              className="flex-1"
-              onPress={handleSubmit}
-              disabled={isSubmitting}
-            />
+          <View className="flex-row gap-3 mt-6">
+            <View className="flex-1">
+              <AppButton
+                title="Clear"
+                variant="secondary"
+                onPress={handleReset}
+              />
+            </View>
+            <View className="flex-1">
+              <AppButton
+                title={isSubmitting ? "Sending..." : "Submit"}
+                variant="primary"
+                onPress={handleSubmit}
+                disabled={isSubmitting}
+              />
+            </View>
           </View>
-        </GlassCard>
+        </AppCard>
 
       </ScrollView>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 

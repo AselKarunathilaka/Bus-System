@@ -5,16 +5,15 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
-  StyleSheet,
   ActivityIndicator,
   Platform,
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
-import StatusBadge from "../components/StatusBadge";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
+import AppBadge from "../components/ui/AppBadge";
 import { Ionicons } from "@expo/vector-icons";
 
 const PRICE_OPTIONS = [
@@ -188,32 +187,32 @@ const RouteListScreen = ({ navigation }) => {
   };
 
   const renderSelectField = (title, fieldKey, value, options, onSelect) => (
-    <View className="mb-3">
-      <Text className="text-xs font-bold text-primary uppercase tracking-widest mb-1.5 ml-1">{title}</Text>
+    <View className="mb-4">
+      <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-2 ml-1">{title}</Text>
       <TouchableOpacity
-        className="bg-white/90 border border-slate-300 p-4 rounded-2xl flex-row justify-between items-center"
+        className="bg-background border border-border p-4 rounded-xl flex-row justify-between items-center"
         onPress={() => setOpenMenu(openMenu === fieldKey ? null : fieldKey)}
         activeOpacity={0.7}
       >
-        <Text className="text-[#0F172A] font-extrabold text-lg">
+        <Text className="text-textDark font-bold text-base">
           {getLabelFromOptions(options, value)}
         </Text>
-        <Ionicons name="chevron-down" size={18} color="#5C7185" />
+        <Ionicons name="chevron-down" size={20} color="#94A3B8" />
       </TouchableOpacity>
 
       {openMenu === fieldKey && (
-        <View className="mt-2 bg-white rounded-xl border border-slate-300 overflow-hidden shadow-md">
+        <View className="mt-2 bg-white rounded-xl border border-border overflow-hidden shadow-sm">
           {options.map((option) => (
             <TouchableOpacity
               key={option.value}
-              className="p-4 border-b border-slate-200"
+              className="p-4 border-b border-slate-100"
               onPress={() => {
                 onSelect(option.value);
                 setOpenMenu(null);
               }}
               activeOpacity={0.7}
             >
-              <Text className="text-[#0F172A] font-bold text-base">{option.label}</Text>
+              <Text className="text-textDark font-medium text-base">{option.label}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -223,13 +222,13 @@ const RouteListScreen = ({ navigation }) => {
 
   const renderStopsPreview = (stops = []) => {
     if (!stops.length) {
-      return <Text className="text-textMuted text-sm mb-3">No stops added yet</Text>;
+      return <Text className="text-textMuted text-sm mb-4">No stops added yet</Text>;
     }
 
     return (
-      <View className="bg-[rgba(255,255,255,0.4)] p-3 rounded-xl mb-3 border border-[rgba(255,255,255,0.5)]">
+      <View className="bg-slate-50 p-4 rounded-xl mb-4 border border-border">
         {stops.map((stop) => (
-          <Text key={stop._id} className="text-textDark text-sm mb-1">
+          <Text key={stop._id} className="text-textDark text-sm mb-1.5 font-medium">
             • {stop.order}. {stop.stopName} - {stop.location}
           </Text>
         ))}
@@ -238,189 +237,194 @@ const RouteListScreen = ({ navigation }) => {
   };
 
   const renderHeader = () => (
-    <>
-      <View className="flex-row items-center justify-between mb-5">
+    <View className="mb-6">
+      <View className="flex-row items-center justify-between mb-6">
         <View className="flex-row items-center flex-1">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
-            <Ionicons name="arrow-back" size={24} color="#3b82f6" />
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+            <Ionicons name="arrow-back" size={24} color="#64748B" />
           </TouchableOpacity>
-          <Text className="text-2xl font-extrabold text-white tracking-tight">
+          <Text className="text-2xl font-extrabold text-textDark tracking-tight">
             {user?.role === "admin" ? "Manage Routes" : "Available Routes"}
           </Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
-          <Ionicons name="home" size={20} color="#60a5fa" />
+        <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="p-2">
+          <Ionicons name="home-outline" size={24} color="#64748B" />
         </TouchableOpacity>
       </View>
 
-      <GlassCard className="mb-4">
-        <Text className="text-xs font-bold text-primary bg-[rgba(255,255,255,0.4)] self-start px-3 py-1 rounded-full mb-3 border border-[rgba(255,255,255,0.5)]">
-          QuickBus Routing
-        </Text>
-        <Text className="text-textMuted text-sm leading-relaxed">
+      <AppCard className="mb-6">
+        <View className="bg-primary/10 self-start px-3 py-1.5 rounded-full mb-4 border border-primary/20">
+          <Text className="text-xs font-bold text-primary uppercase tracking-widest">
+            QuickBus Routing
+          </Text>
+        </View>
+        <Text className="text-textMuted text-sm leading-relaxed mb-1">
           {user?.role === "admin"
             ? "Create, update, and manage highway routes and stops."
             : "Browse highway routes, prices, distance, and stop details."}
         </Text>
-      </GlassCard>
+      </AppCard>
 
-      <GlassCard className="mb-4">
-        <View className="flex-row justify-between items-center mb-5 border-b border-[rgba(255,255,255,0.5)] pb-3">
+      <AppCard className="mb-6">
+        <View className="flex-row justify-between items-center mb-6 border-b border-border pb-4">
           <View className="flex-row items-center">
-            <Ionicons name="filter" size={20} color="#2F80ED" className="mr-2" />
-            <Text className="text-xl font-bold text-textDark tracking-tight ml-2">Filter Routes</Text>
+            <Ionicons name="filter" size={20} color="#2563EB" className="mr-2" />
+            <Text className="text-lg font-bold text-textDark tracking-tight">Filter Routes</Text>
           </View>
 
-          <View className="flex-row gap-2">
-            <TouchableOpacity className="bg-blue-600 px-6 py-3 rounded-xl shadow-md" onPress={applyFilters} activeOpacity={0.7}>
-              <Text className="text-white font-extrabold text-sm tracking-wider uppercase">Apply</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity className="bg-slate-600 px-6 py-3 rounded-xl shadow-md" onPress={clearFilters} activeOpacity={0.7}>
-              <Text className="text-white font-extrabold text-sm tracking-wider uppercase">Clear</Text>
-            </TouchableOpacity>
+          <View className="flex-row gap-3">
+            <AppButton
+              title="Apply"
+              onPress={applyFilters}
+              className="py-2 px-4 rounded-lg"
+              textClassName="text-xs uppercase"
+            />
+            <AppButton
+              title="Clear"
+              variant="secondary"
+              onPress={clearFilters}
+              className="py-2 px-4 rounded-lg"
+              textClassName="text-xs uppercase"
+            />
           </View>
         </View>
 
         {renderSelectField("Starting Location", "start", draftStart, startLocationOptions, setDraftStart)}
         {renderSelectField("Price Range", "price", draftPrice, PRICE_OPTIONS, setDraftPrice)}
         {renderSelectField("Distance Range", "distance", draftDistance, DISTANCE_OPTIONS, setDraftDistance)}
-      </GlassCard>
+      </AppCard>
 
       {user?.role === "admin" && (
-        <View className="mb-6">
-          <GlassButton
+        <View className="mb-2">
+          <AppButton
             title="Add New Route"
-            icon={<Ionicons name="add-circle" size={22} color="white" />}
+            icon={<Ionicons name="add" size={20} color="white" />}
             onPress={() => navigation.navigate("RouteForm")}
             variant="primary"
           />
         </View>
       )}
-    </>
+    </View>
   );
 
-  if (loading) {
-    return (
-      <LiquidBackground>
-        <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#2F80ED" />
-          <Text className="text-primary mt-3 font-semibold">Loading vibrant routes...</Text>
-        </View>
-      </LiquidBackground>
-    );
-  }
-
   return (
-    <LiquidBackground>
-      <FlatList
-        className="flex-1"
-        contentContainerStyle={{ padding: 16, paddingBottom: 24 }}
-        data={filteredRoutes}
-        keyExtractor={(item) => item._id}
-        ListHeaderComponent={renderHeader}
-        ListEmptyComponent={
-          <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="map-outline" size={64} color="#2F80ED" />
-            <Text className="text-primary mt-4 font-bold text-lg">No routes found</Text>
-            <Text className="text-textMuted text-sm mt-1 text-center max-w-[250px]">Try adjusting your filters or checking back later.</Text>
+    <AppLayout useSafeArea>
+      <View className="flex-1 self-center w-full max-w-4xl p-6">
+        {loading ? (
+          <View className="flex-1 justify-center items-center">
+            <ActivityIndicator size="large" color="#2563EB" />
+            <Text className="text-textMuted mt-4 font-medium">Loading routes...</Text>
           </View>
-        }
-        showsVerticalScrollIndicator={false}
-        renderItem={({ item }) => (
-          <GlassCard className="mb-4">
-            <View className="flex-row items-start justify-between mb-4 border-b border-[rgba(255,255,255,0.5)] pb-4">
-              <View className="flex-1 pr-3">
-                <Text className="text-xl font-bold text-textDark mb-1 tracking-tight">{item.routeName}</Text>
-                <View className="flex-row items-center mt-1">
-                  <Ionicons name="location" size={14} color="#2F80ED" />
-                  <Text className="text-sm font-semibold text-primary mx-1">{item.startLocation}</Text>
-                  <Ionicons name="arrow-forward" size={12} color="#5C7185" />
-                  <Text className="text-sm font-semibold text-secondary ml-1">{item.endLocation}</Text>
+        ) : (
+          <FlatList
+            className="flex-1"
+            contentContainerStyle={{ paddingBottom: 40 }}
+            data={filteredRoutes}
+            keyExtractor={(item) => item._id}
+            ListHeaderComponent={renderHeader}
+            ListEmptyComponent={
+              <View className="items-center justify-center mt-20 opacity-80">
+                <Ionicons name="map-outline" size={64} color="#94A3B8" />
+                <Text className="text-textDark mt-4 font-bold text-lg">No routes found</Text>
+                <Text className="text-textMuted text-sm mt-1 text-center max-w-[250px]">Try adjusting your filters or checking back later.</Text>
+              </View>
+            }
+            showsVerticalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <AppCard className="mb-6">
+                <View className="flex-row items-start justify-between mb-5 border-b border-border pb-5">
+                  <View className="flex-1 pr-4">
+                    <Text className="text-xl font-bold text-textDark mb-2 tracking-tight">{item.routeName}</Text>
+                    <View className="flex-row items-center mt-1">
+                      <Ionicons name="location" size={16} color="#2563EB" />
+                      <Text className="text-sm font-semibold text-textDark mx-2">{item.startLocation}</Text>
+                      <Ionicons name="arrow-forward" size={14} color="#94A3B8" />
+                      <Text className="text-sm font-semibold text-textDark ml-2">{item.endLocation}</Text>
+                    </View>
+                  </View>
+                  <AppBadge status={item.status} />
                 </View>
-              </View>
 
-              <StatusBadge status={item.status} />
-            </View>
+                <View className="flex-row flex-wrap justify-between mb-4">
+                  <View className="w-[48%] bg-slate-50 rounded-xl p-4 mb-3 border border-border">
+                    <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Price</Text>
+                    <Text className="text-base font-bold text-textDark">LKR {item.price}</Text>
+                  </View>
 
-            <View className="flex-row flex-wrap justify-between mb-3">
-              <View className="w-[48%] bg-[rgba(255,255,255,0.4)] rounded-xl p-3 mb-2 border border-[rgba(255,255,255,0.5)]">
-                <Text className="text-xs font-bold text-textMuted uppercase mb-1">Price</Text>
-                <Text className="text-base font-bold text-textDark">LKR {item.price}</Text>
-              </View>
+                  <View className="w-[48%] bg-slate-50 rounded-xl p-4 mb-3 border border-border">
+                    <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Distance</Text>
+                    <Text className="text-base font-bold text-textDark">{item.distanceKm ?? "-"} km</Text>
+                  </View>
 
-              <View className="w-[48%] bg-[rgba(255,255,255,0.4)] rounded-xl p-3 mb-2 border border-[rgba(255,255,255,0.5)]">
-                <Text className="text-xs font-bold text-textMuted uppercase mb-1">Distance</Text>
-                <Text className="text-base font-bold text-textDark">{item.distanceKm ?? "-"} km</Text>
-              </View>
+                  <View className="w-[48%] bg-slate-50 rounded-xl p-4 mb-3 border border-border">
+                    <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Duration</Text>
+                    <Text className="text-base font-bold text-textDark">
+                      {item.estimatedDuration || "-"}
+                    </Text>
+                  </View>
 
-              <View className="w-[48%] bg-[rgba(255,255,255,0.4)] rounded-xl p-3 mb-2 border border-[rgba(255,255,255,0.5)]">
-                <Text className="text-xs font-bold text-textMuted uppercase mb-1">Duration</Text>
-                <Text className="text-base font-bold text-textDark">
-                  {item.estimatedDuration || "-"}
-                </Text>
-              </View>
+                  <View className="w-[48%] bg-slate-50 rounded-xl p-4 mb-3 border border-border">
+                    <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Stops</Text>
+                    <Text className="text-base font-bold text-textDark">{item.stopCount || 0}</Text>
+                  </View>
+                </View>
 
-              <View className="w-[48%] bg-[rgba(255,255,255,0.4)] rounded-xl p-3 mb-2 border border-[rgba(255,255,255,0.5)]">
-                <Text className="text-xs font-bold text-textMuted uppercase mb-1">Stops</Text>
-                <Text className="text-base font-bold text-textDark">{item.stopCount || 0}</Text>
-              </View>
-            </View>
+                {!!item.description && (
+                  <View className="bg-slate-50 border border-border rounded-xl p-4 mb-5">
+                    <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-2">Description</Text>
+                    <Text className="text-sm text-textDark leading-relaxed">{item.description}</Text>
+                  </View>
+                )}
 
-            {!!item.description && (
-              <View className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] rounded-xl p-3 mb-3">
-                <Text className="text-xs font-bold text-textMuted uppercase mb-1">Description</Text>
-                <Text className="text-sm text-textDark">{item.description}</Text>
-              </View>
-            )}
-
-            <Text className="text-lg font-bold text-textDark mb-2 tracking-tight">Stops</Text>
-            <TouchableOpacity 
-              activeOpacity={0.7}
-              onPress={() =>
-                navigation.navigate("StopList", {
-                  routeId: item._id,
-                  routeName: item.routeName,
-                })
-              }
-            >
-              {renderStopsPreview(item.stops)}
-            </TouchableOpacity>
-
-            <View className="bg-white/10 py-1.5 px-3 rounded-md mt-1 self-center border border-white/20">
-              <Text className="text-blue-300 text-xs font-bold uppercase tracking-widest text-center">
-                {user?.role === "admin" ? "Manage Stops" : "View Route Stops"}
-              </Text>
-            </View>
-
-            {user?.role === "admin" && (
-              <View className="flex-row justify-between mt-3">
-                <TouchableOpacity
-                  className="bg-amber-600 p-3 rounded-xl flex-1 mr-2 shadow-sm border border-amber-500/20"
+                <Text className="text-lg font-bold text-textDark mb-3 tracking-tight">Stops</Text>
+                <TouchableOpacity 
+                  activeOpacity={0.7}
                   onPress={() =>
-                    navigation.navigate("RouteForm", {
-                      routeData: item,
+                    navigation.navigate("StopList", {
+                      routeId: item._id,
+                      routeName: item.routeName,
                     })
                   }
                 >
-                  <Text className="text-white text-center font-bold tracking-wide">Edit Route</Text>
+                  {renderStopsPreview(item.stops)}
                 </TouchableOpacity>
 
-                <TouchableOpacity
-                  className="bg-red-600 p-3 rounded-xl flex-1 ml-2 shadow-sm border border-red-500/20"
-                  onPress={() => handleDeleteRoute(item._id)}
+                <TouchableOpacity 
+                  className="bg-primary/10 py-2 px-4 rounded-lg mt-2 self-center border border-primary/20"
+                  onPress={() => navigation.navigate("StopList", { routeId: item._id, routeName: item.routeName })}
                 >
-                  <Text className="text-white text-center font-bold tracking-wide">Delete</Text>
+                  <Text className="text-primary text-[10px] font-bold uppercase tracking-widest text-center">
+                    {user?.role === "admin" ? "Manage Stops" : "View Route Stops"}
+                  </Text>
                 </TouchableOpacity>
-              </View>
+
+                {user?.role === "admin" && (
+                  <View className="flex-row justify-between mt-6 gap-3">
+                    <AppButton
+                      title="Edit Route"
+                      variant="secondary"
+                      className="flex-1"
+                      onPress={() =>
+                        navigation.navigate("RouteForm", {
+                          routeData: item,
+                        })
+                      }
+                    />
+                    <AppButton
+                      title="Delete"
+                      variant="danger"
+                      className="flex-1"
+                      onPress={() => handleDeleteRoute(item._id)}
+                    />
+                  </View>
+                )}
+              </AppCard>
             )}
-          </GlassCard>
+          />
         )}
-      />
-    </LiquidBackground>
+      </View>
+    </AppLayout>
   );
 };
 
 export default RouteListScreen;
-
-// We've moved styles to Tailwind classes!

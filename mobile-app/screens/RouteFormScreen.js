@@ -5,17 +5,16 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   View,
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
-import GlassInput from "../components/GlassInput";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
+import AppInput from "../components/ui/AppInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const RouteFormScreen = ({ route, navigation }) => {
@@ -161,7 +160,7 @@ const RouteFormScreen = ({ route, navigation }) => {
   };
 
   return (
-    <LiquidBackground>
+    <AppLayout useSafeArea>
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -172,112 +171,117 @@ const RouteFormScreen = ({ route, navigation }) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center justify-between mb-6">
-          <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+          <View className="flex-row items-center justify-between mb-8 max-w-2xl w-full self-center">
+            <View className="flex-row items-center flex-1">
+              <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+                <Ionicons name="arrow-back" size={24} color="#64748B" />
+              </TouchableOpacity>
+              <Text className="text-2xl font-extrabold text-textDark tracking-tight">
+                {editingRoute ? "Edit Route" : "Add Route"}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="p-2">
+              <Ionicons name="home-outline" size={24} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">
-              {editingRoute ? "Edit Route" : "Add Route"}
-            </Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="home" size={20} color="#2F80ED" />
-          </TouchableOpacity>
-        </View>
 
-          <GlassCard className="mb-6">
-            <GlassInput
-              icon="map"
+          <AppCard className="mb-6 max-w-2xl w-full self-center">
+            <AppInput
+              icon="map-outline"
               placeholder="Route Name"
               value={routeName}
               onChangeText={(text) => setRouteName(sanitizeNameField(text))}
               returnKeyType="next"
+              containerClassName="mb-4"
             />
 
-            <GlassInput
-              icon="navigate-circle"
+            <AppInput
+              icon="navigate-circle-outline"
               placeholder="Start Location"
               value={startLocation}
               onChangeText={(text) => setStartLocation(sanitizeNameField(text))}
               returnKeyType="next"
+              containerClassName="mb-4"
             />
 
-            <GlassInput
-              icon="location"
+            <AppInput
+              icon="location-outline"
               placeholder="End Location"
               value={endLocation}
               onChangeText={(text) => setEndLocation(sanitizeNameField(text))}
               returnKeyType="next"
+              containerClassName="mb-4"
             />
 
-            <GlassInput
-              icon="cash"
+            <AppInput
+              icon="cash-outline"
               placeholder="Price (LKR)"
               value={price}
               onChangeText={(text) => setPrice(sanitizeNumericField(text))}
               keyboardType="numeric"
               returnKeyType="next"
+              containerClassName="mb-4"
             />
 
-            <GlassInput
-              icon="speedometer"
+            <AppInput
+              icon="speedometer-outline"
               placeholder="Distance in KM"
               value={distanceKm}
               onChangeText={(text) => setDistanceKm(sanitizeNumericField(text))}
               keyboardType="numeric"
               returnKeyType="next"
+              containerClassName="mb-4"
             />
 
-            <GlassInput
-              icon="time"
+            <AppInput
+              icon="time-outline"
               placeholder="Estimated Duration (e.g. 3h 30m)"
               value={estimatedDuration}
               onChangeText={(text) => setEstimatedDuration(sanitizeDurationField(text))}
               returnKeyType="next"
+              containerClassName="mb-4"
             />
 
             <TextInput
-              className="bg-[rgba(255,255,255,0.4)] border border-[rgba(255,255,255,0.5)] text-textDark p-4 rounded-xl mb-4 font-semibold text-base min-h-[100px]"
+              className="bg-background border border-border text-textDark p-4 rounded-xl mb-4 font-medium text-base min-h-[100px]"
               style={Platform.OS === 'web' ? { outlineStyle: 'none' } : {}}
               placeholder="Description"
-              placeholderTextColor="#5C7185"
+              placeholderTextColor="#94A3B8"
               value={description}
               onChangeText={setDescription}
               multiline
               textAlignVertical="top"
             />
 
-            <GlassInput
-              icon="toggle"
+            <AppInput
+              icon="toggle-outline"
               placeholder="Status (active/inactive)"
               value={status}
               onChangeText={setStatus}
               autoCapitalize="none"
               returnKeyType="done"
+              containerClassName="mb-2"
             />
-          </GlassCard>
+          </AppCard>
 
-          <View className="mb-10">
-            <GlassButton
+          <View className="mb-10 max-w-2xl w-full self-center gap-3">
+            <AppButton
               title={loading ? (editingRoute ? "Updating..." : "Creating...") : (editingRoute ? "Update Route" : "Create Route")}
               onPress={handleSubmit}
-              className={`mb-4 border-[rgba(255,255,255,0.5)] ${loading ? 'opacity-70' : ''}`}
-              textClassName="text-white font-bold"
               disabled={loading}
+              variant="primary"
             />
 
-            <TouchableOpacity
-              className="bg-[rgba(255,255,255,0.2)] border border-[rgba(255,255,255,0.5)] p-4 rounded-xl items-center"
+            <AppButton
+              title="Cancel"
               onPress={() => navigation.goBack()}
               disabled={loading}
-            >
-              <Text className="text-textMuted font-bold text-base">Cancel</Text>
-            </TouchableOpacity>
+              variant="secondary"
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 

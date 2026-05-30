@@ -4,13 +4,12 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  FlatList,
   Alert,
   ScrollView,
 } from "react-native";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
 import { Ionicons } from "@expo/vector-icons";
 
 const SeatSelectionScreen = ({ route, navigation }) => {
@@ -109,58 +108,58 @@ const SeatSelectionScreen = ({ route, navigation }) => {
   };
 
   return (
-    <LiquidBackground>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
-        <View className="flex-row items-center justify-between mb-6">
+    <AppLayout useSafeArea>
+      <View className="flex-1 self-center w-full max-w-4xl p-6">
+        <View className="flex-row items-center justify-between mb-8">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+              <Ionicons name="arrow-back" size={24} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-2xl font-extrabold text-white tracking-tight">Select Seats</Text>
+            <Text className="text-2xl font-extrabold text-textDark tracking-tight">Select Seats</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="home" size={20} color="#2F80ED" />
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="p-2">
+            <Ionicons name="home-outline" size={24} color="#64748B" />
           </TouchableOpacity>
         </View>
-        
-        <View className="flex-row bg-[rgba(255,255,255,0.1)] rounded-xl p-1 mb-5 border border-[rgba(255,255,255,0.2)]">
+
+        <View className="flex-row bg-slate-100 rounded-xl p-1 mb-6 border border-slate-200 shadow-sm">
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg shadow-sm border ${bookingType === "Single" ? 'bg-[#3b82f6] border-[#2563eb] shadow-blue-500/50' : 'bg-transparent border-transparent shadow-transparent'}`}
+            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Single" ? 'bg-primary border border-primary/20 shadow-sm' : 'bg-transparent border border-transparent'}`}
             onPress={() => handleTypeChange("Single")}
           >
-            <Text className={`font-bold ${bookingType === "Single" ? 'text-white' : 'text-slate-300'}`}>
+            <Text className={`font-bold ${bookingType === "Single" ? 'text-white' : 'text-textMuted'}`}>
               Single (1 Seat)
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg shadow-sm border ${bookingType === "Family" ? 'bg-[#3b82f6] border-[#2563eb] shadow-blue-500/50' : 'bg-transparent border-transparent shadow-transparent'}`}
+            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Family" ? 'bg-primary border border-primary/20 shadow-sm' : 'bg-transparent border border-transparent'}`}
             onPress={() => handleTypeChange("Family")}
           >
-            <Text className={`font-bold ${bookingType === "Family" ? 'text-white' : 'text-slate-300'}`}>
+            <Text className={`font-bold ${bookingType === "Family" ? 'text-white' : 'text-textMuted'}`}>
               Family (Up to 8)
             </Text>
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row justify-around mb-6 bg-[rgba(255,255,255,0.8)] p-4 rounded-2xl border border-[rgba(255,255,255,0.6)] shadow-sm">
+        <AppCard className="mb-6 flex-row justify-around items-center p-4">
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded-full border border-[#3B82F6] mr-2 bg-[#DBEAFE]" />
-            <Text className="text-xs text-[#1E3A8A] font-bold uppercase tracking-widest">Available</Text>
+            <View className="w-4 h-4 rounded-full border border-blue-500 mr-2 bg-blue-100" />
+            <Text className="text-[10px] text-blue-700 font-bold uppercase tracking-widest">Available</Text>
           </View>
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded-full bg-[#059669] mr-2 shadow-sm border border-[#065F46]" />
-            <Text className="text-xs text-[#059669] font-bold uppercase tracking-widest">Selected</Text>
+            <View className="w-4 h-4 rounded-full bg-emerald-500 mr-2 shadow-sm border border-emerald-600" />
+            <Text className="text-[10px] text-emerald-700 font-bold uppercase tracking-widest">Selected</Text>
           </View>
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded-full bg-[#DC2626] mr-2 border border-[#7F1D1D]" />
-            <Text className="text-xs text-[#DC2626] font-bold uppercase tracking-widest">Booked</Text>
+            <View className="w-4 h-4 rounded-full bg-red-500 mr-2 border border-red-700" />
+            <Text className="text-[10px] text-red-700 font-bold uppercase tracking-widest">Booked</Text>
           </View>
-        </View>
+        </AppCard>
 
-        <View className="items-center mb-6">
-          <View className="w-full max-w-[400px] bg-[rgba(255,255,255,0.7)] rounded-[40px] border-[4px] border-[rgba(255,255,255,0.9)] p-5 pt-8 shadow-sm">
-            <View className="items-end mb-8 pr-3 border-b-2 border-[#CBD5E1] pb-5">
-              <View className="w-12 h-12 bg-slate-200 rounded-full justify-center items-center border border-slate-300 shadow-sm">
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40, alignItems: "center" }}>
+          <View className="w-full max-w-[360px] bg-white rounded-[40px] border-4 border-slate-200 p-5 pt-8 shadow-sm mb-6">
+            <View className="items-end mb-8 pr-3 border-b-2 border-slate-200 pb-5">
+              <View className="w-12 h-12 bg-slate-100 rounded-full justify-center items-center border border-slate-200 shadow-sm">
                 <Text className="text-xl">👨‍✈️</Text>
               </View>
             </View>
@@ -181,23 +180,24 @@ const SeatSelectionScreen = ({ route, navigation }) => {
               ))}
             </View>
           </View>
-        </View>
+        </ScrollView>
 
-        <GlassCard className="flex-row justify-between items-center mb-10">
-          <Text className="text-base font-bold text-slate-200">
-            Selected: <Text className="text-white font-black text-xl">{selectedSeats.length}</Text> <Text className="text-slate-400">/ {bookingType === "Single" ? 1 : 8}</Text>
-          </Text>
-          <View className="flex-1 ml-4 items-end">
-            <GlassButton 
-              title="Continue"
-              onPress={handleContinue}
-              style={{ backgroundColor: "#10b981" }}
-              className="px-8 border-0"
-            />
-          </View>
-        </GlassCard>
-      </ScrollView>
-    </LiquidBackground>
+        <View className="absolute bottom-6 left-6 right-6">
+          <AppCard className="flex-row justify-between items-center shadow-lg border border-border">
+            <Text className="text-sm font-bold text-textMuted">
+              Selected: <Text className="text-primary font-black text-xl">{selectedSeats.length}</Text> <Text className="text-slate-400">/ {bookingType === "Single" ? 1 : 8}</Text>
+            </Text>
+            <View className="w-1/2 ml-4">
+              <AppButton 
+                title="Continue"
+                onPress={handleContinue}
+                variant="primary"
+              />
+            </View>
+          </AppCard>
+        </View>
+      </View>
+    </AppLayout>
   );
 };
 
@@ -217,19 +217,19 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   seatAvailable: {
-    backgroundColor: "#DBEAFE",
-    borderColor: "#3B82F6",
+    backgroundColor: "#DBEAFE", // blue-100
+    borderColor: "#3B82F6", // blue-500
   },
   seatSelected: {
-    backgroundColor: "#059669",
-    borderColor: "#065F46",
+    backgroundColor: "#10B981", // emerald-500
+    borderColor: "#059669", // emerald-600
   },
   seatBooked: {
-    backgroundColor: "#DC2626",
-    borderColor: "#7F1D1D",
+    backgroundColor: "#EF4444", // red-500
+    borderColor: "#B91C1C", // red-700
   },
   seatText: { fontWeight: "800", fontSize: 14 },
-  seatTextAvailable: { color: "#1E3A8A" },
+  seatTextAvailable: { color: "#1E3A8A" }, // blue-900
   seatTextSelected: { color: "#ffffff" },
   seatTextBooked: { color: "#ffffff" },
 });

@@ -3,7 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  StyleSheet,
   ActivityIndicator,
   Alert,
   TouchableOpacity,
@@ -11,9 +10,8 @@ import {
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import StatusBadge from "../components/StatusBadge";
+import AppLayout from "../components/ui/AppLayout";
+import AppBadge from "../components/ui/AppBadge";
 import { Ionicons } from "@expo/vector-icons";
 
 const MyBookingsScreen = ({ navigation }) => {
@@ -88,36 +86,44 @@ const MyBookingsScreen = ({ navigation }) => {
     const formattedSeats = item.seatNumbers.map(getSeatLabel).join(", ");
     
     return (
-      <GlassCard className="mb-6 p-0 overflow-hidden border-0 bg-transparent shadow-none">
+      <View className="mb-6 self-center w-full max-w-md">
         {/* Ticket Header */}
-        <View className="bg-[rgba(255,255,255,0.4)] p-4 border border-[rgba(255,255,255,0.5)] border-b-0 rounded-t-2xl">
-          <View className="flex-row justify-between items-center mb-2">
-            <Text className="text-lg font-bold text-textDark flex-1 pr-3 tracking-tight">
-              {item.scheduleId?.routeId?.startLocation} to {item.scheduleId?.routeId?.endLocation}
+        <View className="bg-primary/5 p-5 border border-primary/20 border-b-0 rounded-t-3xl relative overflow-hidden">
+          <View className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-[100px] -z-10" />
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-xl font-bold text-textDark flex-1 pr-3 tracking-tight leading-7">
+              {item.scheduleId?.routeId?.startLocation} <Text className="text-primary font-black px-2">→</Text> {item.scheduleId?.routeId?.endLocation}
             </Text>
-            <StatusBadge status={item.status} />
+            <AppBadge status={item.status} />
           </View>
-          <Text className="text-xs text-textMuted font-bold uppercase tracking-widest">
-            Booking ID: {item.bookingId || "N/A"}
-          </Text>
+          <View className="bg-white/60 self-start px-3 py-1.5 rounded-lg border border-primary/10">
+            <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest">
+              Booking ID: <Text className="text-textDark">{item.bookingId || "N/A"}</Text>
+            </Text>
+          </View>
         </View>
 
         {/* Ticket Body (Dashed border simulation) */}
-        <View className="bg-[rgba(255,255,255,0.3)] p-4 border-l border-r border-[rgba(255,255,255,0.5)] border-dashed border-t border-b-0 relative">
-          <View className="flex-row justify-between mb-3">
+        <View className="bg-white p-5 border-l border-r border-slate-200 border-dashed border-t-2 relative">
+          <View className="flex-row justify-between items-center absolute left-0 right-0 -top-[13px] z-10 px-0">
+            <View className="w-6 h-6 bg-background rounded-full -ml-3 border-r border-slate-200" />
+            <View className="w-6 h-6 bg-background rounded-full -mr-3 border-l border-slate-200" />
+          </View>
+
+          <View className="flex-row justify-between mb-5">
             <View>
-              <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Bus</Text>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Bus</Text>
               <Text className="text-sm font-bold text-textDark">{item.scheduleId?.busId?.licenseNumber}</Text>
             </View>
             <View className="items-end">
-              <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Seats</Text>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Seats</Text>
               <Text className="text-sm font-bold text-primary">{formattedSeats}</Text>
             </View>
           </View>
 
-          <View className="flex-row justify-between mb-3">
+          <View className="flex-row justify-between mb-5">
             <View>
-              <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Date & Time</Text>
+              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Date & Time</Text>
               <Text className="text-sm font-bold text-textDark">
                 {new Date(item.scheduleId?.departureDate).toLocaleDateString()} at {item.scheduleId?.departureTime}
               </Text>
@@ -127,7 +133,7 @@ const MyBookingsScreen = ({ navigation }) => {
           {item.contactNumber && (
             <View className="flex-row justify-between">
               <View>
-                <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Contact</Text>
+                <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Contact</Text>
                 <Text className="text-sm font-bold text-textDark">{item.contactNumber}</Text>
               </View>
             </View>
@@ -135,51 +141,57 @@ const MyBookingsScreen = ({ navigation }) => {
         </View>
 
         {/* Ticket Footer (Total Price) */}
-        <View className="bg-[rgba(255,255,255,0.3)] p-4 border border-[rgba(255,255,255,0.5)] border-t-0 rounded-b-2xl border-dashed">
-          <View className="flex-row justify-between items-center">
+        <View className="bg-slate-50 p-5 border border-slate-200 border-t-2 rounded-b-3xl border-dashed relative">
+          <View className="flex-row justify-between items-center absolute left-0 right-0 -top-[13px] z-10 px-0">
+            <View className="w-6 h-6 bg-background rounded-full -ml-3 border-r border-slate-200" />
+            <View className="w-6 h-6 bg-background rounded-full -mr-3 border-l border-slate-200" />
+          </View>
+          <View className="flex-row justify-between items-end">
             <View>
-              <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Total Paid</Text>
-              <Text className="text-xl font-black text-textDark">LKR {item.totalPrice}</Text>
+              <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1.5">Total Paid</Text>
+              <Text className="text-2xl font-black text-textDark tracking-tight">
+                <Text className="text-sm text-textMuted mr-1">LKR</Text> {item.totalPrice}
+              </Text>
             </View>
             
             {item.status !== "Cancelled" && (
               <TouchableOpacity
-                className="bg-amber-600 px-6 py-2.5 rounded-xl ml-2 shadow-sm"
+                className="bg-red-50 px-4 py-2.5 rounded-xl border border-red-200 active:bg-red-100"
                 onPress={() => handleCancel(item._id)}
               >
-                <Text className="text-white font-bold text-xs uppercase tracking-wider">Cancel Booking</Text>
+                <Text className="text-red-600 font-bold text-xs uppercase tracking-wider">Cancel</Text>
               </TouchableOpacity>
             )}
           </View>
         </View>
-      </GlassCard>
+      </View>
     );
   };
 
   return (
-    <LiquidBackground>
-      <View className="flex-1 p-5">
-        <View className="flex-row items-center justify-between mb-5">
+    <AppLayout useSafeArea>
+      <View className="flex-1 self-center w-full max-w-4xl p-6">
+        <View className="flex-row items-center justify-between mb-8">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+              <Ionicons name="arrow-back" size={24} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-2xl font-extrabold text-white tracking-tight ml-2 mt-1">My Bookings</Text>
+            <Text className="text-2xl font-extrabold text-textDark tracking-tight">My Bookings</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="home" size={20} color="#2F80ED" />
+          <TouchableOpacity onPress={() => navigation.navigate("HomeTab")} className="p-2">
+            <Ionicons name="home-outline" size={24} color="#64748B" />
           </TouchableOpacity>
         </View>
 
         {loading ? (
           <View className="flex-1 justify-center items-center mt-10">
-            <ActivityIndicator size="large" color="#2F80ED" />
-            <Text className="mt-3 text-primary font-semibold">Loading bookings...</Text>
+            <ActivityIndicator size="large" color="#2563EB" />
+            <Text className="mt-4 text-textMuted font-medium">Loading bookings...</Text>
           </View>
         ) : bookings.length === 0 ? (
-          <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="ticket-outline" size={64} color="#2F80ED" />
-            <Text className="text-primary mt-4 font-bold text-lg">No bookings yet</Text>
+          <View className="items-center justify-center mt-20 opacity-80">
+            <Ionicons name="ticket-outline" size={64} color="#94A3B8" />
+            <Text className="text-textDark mt-4 font-bold text-lg">No bookings yet</Text>
             <Text className="text-textMuted text-sm mt-1 text-center">Your digital tickets will appear here.</Text>
           </View>
         ) : (
@@ -187,15 +199,13 @@ const MyBookingsScreen = ({ navigation }) => {
             data={bookings}
             keyExtractor={(item) => item._id}
             renderItem={renderItem}
-            contentContainerStyle={{ paddingBottom: 20 }}
+            contentContainerStyle={{ paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
           />
         )}
       </View>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 
 export default MyBookingsScreen;
-
-// We've moved styles to Tailwind classes!

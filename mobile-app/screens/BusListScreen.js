@@ -11,17 +11,15 @@ import {
   FlatList,
   TouchableOpacity,
   Alert,
-  StyleSheet,
   ActivityIndicator,
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
-import StatusBadge from "../components/StatusBadge";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
+import AppBadge from "../components/ui/AppBadge";
 import { Ionicons } from "@expo/vector-icons";
-
 
 const BusListScreen = ({ navigation }) => {
   const { token, user } = useContext(AuthContext);
@@ -100,105 +98,103 @@ const BusListScreen = ({ navigation }) => {
     [buses]
   );
 
-  // getStatusStyle is replaced by StatusBadge component
-
   const renderDashboardHeader = () => (
-    <View className="mb-4 mt-2 px-3">
-      <View className="flex-row items-center justify-between mb-4">
+    <View className="mb-6">
+      <View className="flex-row items-center justify-between mb-6">
         <View className="flex-row items-center flex-1">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
-            <Ionicons name="arrow-back" size={24} color="#3b82f6" />
+          <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+            <Ionicons name="arrow-back" size={24} color="#64748B" />
           </TouchableOpacity>
-          <Text className="text-2xl font-extrabold text-white tracking-tight">
+          <Text className="text-2xl font-extrabold text-textDark tracking-tight">
             {isAdmin ? "Bus Dashboard" : "Available Buses"}
           </Text>
         </View>
-        <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.2)] p-2 rounded-full border border-[rgba(255,255,255,0.3)]">
-          <Ionicons name="home" size={20} color="#60a5fa" />
+        <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="p-2">
+          <Ionicons name="home-outline" size={24} color="#64748B" />
         </TouchableOpacity>
       </View>
 
-      <GlassCard className="mb-4">
-        <Text className="text-slate-200 text-sm font-medium leading-relaxed mb-4">
+      <AppCard className="mb-6">
+        <Text className="text-textMuted text-sm font-medium leading-relaxed mb-6">
           {isAdmin
             ? "Manage and monitor the entire bus fleet from one place."
             : "These are the buses available in the system."}
         </Text>
 
-        <View className="flex-row flex-wrap justify-between gap-y-3">
-          <View className="w-[31%] bg-blue-50 rounded-xl py-4 items-center border-[2px] border-blue-500 shadow-sm">
-            <Ionicons name="bus" size={20} color="#2563EB" className="mb-1" />
-            <Text className="text-2xl font-black text-[#0F172A]">{totalBuses}</Text>
-            <Text className="text-[11px] text-blue-700 mt-1 text-center font-extrabold uppercase tracking-widest">Total</Text>
+        <View className="flex-row flex-wrap justify-between gap-y-4">
+          <View className="w-[31%] bg-blue-50 rounded-xl py-4 items-center border border-blue-200">
+            <Ionicons name="bus" size={24} color="#2563EB" className="mb-2" />
+            <Text className="text-2xl font-black text-textDark">{totalBuses}</Text>
+            <Text className="text-[10px] text-blue-600 mt-1 text-center font-bold uppercase tracking-widest">Total</Text>
           </View>
 
-          <View className="w-[31%] bg-purple-50 rounded-xl py-4 items-center border-[2px] border-purple-500 shadow-sm">
-            <Ionicons name="git-merge" size={20} color="#9333EA" className="mb-1" />
-            <Text className="text-2xl font-black text-[#0F172A]">{assignedCount}</Text>
-            <Text className="text-[11px] text-purple-700 mt-1 text-center font-extrabold uppercase tracking-widest">Assigned</Text>
+          <View className="w-[31%] bg-purple-50 rounded-xl py-4 items-center border border-purple-200">
+            <Ionicons name="git-merge" size={24} color="#9333EA" className="mb-2" />
+            <Text className="text-2xl font-black text-textDark">{assignedCount}</Text>
+            <Text className="text-[10px] text-purple-600 mt-1 text-center font-bold uppercase tracking-widest">Assigned</Text>
           </View>
 
-          <View className="w-[31%] bg-green-50 rounded-xl py-4 items-center border-[2px] border-green-500 shadow-sm">
-            <Ionicons name="checkmark-circle" size={20} color="#16A34A" className="mb-1" />
-            <Text className="text-2xl font-black text-[#0F172A]">{activeCount}</Text>
-            <Text className="text-[11px] text-green-700 mt-1 text-center font-extrabold uppercase tracking-widest">Active</Text>
+          <View className="w-[31%] bg-emerald-50 rounded-xl py-4 items-center border border-emerald-200">
+            <Ionicons name="checkmark-circle" size={24} color="#10B981" className="mb-2" />
+            <Text className="text-2xl font-black text-textDark">{activeCount}</Text>
+            <Text className="text-[10px] text-emerald-600 mt-1 text-center font-bold uppercase tracking-widest">Active</Text>
           </View>
 
-          <View className="w-[48%] bg-amber-50 rounded-xl py-4 items-center border-[2px] border-amber-500 shadow-sm">
-            <Ionicons name="construct" size={20} color="#D97706" className="mb-1" />
-            <Text className="text-2xl font-black text-[#0F172A]">{maintenanceCount}</Text>
-            <Text className="text-[11px] text-amber-700 mt-1 text-center font-extrabold uppercase tracking-widest">Maintenance</Text>
+          <View className="w-[48%] bg-amber-50 rounded-xl py-4 items-center border border-amber-200">
+            <Ionicons name="construct" size={24} color="#D97706" className="mb-2" />
+            <Text className="text-2xl font-black text-textDark">{maintenanceCount}</Text>
+            <Text className="text-[10px] text-amber-600 mt-1 text-center font-bold uppercase tracking-widest">Maintenance</Text>
           </View>
 
-          <View className="w-[48%] bg-red-50 rounded-xl py-4 items-center border-[2px] border-red-500 shadow-sm">
-            <Ionicons name="close-circle" size={20} color="#DC2626" className="mb-1" />
-            <Text className="text-2xl font-black text-[#0F172A]">{inactiveCount}</Text>
-            <Text className="text-[11px] text-red-700 mt-1 text-center font-extrabold uppercase tracking-widest">Inactive</Text>
+          <View className="w-[48%] bg-rose-50 rounded-xl py-4 items-center border border-rose-200">
+            <Ionicons name="close-circle" size={24} color="#E11D48" className="mb-2" />
+            <Text className="text-2xl font-black text-textDark">{inactiveCount}</Text>
+            <Text className="text-[10px] text-rose-600 mt-1 text-center font-bold uppercase tracking-widest">Inactive</Text>
           </View>
         </View>
 
         {isAdmin && (
-          <View className="mt-6">
-            <GlassButton
+          <View className="mt-8">
+            <AppButton
               title="Add New Bus"
-              icon={<Ionicons name="add-circle" size={22} color="white" />}
+              icon={<Ionicons name="add" size={20} color="white" />}
               onPress={() => navigation.navigate("BusForm")}
               variant="primary"
             />
           </View>
         )}
-      </GlassCard>
+      </AppCard>
     </View>
   );
 
   const renderBus = ({ item }) => (
-    <GlassCard className="mx-3 mb-4">
-      <View className="flex-row items-start justify-between mb-3 border-b border-[rgba(255,255,255,0.5)] pb-3">
+    <AppCard className="mb-4">
+      <View className="flex-row items-start justify-between mb-4 border-b border-border pb-4">
         <View className="flex-1 pr-3">
           <Text className="text-xl font-bold text-textDark tracking-tight">{item.busName}</Text>
           <Text className="text-sm font-semibold text-textMuted mt-1">{item.licenseNumber}</Text>
         </View>
 
-        <StatusBadge status={item.status} />
+        <AppBadge status={item.status} />
       </View>
 
-      <View className="flex-row flex-wrap justify-between mb-3">
-        <View className="w-[48%] mb-2">
-          <Text className="text-xs text-textMuted font-semibold mb-1">Type</Text>
+      <View className="flex-row flex-wrap justify-between mb-4">
+        <View className="w-[48%] mb-3">
+          <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Type</Text>
           <Text className="text-sm text-textDark font-bold">{item.busType}</Text>
         </View>
-        <View className="w-[48%] mb-2">
-          <Text className="text-xs text-textMuted font-semibold mb-1">Seats</Text>
+        <View className="w-[48%] mb-3">
+          <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Seats</Text>
           <Text className="text-sm text-textDark font-bold">{item.seatCount}</Text>
         </View>
-        <View className="w-[100%] mb-2">
-          <Text className="text-xs text-textMuted font-semibold mb-1">Contact</Text>
+        <View className="w-[100%] mb-3">
+          <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Contact</Text>
           <Text className="text-sm text-textDark font-bold">{item.busContactNumber}</Text>
         </View>
       </View>
 
-      <View className="bg-[rgba(255,255,255,0.4)] rounded-xl p-3 mb-3 border border-[rgba(255,255,255,0.5)]">
-        <Text className="text-xs font-bold text-textDark mb-2 uppercase">Crew Details</Text>
+      <View className="bg-slate-50 rounded-xl p-4 mb-4 border border-border">
+        <Text className="text-xs font-bold text-textDark mb-3 uppercase">Crew Details</Text>
         <View className="flex-row justify-between mb-2">
           <Text className="text-xs text-textMuted font-medium">Driver:</Text>
           <Text className="text-xs text-textDark font-bold text-right flex-1 ml-2">{item.driverName} ({item.driverNIC})</Text>
@@ -209,7 +205,7 @@ const BusListScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <View className="bg-primary/10 rounded-xl p-3 border border-primary/20">
+      <View className="bg-primary/5 rounded-xl p-4 border border-primary/20">
         <Text className="text-sm text-primary font-bold leading-relaxed">
           {item.assignedRoute
             ? `Route: ${item.assignedRoute.routeName}\n${item.assignedRoute.startLocation} → ${item.assignedRoute.endLocation}`
@@ -218,58 +214,53 @@ const BusListScreen = ({ navigation }) => {
       </View>
 
       {isAdmin && (
-        <View className="flex-row gap-3 mt-4">
-          <TouchableOpacity
-            className="bg-amber-600 p-3 rounded-xl flex-1 shadow-sm border border-amber-500/20"
+        <View className="flex-row gap-3 mt-5">
+          <AppButton
+            title="Edit"
+            variant="secondary"
+            className="flex-1"
             onPress={() => navigation.navigate("BusForm", { busData: item })}
-          >
-            <Text className="text-white font-bold text-center tracking-wide">Edit</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            className="bg-red-600 p-3 rounded-xl flex-1 shadow-sm border border-red-500/20"
+          />
+          <AppButton
+            title="Delete"
+            variant="danger"
+            className="flex-1"
             onPress={() => handleDeleteBus(item._id)}
-          >
-            <Text className="text-white font-bold text-center tracking-wide">Delete</Text>
-          </TouchableOpacity>
+          />
         </View>
       )}
-    </GlassCard>
+    </AppCard>
   );
 
-  if (loading) {
-    return (
-      <LiquidBackground>
-        <View className="flex-1 justify-center items-center">
-          <ActivityIndicator size="large" color="#2F80ED" />
-          <Text className="mt-3 text-primary font-semibold">Loading vibrant buses...</Text>
-        </View>
-      </LiquidBackground>
-    );
-  }
-
   return (
-    <LiquidBackground>
-      <FlatList
-        className="flex-1"
-        data={buses}
-        keyExtractor={(item) => item._id}
-        renderItem={renderBus}
-        ListHeaderComponent={renderDashboardHeader}
-        contentContainerStyle={{ paddingBottom: 24, paddingTop: 12 }}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={
-          <View className="items-center justify-center mt-16 opacity-80">
-            <Ionicons name="bus-outline" size={64} color="#2F80ED" />
-            <Text className="text-primary mt-4 font-bold text-lg">No buses found</Text>
-            <Text className="text-textMuted text-sm mt-1 text-center">Your fleet is currently empty.</Text>
+    <AppLayout useSafeArea>
+      <View className="flex-1 self-center w-full max-w-4xl p-6">
+        {loading ? (
+          <View className="flex-1 justify-center items-center">
+            <ActivityIndicator size="large" color="#2563EB" />
+            <Text className="mt-4 text-textMuted font-medium">Loading buses...</Text>
           </View>
-        }
-      />
-    </LiquidBackground>
+        ) : (
+          <FlatList
+            className="flex-1"
+            data={buses}
+            keyExtractor={(item) => item._id}
+            renderItem={renderBus}
+            ListHeaderComponent={renderDashboardHeader}
+            contentContainerStyle={{ paddingBottom: 40 }}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <View className="items-center justify-center mt-20 opacity-80">
+                <Ionicons name="bus-outline" size={64} color="#94A3B8" />
+                <Text className="text-textDark mt-4 font-bold text-lg">No buses found</Text>
+                <Text className="text-textMuted text-sm mt-1 text-center">Your fleet is currently empty.</Text>
+              </View>
+            }
+          />
+        )}
+      </View>
+    </AppLayout>
   );
 };
 
 export default BusListScreen;
-
-// We've moved styles to Tailwind classes!

@@ -2,20 +2,17 @@ import React, { useContext, useState } from "react";
 import {
   View,
   Text,
-  StyleSheet,
   TouchableOpacity,
   Alert,
-  ActivityIndicator,
   ScrollView,
-  TextInput,
   Platform,
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
-import GlassInput from "../components/GlassInput";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
+import AppInput from "../components/ui/AppInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const BookingConfirmationScreen = ({ route, navigation }) => {
@@ -88,138 +85,138 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
   };
 
   return (
-    <LiquidBackground>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 120 }}>
-        <View className="flex-row items-center justify-between mb-6">
+    <AppLayout useSafeArea>
+      <View className="flex-1 self-center w-full max-w-4xl p-6">
+        <View className="flex-row items-center justify-between mb-8">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+              <Ionicons name="arrow-back" size={24} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">Confirm Booking</Text>
+            <Text className="text-2xl font-extrabold text-textDark tracking-tight">Confirm Booking</Text>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-            <Ionicons name="home" size={20} color="#2F80ED" />
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="p-2">
+            <Ionicons name="home-outline" size={24} color="#64748B" />
           </TouchableOpacity>
         </View>
 
-        <View className="mb-6 relative">
-          {/* Ticket styling with dashed borders */}
-          <GlassCard className="border-b-0 rounded-b-none border-dashed border-[rgba(255,255,255,0.5)] pb-8">
-            <View className="flex-row items-center mb-6 border-b border-[rgba(255,255,255,0.5)] pb-4">
-              <View className="bg-[rgba(255,255,255,0.6)] p-2 rounded-full mr-3 border border-[rgba(255,255,255,0.8)]">
-                <Ionicons name="bus" size={20} color="#2F80ED" />
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
+          <View className="mb-8 relative max-w-md w-full self-center">
+            {/* Ticket styling with dashed borders */}
+            <View className="bg-white rounded-2xl rounded-b-none border border-slate-200 border-b-0 pb-8 p-6">
+              <View className="flex-row items-center mb-6 border-b border-slate-100 pb-4">
+                <View className="bg-primary/10 p-3 rounded-full mr-4 border border-primary/20">
+                  <Ionicons name="bus" size={20} color="#2563EB" />
+                </View>
+                <Text className="text-xl font-bold text-textDark tracking-tight">Digital Ticket</Text>
               </View>
-              <Text className="text-xl font-bold text-textDark tracking-tight">Digital Ticket</Text>
+
+              <View className="flex-row justify-between mb-6">
+                <View className="flex-1">
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">From</Text>
+                  <Text className="text-base font-bold text-textDark">{schedule.routeId?.startLocation}</Text>
+                </View>
+                <View className="px-4 justify-center">
+                  <Ionicons name="arrow-forward" size={20} color="#94A3B8" />
+                </View>
+                <View className="flex-1 items-end">
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">To</Text>
+                  <Text className="text-base font-bold text-textDark">{schedule.routeId?.endLocation}</Text>
+                </View>
+              </View>
+
+              <View className="flex-row justify-between mb-6 border-t border-slate-100 pt-5">
+                <View>
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Date</Text>
+                  <Text className="text-sm font-bold text-textDark">{new Date(schedule.departureDate).toLocaleDateString()}</Text>
+                </View>
+                <View className="items-end">
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Time</Text>
+                  <Text className="text-sm font-bold text-textDark">{schedule.departureTime} - {schedule.arrivalTime}</Text>
+                </View>
+              </View>
+
+              <View className="flex-row justify-between border-t border-slate-100 pt-5">
+                <View>
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Bus</Text>
+                  <Text className="text-sm font-bold text-textDark">{schedule.busId?.licenseNumber}</Text>
+                </View>
+                <View className="items-center">
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Type</Text>
+                  <Text className="text-sm font-bold text-textDark">{bookingType}</Text>
+                </View>
+                <View className="items-end">
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Seats ({selectedSeats.length})</Text>
+                  <Text className="text-sm font-bold text-primary">{formattedSeats}</Text>
+                </View>
+              </View>
             </View>
 
-            <View className="flex-row justify-between mb-4">
-              <View className="flex-1">
-                <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">From</Text>
-                <Text className="text-base font-bold text-textDark">{schedule.routeId?.startLocation}</Text>
-              </View>
-              <View className="px-4 justify-center">
-                <Ionicons name="arrow-forward" size={20} color="#2F80ED" />
-              </View>
-              <View className="flex-1 items-end">
-                <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">To</Text>
-                <Text className="text-base font-bold text-textDark">{schedule.routeId?.endLocation}</Text>
-              </View>
+            {/* Ticket Cutouts */}
+            <View className="flex-row justify-between items-center absolute left-0 right-0" style={{ bottom: 104, zIndex: 10 }}>
+              <View className="w-6 h-6 bg-background rounded-full -ml-3 border-r border-slate-200" />
+              <View className="flex-1 border-t-[3px] border-dashed border-slate-200 mx-2" />
+              <View className="w-6 h-6 bg-background rounded-full -mr-3 border-l border-slate-200" />
             </View>
 
-            <View className="flex-row justify-between mb-4 border-t border-[rgba(255,255,255,0.3)] pt-4">
-              <View>
-                <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Date</Text>
-                <Text className="text-sm font-bold text-textDark">{new Date(schedule.departureDate).toLocaleDateString()}</Text>
-              </View>
-              <View className="items-end">
-                <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Time</Text>
-                <Text className="text-sm font-bold text-textDark">{schedule.departureTime} - {schedule.arrivalTime}</Text>
-              </View>
-            </View>
-
-            <View className="flex-row justify-between border-t border-[rgba(255,255,255,0.3)] pt-4">
-              <View>
-                <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Bus</Text>
-                <Text className="text-sm font-bold text-textDark">{schedule.busId?.licenseNumber}</Text>
-              </View>
+            {/* Ticket Bottom - Price */}
+            <View className="bg-slate-50 border border-slate-200 border-t-0 rounded-2xl rounded-t-none pt-10 pb-8 px-6">
               <View className="items-center">
-                <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Type</Text>
-                <Text className="text-sm font-bold text-textDark">{bookingType}</Text>
-              </View>
-              <View className="items-end">
-                <Text className="text-xs font-bold text-textMuted uppercase tracking-widest mb-1">Seats ({selectedSeats.length})</Text>
-                <Text className="text-sm font-bold text-primary">{formattedSeats}</Text>
+                <Text className="text-textMuted font-bold uppercase text-[10px] mb-2 tracking-widest">Total Amount</Text>
+                <Text className="text-textDark font-black text-4xl">
+                  <Text className="text-xl text-textMuted mr-1">LKR</Text> {totalPrice.toLocaleString()}
+                </Text>
               </View>
             </View>
-          </GlassCard>
-
-          {/* Ticket Cutouts */}
-          <View className="flex-row justify-between items-center absolute left-0 right-0" style={{ bottom: -12, zIndex: 10 }}>
-            <View className="w-6 h-6 bg-[#EAF6FF] rounded-full -ml-3" />
-            <View className="flex-1 border-t-2 border-dashed border-[rgba(255,255,255,0.5)] mx-2" />
-            <View className="w-6 h-6 bg-[#EAF6FF] rounded-full -mr-3" />
           </View>
 
-          {/* Ticket Bottom - Price */}
-          <GlassCard className="border-t-0 rounded-t-none bg-[rgba(255,255,255,0.3)] border-dashed border-[rgba(255,255,255,0.5)] pt-8">
-            <View className="items-center">
-              <Text className="text-textMuted font-bold uppercase text-xs mb-1 tracking-widest">Total Amount</Text>
-              <Text className="text-textDark font-black text-4xl">
-                <Text className="text-lg text-textMuted mr-1">LKR</Text> {totalPrice.toLocaleString()}
-              </Text>
-            </View>
-          </GlassCard>
-        </View>
-
-        <GlassCard className="mb-8">
-          <Text className="text-base font-bold text-textDark mb-4 pb-2 border-b border-[rgba(255,255,255,0.5)]">
-            {isAdmin ? "Passenger Information (Optional)" : "Passenger Information"}
-          </Text>
-          <GlassInput
-            icon="person"
-            placeholder={isAdmin ? "Customer Name (Optional)" : "Primary Passenger Name *"}
-            value={passengerName}
-            onChangeText={setPassengerName}
-            className="mb-3"
-            containerClassName="mb-3"
-          />
-          <GlassInput
-            icon="call"
-            placeholder={isAdmin ? "Customer Phone Number (Optional)" : "Contact Phone Number *"}
-            value={contactNumber}
-            onChangeText={setContactNumber}
-            keyboardType="phone-pad"
-            maxLength={15}
-            className={isAdmin ? "mb-3" : "mb-0"}
-            containerClassName={isAdmin ? "mb-3" : "mb-0"}
-          />
-          {isAdmin && (
-            <GlassInput
-              icon="document-text"
-              placeholder="Admin Note (Optional)"
-              value={adminNote}
-              onChangeText={setAdminNote}
-              multiline
-              numberOfLines={2}
-              className="h-16 py-2 mb-0"
-              containerClassName="mb-0"
+          <AppCard className="mb-8 max-w-md w-full self-center">
+            <Text className="text-sm font-bold text-textDark mb-6 border-b border-border pb-4">
+              {isAdmin ? "Passenger Information (Optional)" : "Passenger Information"}
+            </Text>
+            
+            <AppInput
+              icon="person-outline"
+              placeholder={isAdmin ? "Customer Name (Optional)" : "Primary Passenger Name *"}
+              value={passengerName}
+              onChangeText={setPassengerName}
+              containerClassName="mb-4"
             />
-          )}
-        </GlassCard>
+            
+            <AppInput
+              icon="call-outline"
+              placeholder={isAdmin ? "Customer Phone Number (Optional)" : "Contact Phone Number *"}
+              value={contactNumber}
+              onChangeText={setContactNumber}
+              keyboardType="phone-pad"
+              maxLength={15}
+              containerClassName={isAdmin ? "mb-4" : "mb-0"}
+            />
+            
+            {isAdmin && (
+              <AppInput
+                icon="document-text-outline"
+                placeholder="Admin Note (Optional)"
+                value={adminNote}
+                onChangeText={setAdminNote}
+                multiline
+                numberOfLines={2}
+                containerClassName="mb-0"
+              />
+            )}
+          </AppCard>
 
-        <View className="mb-10">
-          <GlassButton
-            title={loading ? "Confirming..." : "Confirm Booking"}
-            onPress={handleConfirm}
-            className={`mb-4 border-[rgba(255,255,255,0.5)] ${loading ? 'opacity-70' : ''}`}
-            textClassName="text-white font-extrabold"
-            disabled={loading}
-          />
-        </View>
-      </ScrollView>
-    </LiquidBackground>
+          <View className="mb-10 max-w-md w-full self-center">
+            <AppButton
+              title={loading ? "Confirming..." : "Confirm Booking"}
+              onPress={handleConfirm}
+              disabled={loading}
+              variant="primary"
+            />
+          </View>
+        </ScrollView>
+      </View>
+    </AppLayout>
   );
 };
 
 export default BookingConfirmationScreen;
-

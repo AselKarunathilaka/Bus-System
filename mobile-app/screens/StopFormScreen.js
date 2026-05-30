@@ -2,20 +2,18 @@ import React, { useContext, useState } from "react";
 import {
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   Alert,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   View,
 } from "react-native";
 import api from "../services/api";
 import { AuthContext } from "../context/AuthContext";
-import LiquidBackground from "../components/LiquidBackground";
-import GlassCard from "../components/GlassCard";
-import GlassButton from "../components/GlassButton";
-import GlassInput from "../components/GlassInput";
+import AppLayout from "../components/ui/AppLayout";
+import AppCard from "../components/ui/AppCard";
+import AppButton from "../components/ui/AppButton";
+import AppInput from "../components/ui/AppInput";
 import { Ionicons } from "@expo/vector-icons";
 
 const StopFormScreen = ({ route, navigation }) => {
@@ -107,7 +105,7 @@ const StopFormScreen = ({ route, navigation }) => {
   };
 
   return (
-    <LiquidBackground>
+    <AppLayout useSafeArea>
       <KeyboardAvoidingView
         className="flex-1"
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -118,67 +116,68 @@ const StopFormScreen = ({ route, navigation }) => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center justify-between mb-8 max-w-2xl w-full self-center">
             <View className="flex-row items-center flex-1">
-              <TouchableOpacity onPress={() => navigation.goBack()} className="mr-3 bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-                <Ionicons name="arrow-back" size={24} color="#2F80ED" />
+              <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
+                <Ionicons name="arrow-back" size={24} color="#64748B" />
               </TouchableOpacity>
-              <Text className="text-3xl font-bold text-textDark shadow-sm tracking-tight">
+              <Text className="text-2xl font-extrabold text-textDark tracking-tight">
                 {stopData ? "Edit Stop" : "Add Stop"}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="bg-[rgba(255,255,255,0.4)] p-2 rounded-full border border-[rgba(255,255,255,0.5)]">
-              <Ionicons name="home" size={20} color="#2F80ED" />
+            <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="p-2">
+              <Ionicons name="home-outline" size={24} color="#64748B" />
             </TouchableOpacity>
           </View>
 
-          <GlassCard className="mb-6">
-            <GlassInput
-              icon="pin"
+          <AppCard className="mb-6 max-w-2xl w-full self-center">
+            <AppInput
+              icon="pin-outline"
               placeholder="Stop Name"
               value={stopName}
               onChangeText={(text) => setStopName(sanitizeNameField(text))}
               returnKeyType="next"
+              containerClassName="mb-4"
             />
 
-            <GlassInput
-              icon="map"
+            <AppInput
+              icon="map-outline"
               placeholder="Location"
               value={location}
               onChangeText={(text) => setLocation(sanitizeNameField(text))}
               returnKeyType="next"
+              containerClassName="mb-4"
             />
 
-            <GlassInput
-              icon="list"
+            <AppInput
+              icon="list-outline"
               placeholder="Order"
               value={order}
               onChangeText={(text) => setOrder(sanitizeNumericField(text))}
               keyboardType="numeric"
               returnKeyType="done"
+              containerClassName="mb-2"
             />
-          </GlassCard>
+          </AppCard>
 
-          <View className="mb-10">
-            <GlassButton
+          <View className="mb-10 max-w-2xl w-full self-center gap-3">
+            <AppButton
               title={loading ? (stopData ? "Updating..." : "Creating...") : (stopData ? "Update Stop" : "Create Stop")}
               onPress={handleSubmit}
-              className={`mb-4 border-[rgba(255,255,255,0.5)] ${loading ? 'opacity-70' : ''}`}
-              textClassName="text-white font-bold"
               disabled={loading}
+              variant="primary"
             />
 
-            <TouchableOpacity
-              className="bg-[rgba(255,255,255,0.2)] border border-[rgba(255,255,255,0.5)] p-4 rounded-xl items-center"
+            <AppButton
+              title="Cancel"
               onPress={() => navigation.goBack()}
               disabled={loading}
-            >
-              <Text className="text-textMuted font-bold text-base">Cancel</Text>
-            </TouchableOpacity>
+              variant="secondary"
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </LiquidBackground>
+    </AppLayout>
   );
 };
 
