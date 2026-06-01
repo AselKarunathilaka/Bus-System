@@ -19,6 +19,44 @@ import AppLayout from "../components/ui/AppLayout";
 import AppCard from "../components/ui/AppCard";
 import AppButton from "../components/ui/AppButton";
 import { getGreeting } from "../utils/timeUtils";
+import Svg, { G, Circle } from "react-native-svg";
+
+const DonutChart = ({ data, radius = 40, strokeWidth = 15 }) => {
+  const circumference = 2 * Math.PI * radius;
+  let currentOffset = 0;
+  const center = radius + strokeWidth;
+  const total = data.reduce((acc, item) => acc + item.value, 0);
+
+  return (
+    <Svg height={center * 2} width={center * 2} viewBox={`0 0 ${center * 2} ${center * 2}`}>
+      <G rotation="-90" origin={`${center}, ${center}`}>
+        {total === 0 ? (
+          <Circle cx={center} cy={center} r={radius} stroke="#E2E8F0" strokeWidth={strokeWidth} fill="transparent" />
+        ) : (
+          data.map((item, index) => {
+            if (item.percentage === 0) return null;
+            const strokeDasharray = `${item.percentage * circumference} ${circumference}`;
+            const strokeDashoffset = -currentOffset * circumference;
+            currentOffset += item.percentage;
+            return (
+              <Circle
+                key={index}
+                cx={center}
+                cy={center}
+                r={radius}
+                stroke={item.color}
+                strokeWidth={strokeWidth}
+                strokeDasharray={strokeDasharray}
+                strokeDashoffset={strokeDashoffset}
+                fill="transparent"
+              />
+            );
+          })
+        )}
+      </G>
+    </Svg>
+  );
+};
 
 const AdminDashboardScreen = ({ navigation }) => {
   const { token, user } = useContext(AuthContext);
@@ -68,6 +106,7 @@ const AdminDashboardScreen = ({ navigation }) => {
 
     let totalRevenue = 0;
     let totalBookings = 0;
+    let statusCounts = { Confirmed: 0, Pending: 0, Cancelled: 0 };
 
     // Group bookings by day for the chart (always based on filtered bookings)
     const last7Days = [...Array(7)]
@@ -87,6 +126,10 @@ const AdminDashboardScreen = ({ navigation }) => {
       if (booking.status === "Confirmed") {
         totalRevenue += booking.totalPrice || 0;
       }
+      
+      const stat = booking.status || "Pending";
+      statusCounts[stat] = (statusCounts[stat] || 0) + 1;
+      
       totalBookings++;
 
       if (booking.createdAt) {
@@ -105,6 +148,7 @@ const AdminDashboardScreen = ({ navigation }) => {
       totalBuses,
       availableBuses,
       maintenanceBuses,
+      statusCounts,
     });
 
     const maxCount = Math.max(...last7Days.map((d) => d.count), 1);
@@ -610,34 +654,73 @@ const AdminDashboardScreen = ({ navigation }) => {
           </View>
         </AppCard>
 
-        <AppCard className="mb-8 p-5">
-          <Text className="text-sm font-sans font-bold text-textDark mb-3 tracking-tight">Fleet Status Breakdown</Text>
-          <View className="mt-1">
-            <View className="flex-row justify-between">
-              <View className="flex-row items-center mb-2">
-                <View className="w-3 h-3 rounded-full mr-2 bg-emerald-500" />
-                <Text className="text-sm font-semibold text-textDark">Available</Text>
-                <Text className="text-sm font-bold text-textMuted ml-2">{metrics.availableBuses}</Text>
-              </View>
-              <View className="flex-row items-center mb-2">
-                <View className="w-3 h-3 rounded-full mr-2 bg-amber-500" />
-                <Text className="text-sm font-semibold text-textDark">Maintenance</Text>
-                <Text className="text-sm font-bold text-textMuted ml-2">{metrics.maintenanceBuses}</Text>
-              </View>
-            </View>
+        <View className="flex-row flex-wrap justify-between mb-8">
+          <View className="w-full md:w-[48%] mb-4 md:mb-0">
+            <AppCard className="p-6 h-full">
+              <Text className="text-base font-sans font-bold text-textDark mb-4 tracking-tight">Fleet Status</Text>
+              <View className="mt-1">
+                <View className="flex-row justify-between">
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-4 h-4 rounded-full mr-3 bg-emerald-500" />
+                    <Text className="text-sm font-semibold text-textDark">Available</Text>
+                  </View>
+                  <Text className="text-sm font-bold text-textMuted">{metrics.availableBuses}</Text>
+                </View>
+                <View className="flex-row justify-between">
+                  <View className="flex-row items-center mb-3">
+                    <View className="w-4 h-4 rounded-full mr-3 bg-amber-500" />
+                    <Text className="text-sm font-semibold text-textDark">Maintenance</Text>
+                  </View>
+                  <Text className="text-sm font-bold text-textMuted">{metrics.maintenanceBuses}</Text>
+                </View>
 
-            <View className="flex-row h-3 rounded-full overflow-hidden bg-slate-100 mt-3">
-              <View
-                className="bg-emerald-500"
-                style={{ flex: metrics.availableBuses || 1 }}
-              />
-              <View
-                className="bg-amber-500"
-                style={{ flex: metrics.maintenanceBuses || 0 }}
-              />
-            </View>
+                <View className="flex-row h-4 rounded-full overflow-hidden bg-slate-100 mt-4">
+                  <View
+                    className="bg-emerald-500"
+                    style={{ flex: metrics.availableBuses || 1 }}
+                  />
+                  <View
+                    className="bg-amber-500"
+                    style={{ flex: metrics.maintenanceBuses || 0 }}
+                  />
+                </View>
+              </View>
+            </AppCard>
           </View>
-        </AppCard>
+
+          <View className="w-full md:w-[48%]">
+            <AppCard className="p-6 h-full">
+              <Text className="text-base font-sans font-bold text-textDark mb-6 tracking-tight">Booking Status</Text>
+              <View className="flex-row items-center justify-between px-2">
+                <View className="items-center justify-center">
+                  <DonutChart 
+                    data={[
+                      { color: "#10B981", value: metrics.statusCounts?.Confirmed || 0, percentage: (metrics.statusCounts?.Confirmed || 0) / (metrics.totalBookings || 1) },
+                      { color: "#F59E0B", value: metrics.statusCounts?.Pending || 0, percentage: (metrics.statusCounts?.Pending || 0) / (metrics.totalBookings || 1) },
+                      { color: "#EF4444", value: metrics.statusCounts?.Cancelled || 0, percentage: (metrics.statusCounts?.Cancelled || 0) / (metrics.totalBookings || 1) }
+                    ]}
+                    radius={45}
+                    strokeWidth={18}
+                  />
+                </View>
+                <View className="flex-1 ml-8 justify-center">
+                  <View className="flex-row items-center justify-between mb-4">
+                    <View className="flex-row items-center"><View className="w-3 h-3 rounded-full mr-2.5 bg-emerald-500" /><Text className="text-xs font-bold text-textDark">Confirmed</Text></View>
+                    <Text className="text-xs font-extrabold text-textMuted ml-4">{metrics.statusCounts?.Confirmed || 0}</Text>
+                  </View>
+                  <View className="flex-row items-center justify-between mb-4">
+                    <View className="flex-row items-center"><View className="w-3 h-3 rounded-full mr-2.5 bg-amber-500" /><Text className="text-xs font-bold text-textDark">Pending</Text></View>
+                    <Text className="text-xs font-extrabold text-textMuted ml-4">{metrics.statusCounts?.Pending || 0}</Text>
+                  </View>
+                  <View className="flex-row items-center justify-between">
+                    <View className="flex-row items-center"><View className="w-3 h-3 rounded-full mr-2.5 bg-red-500" /><Text className="text-xs font-bold text-textDark">Cancelled</Text></View>
+                    <Text className="text-xs font-extrabold text-textMuted ml-4">{metrics.statusCounts?.Cancelled || 0}</Text>
+                  </View>
+                </View>
+              </View>
+            </AppCard>
+          </View>
+        </View>
 
         {recentBookings.length > 0 && (
           <AppCard className="mb-10 p-0 overflow-hidden">
@@ -648,8 +731,8 @@ const AdminDashboardScreen = ({ navigation }) => {
               {recentBookings.map((bk, index) => (
                 <View key={bk._id || index} className={`flex-row justify-between items-center p-3 ${index !== recentBookings.length - 1 ? 'border-b border-border' : ''}`}>
                   <View className="flex-1 pr-2">
-                    <Text className="text-textDark font-bold text-sm" numberOfLines={1}>{bk.schedule?.route?.routeName || "Unknown Route"}</Text>
-                    <Text className="text-textMuted text-xs font-medium mt-1">{new Date(bk.createdAt).toLocaleDateString()} • {bk.seats?.length || 0} Seats</Text>
+                    <Text className="text-textDark font-bold text-sm" numberOfLines={1}>{bk.scheduleId?.routeId?.routeName || bk.schedule?.route?.routeName || "Unknown Route"}</Text>
+                    <Text className="text-textMuted text-xs font-medium mt-1">{new Date(bk.createdAt).toLocaleDateString()} • {bk.seats?.length || bk.seatNumbers?.length || 0} Seats</Text>
                   </View>
                   <View className="items-end">
                     <Text className="text-textDark font-black text-sm">LKR {bk.totalPrice}</Text>
