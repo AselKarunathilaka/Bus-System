@@ -13,6 +13,7 @@ import api from "../services/api";
 import AppLayout from "../components/ui/AppLayout";
 import AppBadge from "../components/ui/AppBadge";
 import { Ionicons } from "@expo/vector-icons";
+import QRCode from "react-native-qrcode-svg";
 
 const MyBookingsScreen = ({ navigation }) => {
   const { token } = useContext(AuthContext);
@@ -34,7 +35,11 @@ const MyBookingsScreen = ({ navigation }) => {
 
   useEffect(() => {
     fetchBookings();
-  }, [token]);
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchBookings();
+    });
+    return unsubscribe;
+  }, [token, navigation]);
 
   const handleCancel = async (bookingId) => {
     const executeCancel = async () => {
@@ -110,34 +115,44 @@ const MyBookingsScreen = ({ navigation }) => {
             <View className="w-6 h-6 bg-background rounded-full -mr-3 border-l border-slate-200" />
           </View>
 
-          <View className="flex-row justify-between mb-5">
-            <View>
-              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Bus</Text>
-              <Text className="text-sm font-bold text-textDark">{item.scheduleId?.busId?.licenseNumber}</Text>
-            </View>
-            <View className="items-end">
-              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Seats</Text>
-              <Text className="text-sm font-bold text-primary">{formattedSeats}</Text>
-            </View>
-          </View>
-
-          <View className="flex-row justify-between mb-5">
-            <View>
-              <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Date & Time</Text>
-              <Text className="text-sm font-bold text-textDark">
-                {new Date(item.scheduleId?.departureDate).toLocaleDateString()} at {item.scheduleId?.departureTime}
-              </Text>
-            </View>
-          </View>
-          
-          {item.contactNumber && (
-            <View className="flex-row justify-between">
-              <View>
-                <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Contact</Text>
-                <Text className="text-sm font-bold text-textDark">{item.contactNumber}</Text>
+          <View className="flex-row justify-between items-center">
+            <View className="flex-1 pr-4">
+              <View className="flex-row justify-between mb-5">
+                <View>
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Bus</Text>
+                  <Text className="text-sm font-bold text-textDark">{item.scheduleId?.busId?.licenseNumber}</Text>
+                </View>
+                <View className="items-end">
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Seats</Text>
+                  <Text className="text-sm font-bold text-primary">{formattedSeats}</Text>
+                </View>
               </View>
+
+              <View className="mb-5">
+                <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Date & Time</Text>
+                <Text className="text-sm font-bold text-textDark">
+                  {new Date(item.scheduleId?.departureDate).toLocaleDateString()} at {item.scheduleId?.departureTime}
+                </Text>
+              </View>
+              
+              {item.contactNumber && (
+                <View>
+                  <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Contact</Text>
+                  <Text className="text-sm font-bold text-textDark">{item.contactNumber}</Text>
+                </View>
+              )}
             </View>
-          )}
+
+            <View className="justify-center items-center p-3 bg-white rounded-xl shadow-sm border border-slate-100">
+              <QRCode 
+                value={item.bookingId || item._id} 
+                size={80} 
+                color="#0F172A" 
+                backgroundColor="transparent"
+              />
+              <Text className="text-[8px] text-textMuted font-bold mt-2 uppercase tracking-widest">Scan Ticket</Text>
+            </View>
+          </View>
         </View>
 
         {/* Ticket Footer (Total Price) */}

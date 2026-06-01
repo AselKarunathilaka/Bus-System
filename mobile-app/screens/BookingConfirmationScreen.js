@@ -78,7 +78,12 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
         ]);
       }
     } catch (error) {
-      Alert.alert("Error", error.response?.data?.message || "Failed to confirm booking.");
+      const msg = error.response?.data?.message || "Failed to confirm booking.";
+      if (Platform.OS === "web") {
+        window.alert(msg);
+      } else {
+        Alert.alert("Error", msg);
+      }
     } finally {
       setLoading(false);
     }
