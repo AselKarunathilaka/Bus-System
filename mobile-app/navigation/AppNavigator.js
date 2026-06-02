@@ -31,6 +31,9 @@ import OffersScreen from "../screens/OffersScreen";
 import TravelStatsScreen from "../screens/TravelStatsScreen";
 import DriverManagementScreen from "../screens/DriverManagementScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
+import AboutUsScreen from "../screens/AboutUsScreen";
+import BookingGuideScreen from "../screens/BookingGuideScreen";
+import ContactUsScreen from "../screens/ContactUsScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -108,7 +111,7 @@ const AppNavigator = () => {
           )}
         </Stack.Screen>
       ) : authToken ? (
-        <>
+        <Stack.Group>
           <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
           <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: "Admin Dashboard" }} />
           <Stack.Screen name="AdminGuide" component={AdminGuideScreen} options={{ title: "Admin Guide" }} />
@@ -130,13 +133,16 @@ const AppNavigator = () => {
           <Stack.Screen name="Offers" component={OffersScreen} options={{ title: "Offers & Deals" }} />
           <Stack.Screen name="TravelStats" component={TravelStatsScreen} options={{ title: "Travel Stats" }} />
           <Stack.Screen name="DriverManagement" component={DriverManagementScreen} options={{ title: "Drivers" }} />
-        </>
+          <Stack.Screen name="AboutUs" component={AboutUsScreen} options={{ title: "About Us" }} />
+          <Stack.Screen name="BookingGuide" component={BookingGuideScreen} options={{ title: "How to Book" }} />
+          <Stack.Screen name="ContactUs" component={ContactUsScreen} options={{ title: "Contact Us" }} />
+        </Stack.Group>
       ) : (
-        <>
+        <Stack.Group>
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-        </>
+        </Stack.Group>
       )}
     </Stack.Navigator>
   );

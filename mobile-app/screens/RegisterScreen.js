@@ -66,12 +66,12 @@ const RegisterScreen = ({ navigation }) => {
       });
       Alert.alert("Success", "Registration successful.");
       navigation.navigate("Login");
+      setLoading(false);
     } catch (error) {
       Alert.alert(
         "Registration Failed",
         error?.response?.data?.message || error?.message || "Something went wrong."
       );
-    } finally {
       setLoading(false);
     }
   };

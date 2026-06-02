@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, TextInput, Text, Platform } from "react-native";
+import React from "react";
+import { View, TextInput, Text, Platform, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 const AppInput = ({
@@ -11,56 +11,90 @@ const AppInput = ({
   style,
   ...props
 }) => {
-  const [isFocused, setIsFocused] = useState(false);
-
-  const borderColor = error
-    ? "border-danger"
-    : isFocused
-    ? "border-primary"
-    : "border-border";
+  const getBorderColor = () => {
+    if (error) return "#EF4444"; // danger
+    return "#E2E8F0"; // border
+  };
 
   return (
-    <View className={`mb-4 ${containerClassName}`}>
+    <View style={[styles.container, style]}>
       {label && (
-        <Text className="text-sm font-sans font-semibold text-textDark mb-1.5 ml-1">
+        <Text style={styles.label}>
           {label}
         </Text>
       )}
       <View
-        className={`flex-row items-center border rounded-xl px-4 py-1 bg-surface ${borderColor} ${
-          isFocused ? "shadow-sm shadow-primary/10" : ""
-        }`}
+        style={[
+          styles.inputContainer,
+          { borderColor: getBorderColor() }
+        ]}
       >
         {icon && (
           <Ionicons
             name={icon}
             size={20}
-            color={error ? "#EF4444" : isFocused ? "#2563EB" : "#64748B"}
-            className="mr-3"
+            color={error ? "#EF4444" : "#64748B"}
+            style={styles.icon}
           />
         )}
         <TextInput
           placeholderTextColor="#94A3B8"
-          className={`flex-1 text-textDark font-sans font-medium text-base py-3 h-14 ${className}`}
-          style={[Platform.OS === "web" ? { outlineStyle: "none" } : {}, style]}
-          onFocus={(e) => {
-            setIsFocused(true);
-            props.onFocus && props.onFocus(e);
-          }}
-          onBlur={(e) => {
-            setIsFocused(false);
-            props.onBlur && props.onBlur(e);
-          }}
+          style={[styles.input, Platform.OS === "web" && { outlineStyle: "none" }]}
+          autoCorrect={false}
+          spellCheck={false}
           {...props}
         />
       </View>
       {error && (
-        <Text className="text-danger font-sans text-xs font-semibold mt-1.5 ml-1">
+        <Text style={styles.errorText}>
           {error}
         </Text>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 16, // mb-4
+  },
+  label: {
+    fontSize: 14, // text-sm
+    fontFamily: "PlusJakartaSans-SemiBold",
+    fontWeight: "600",
+    color: "#0F172A", // textDark
+    marginBottom: 6, // mb-1.5
+    marginLeft: 4, // ml-1
+  },
+  inputContainer: {
+    flexDirection: "row", // flex-row
+    alignItems: "center", // items-center
+    borderWidth: 1.5, // border
+    borderRadius: 12, // rounded-xl
+    paddingHorizontal: 16, // px-4
+    paddingVertical: 4, // py-1
+    backgroundColor: "#FFFFFF", // bg-surface
+  },
+  icon: {
+    marginRight: 12, // mr-3
+  },
+  input: {
+    flex: 1,
+    color: "#0F172A", // text-textDark
+    fontFamily: "PlusJakartaSans-Medium",
+    fontWeight: "500",
+    fontSize: 16, // text-base
+    paddingVertical: 12, // py-3
+    height: 56, // h-14
+  },
+  errorText: {
+    color: "#EF4444", // text-danger
+    fontFamily: "PlusJakartaSans-SemiBold",
+    fontWeight: "600",
+    fontSize: 12, // text-xs
+    marginTop: 6, // mt-1.5
+    marginLeft: 4, // ml-1
+  }
+});
 
 export default AppInput;

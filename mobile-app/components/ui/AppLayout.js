@@ -1,20 +1,26 @@
 import React from "react";
-import { View, SafeAreaView, Platform } from "react-native";
+import { View, Platform } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const AppLayout = ({ children, className = "", style = {}, useSafeArea = false }) => {
-  const Wrapper = useSafeArea ? SafeAreaView : View;
+  const layoutStyle = [
+    { flex: 1 },
+    Platform.OS === 'web' && { height: '100vh', display: 'flex', overflowY: 'auto', overflowX: 'hidden' },
+    style
+  ];
+
+  if (useSafeArea) {
+    return (
+      <SafeAreaView style={layoutStyle} className={`bg-background ${className}`}>
+        {children}
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <Wrapper
-      style={[
-        { flex: 1 },
-        Platform.OS === 'web' && { height: '100vh', display: 'flex', overflowY: 'auto', overflowX: 'hidden' },
-        style
-      ]}
-      className={`bg-background ${className}`}
-    >
+    <View style={layoutStyle} className={`bg-background ${className}`}>
       {children}
-    </Wrapper>
+    </View>
   );
 };
 

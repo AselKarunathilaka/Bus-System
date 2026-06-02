@@ -35,11 +35,12 @@ const LoginScreen = ({ navigation }) => {
     try {
       setLoading(true);
       await login(email.trim(), password);
+      // Do not set loading to false here, as the component will unmount and 
+      // setting state on an unmounting component causes NavigationContainer issues.
     } catch (error) {
       setErrorMessage(
         error?.response?.data?.message || error?.message || "Login failed. Please try again."
       );
-    } finally {
       setLoading(false);
     }
   };
@@ -53,7 +54,10 @@ const LoginScreen = ({ navigation }) => {
     >
       <View className={Platform.OS === 'web' ? "w-full max-w-md" : ""}>
         <View className="mb-8 items-center">
-          <View className="bg-primary/10 px-3 py-1 rounded-full mb-4">
+          <View 
+            className="px-3 py-1 rounded-full mb-4"
+            style={{ backgroundColor: "rgba(37, 99, 235, 0.1)" }}
+          >
             <Text className="text-primary font-sans text-xs font-bold tracking-widest uppercase">QuickBus Connect</Text>
           </View>
           <Text className="text-3xl font-sans font-extrabold text-textDark mb-2 text-center tracking-tight">

@@ -29,6 +29,7 @@ const ProfileScreen = ({ navigation }) => {
 
   useEffect(() => {
     getProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUpdate = async () => {

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import React, { useState, useEffect, useContext } from "react";
 import {
   View,
@@ -9,15 +10,18 @@ import {
 } from "react-native";
 import { AuthContext } from "../context/AuthContext";
 import api from "../services/api";
-import AppLayout from "../components/ui/AppLayout";
-import AppCard from "../components/ui/AppCard";
-import AppButton from "../components/ui/AppButton";
 import { Ionicons } from "@expo/vector-icons";
+import AppLayout from "../components/ui/AppLayout";
+import ScheduleCard from "../components/ui/ScheduleCard";
 
-const UserScheduleListScreen = ({ navigation }) => {
+const UserScheduleListScreen = ({ navigation, route }) => {
   const { token } = useContext(AuthContext);
   const [schedules, setSchedules] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Safely extract search params from navigation route
+  const searchParams = route?.params || {};
+  const { from, to, date } = searchParams;
 
   useEffect(() => {
     const fetchSchedules = async () => {
@@ -25,8 +29,23 @@ const UserScheduleListScreen = ({ navigation }) => {
         const response = await api.get("/schedules", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        // Filter out Cancelled schedules
-        const activeSchedules = response.data.filter((s) => s.status !== "Cancelled");
+        
+        let activeSchedules = response.data.filter((s) => s.status !== "Cancelled");
+
+        // Apply filters if they exist
+        if (from) {
+          activeSchedules = activeSchedules.filter(s => s.routeId?.startLocation === from);
+        }
+        if (to) {
+          activeSchedules = activeSchedules.filter(s => s.routeId?.endLocation === to);
+        }
+        if (date) {
+          activeSchedules = activeSchedules.filter(s => {
+            const schedDate = new Date(s.departureDate).toISOString().split('T')[0];
+            return schedDate === date;
+          });
+        }
+
         setSchedules(activeSchedules);
       } catch (error) {
         Alert.alert("Error", "Failed to load schedules");
@@ -35,78 +54,55 @@ const UserScheduleListScreen = ({ navigation }) => {
       }
     };
     fetchSchedules();
-  }, [token]);
+  }, [token, from, to, date]);
 
   const renderItem = ({ item }) => {
-    const totalSeats = item.busId?.seatCount || 0;
-    const bookedCount = item.bookedSeats?.length || 0;
-    const availableSeats = totalSeats - bookedCount;
-
-    return (
-      <AppCard className="mb-4">
-        <View className="flex-row justify-between items-start mb-4 pb-4 border-b border-border">
-          <Text className="text-lg font-bold text-textDark flex-1 pr-3 leading-6 tracking-tight">
-            {item.routeId?.startLocation} to {item.routeId?.endLocation}
-          </Text>
-          <View className="bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 mt-1">
-            <Text className="text-emerald-700 text-xs font-bold">LKR {item.routeId?.price}</Text>
-          </View>
-        </View>
-
-        <View className="mb-5 flex-row flex-wrap justify-between">
-          <View className="w-[48%] mb-3">
-            <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Bus Type</Text>
-            <Text className="text-sm text-textDark font-bold">{item.busId?.busType}</Text>
-          </View>
-          <View className="w-[48%] mb-3">
-            <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Date</Text>
-            <Text className="text-sm text-textDark font-bold">{new Date(item.departureDate).toLocaleDateString()}</Text>
-          </View>
-          <View className="w-[48%] mb-3">
-            <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Time</Text>
-            <Text className="text-sm text-textDark font-bold">{item.departureTime} - {item.arrivalTime}</Text>
-          </View>
-          <View className="w-[48%] mb-3">
-            <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Available Seats</Text>
-            <Text className="text-sm text-textDark font-bold">{availableSeats} / {totalSeats}</Text>
-          </View>
-        </View>
-
-        <AppButton
-          title={availableSeats === 0 ? "Sold Out" : "Select Seats"}
-          variant={availableSeats === 0 ? "secondary" : "primary"}
-          onPress={() => navigation.navigate("SeatSelection", { schedule: item })}
-          disabled={availableSeats === 0}
-        />
-      </AppCard>
-    );
+    return <ScheduleCard item={item} navigation={navigation} />;
   };
 
   return (
     <AppLayout useSafeArea>
       <View className="flex-1 self-center w-full max-w-4xl p-6">
+        {/* Header */}
         <View className="flex-row items-center justify-between mb-8">
           <View className="flex-row items-center flex-1">
-            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2">
-              <Ionicons name="arrow-back" size={24} color="#64748B" />
+            <TouchableOpacity onPress={() => navigation.goBack()} className="mr-4 p-2 bg-white rounded-full border border-border">
+              <Ionicons name="arrow-back" size={20} color="#64748B" />
             </TouchableOpacity>
-            <Text className="text-2xl font-extrabold text-textDark tracking-tight">Available Buses</Text>
+            <View>
+              <Text className="text-2xl font-black text-textDark tracking-tight">Available Buses</Text>
+              {(from || to || date) && (
+                <Text className="text-primary text-xs font-bold mt-1">
+                  Filtered: {from || 'Any'} → {to || 'Any'} {date ? `| ${date}` : ''}
+                </Text>
+              )}
+            </View>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="p-2">
-            <Ionicons name="home-outline" size={24} color="#64748B" />
+          <TouchableOpacity onPress={() => navigation.navigate("MainTabs")} className="p-2 bg-white rounded-full border border-border">
+            <Ionicons name="home" size={20} color="#64748B" />
           </TouchableOpacity>
         </View>
 
         {loading ? (
-          <View className="flex-1 justify-center items-center mt-10">
+          <View className="flex-1 justify-center items-center mt-20">
             <ActivityIndicator size="large" color="#2563EB" />
             <Text className="mt-4 text-textMuted font-medium">Loading available trips...</Text>
           </View>
         ) : schedules.length === 0 ? (
-          <View className="items-center justify-center mt-20 opacity-80">
-            <Ionicons name="bus-outline" size={64} color="#94A3B8" />
-            <Text className="text-textDark mt-4 font-bold text-lg">No trips available</Text>
-            <Text className="text-textMuted text-sm mt-1 text-center">There are currently no active bus schedules.</Text>
+          <View className="items-center justify-center mt-32 bg-slate-50 p-10 rounded-3xl border border-slate-200 border-dashed">
+            <View className="w-20 h-20 rounded-full bg-white border border-slate-200 items-center justify-center mb-4 shadow-sm">
+              <Ionicons name="bus-outline" size={40} color="#94A3B8" />
+            </View>
+            <Text className="text-textDark mt-2 font-bold text-xl tracking-tight">No trips found</Text>
+            <Text className="text-textMuted text-sm mt-2 text-center max-w-xs">
+              We couldn&apos;t find any schedules matching your criteria. Please try different dates or locations.
+            </Text>
+            <TouchableOpacity 
+              className="mt-6 bg-slate-100 px-6 py-2 rounded-full border border-slate-200"
+              onPress={() => navigation.goBack()}
+            >
+              <Text className="text-textDark font-medium">Clear Filters</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <FlatList
