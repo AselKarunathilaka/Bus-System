@@ -15,8 +15,8 @@ const AboutUsScreen = ({ navigation }) => {
           <Text className="text-2xl font-extrabold text-textDark tracking-tight flex-1">About Us</Text>
         </View>
 
-        <AppCard className="mb-8 overflow-hidden p-0 border-0 shadow-lg">
-          <View className="bg-primary/10 h-32 items-center justify-center">
+        <AppCard className="mb-8 overflow-hidden p-0 border-0">
+          <View className="h-32 items-center justify-center" style={{ backgroundColor: "rgba(37,99,235,0.1)" }}>
              <Ionicons name="bus" size={64} color="#2563EB" />
           </View>
           <View className="p-6">
@@ -28,7 +28,7 @@ const AboutUsScreen = ({ navigation }) => {
         </AppCard>
 
         <Text className="text-lg font-bold text-textDark mb-4">Our Mission</Text>
-        <AppCard className="mb-8 p-5 border-l-4 border-l-emerald-500 bg-emerald-50/30">
+        <AppCard className="mb-8 p-5 border-l-4 border-l-emerald-500 bg-emerald-50">
           <Text className="text-textDark leading-6 text-sm font-medium">
             To provide a seamless, stress-free travel experience by connecting passengers with top-rated bus operators through a transparent and easy-to-use digital ecosystem.
           </Text>

@@ -122,9 +122,9 @@ const SeatSelectionScreen = ({ route, navigation }) => {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row bg-slate-100 rounded-xl p-1 mb-6 border border-slate-200 shadow-sm">
+        <View className="flex-row bg-slate-100 rounded-xl p-1 mb-6 border border-slate-200">
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Single" ? 'bg-primary border border-primary/20 shadow-sm' : 'bg-transparent border border-transparent'}`}
+            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Single" ? 'bg-primary border border-blue-400' : 'bg-transparent border border-transparent'}`}
             onPress={() => handleTypeChange("Single")}
           >
             <Text className={`font-bold ${bookingType === "Single" ? 'text-white' : 'text-textMuted'}`}>
@@ -132,7 +132,7 @@ const SeatSelectionScreen = ({ route, navigation }) => {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
-            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Family" ? 'bg-primary border border-primary/20 shadow-sm' : 'bg-transparent border border-transparent'}`}
+            className={`flex-1 py-3 items-center rounded-lg ${bookingType === "Family" ? 'bg-primary border border-blue-400' : 'bg-transparent border border-transparent'}`}
             onPress={() => handleTypeChange("Family")}
           >
             <Text className={`font-bold ${bookingType === "Family" ? 'text-white' : 'text-textMuted'}`}>
@@ -147,7 +147,7 @@ const SeatSelectionScreen = ({ route, navigation }) => {
             <Text className="text-[10px] text-blue-700 font-bold uppercase tracking-widest">Available</Text>
           </View>
           <View className="flex-row items-center">
-            <View className="w-4 h-4 rounded-full bg-emerald-500 mr-2 shadow-sm border border-emerald-600" />
+            <View className="w-4 h-4 rounded-full bg-emerald-500 mr-2 border border-emerald-600" />
             <Text className="text-[10px] text-emerald-700 font-bold uppercase tracking-widest">Selected</Text>
           </View>
           <View className="flex-row items-center">
@@ -157,9 +157,9 @@ const SeatSelectionScreen = ({ route, navigation }) => {
         </AppCard>
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40, alignItems: "center" }}>
-          <View className="w-full max-w-[360px] bg-white rounded-[40px] border-4 border-slate-200 p-5 pt-8 shadow-sm mb-6">
+          <View className="w-full max-w-[360px] bg-white rounded-[40px] border-4 border-slate-200 p-5 pt-8 mb-6">
             <View className="items-end mb-8 pr-3 border-b-2 border-slate-200 pb-5">
-              <View className="w-12 h-12 bg-slate-100 rounded-full justify-center items-center border border-slate-200 shadow-sm">
+              <View className="w-12 h-12 bg-slate-100 rounded-full justify-center items-center border border-slate-200">
                 <Text className="text-xl">👨‍✈️</Text>
               </View>
             </View>
@@ -183,7 +183,7 @@ const SeatSelectionScreen = ({ route, navigation }) => {
         </ScrollView>
 
         <View className="absolute bottom-6 left-6 right-6">
-          <AppCard className="flex-row justify-between items-center shadow-lg border border-border">
+          <AppCard className="flex-row justify-between items-center border border-border">
             <Text className="text-sm font-bold text-textMuted">
               Selected: <Text className="text-primary font-black text-xl">{selectedSeats.length}</Text> <Text className="text-slate-400">/ {bookingType === "Single" ? 1 : 8}</Text>
             </Text>

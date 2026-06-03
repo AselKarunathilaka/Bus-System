@@ -40,10 +40,8 @@ const AppButton = ({
       disabled={disabled || loading}
       onPress={onPress}
       activeOpacity={0.8}
-      style={style}
-      className={`flex-row items-center justify-center rounded-xl py-3.5 px-6 border ${borderColor} ${bgColor} ${
-        disabled ? "opacity-50" : ""
-      } ${className}`}
+      style={[style, disabled ? { opacity: 0.5 } : undefined]}
+      className={`flex-row items-center justify-center rounded-xl py-3.5 px-6 border ${borderColor} ${bgColor} ${className}`}
     >
       {loading ? (
         <ActivityIndicator color={textColor === "text-white" ? "#fff" : "#2563EB"} size="small" />

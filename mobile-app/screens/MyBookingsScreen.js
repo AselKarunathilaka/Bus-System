@@ -93,15 +93,15 @@ const MyBookingsScreen = ({ navigation }) => {
     return (
       <View className="mb-6 self-center w-full max-w-md">
         {/* Ticket Header */}
-        <View className="bg-primary/5 p-5 border border-primary/20 border-b-0 rounded-t-3xl relative overflow-hidden">
-          <View className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-[100px] -z-10" />
+        <View className="p-5 border-b-0 rounded-t-3xl relative overflow-hidden" style={{ backgroundColor: "rgba(37,99,235,0.05)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}>
+          <View className="absolute top-0 right-0 w-32 h-32 rounded-bl-[100px] -z-10" style={{ backgroundColor: "rgba(37,99,235,0.1)" }} />
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-xl font-bold text-textDark flex-1 pr-3 tracking-tight leading-7">
               {item.scheduleId?.routeId?.startLocation} <Text className="text-primary font-black px-2">→</Text> {item.scheduleId?.routeId?.endLocation}
             </Text>
             <AppBadge status={item.status} />
           </View>
-          <View className="bg-white/60 self-start px-3 py-1.5 rounded-lg border border-primary/10">
+          <View className="self-start px-3 py-1.5 rounded-lg" style={{ backgroundColor: "rgba(255,255,255,0.6)", borderWidth: 1, borderColor: "rgba(37,99,235,0.1)" }}>
             <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest">
               Booking ID: <Text className="text-textDark">{item.bookingId || "N/A"}</Text>
             </Text>
@@ -120,7 +120,7 @@ const MyBookingsScreen = ({ navigation }) => {
               <View className="flex-row justify-between mb-5">
                 <View>
                   <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Bus</Text>
-                  <Text className="text-sm font-bold text-textDark">{item.scheduleId?.busId?.licenseNumber}</Text>
+                  <Text className="text-sm font-bold text-textDark">{item.scheduleId?.busId?.licensePlate}</Text>
                 </View>
                 <View className="items-end">
                   <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Seats</Text>
@@ -143,7 +143,7 @@ const MyBookingsScreen = ({ navigation }) => {
               )}
             </View>
 
-            <View className="justify-center items-center p-3 bg-white rounded-xl shadow-sm border border-slate-100">
+            <View className="justify-center items-center p-3 bg-white rounded-xl border border-slate-100">
               <QRCode 
                 value={item.bookingId || item._id} 
                 size={80} 
@@ -204,7 +204,7 @@ const MyBookingsScreen = ({ navigation }) => {
             <Text className="mt-4 text-textMuted font-medium">Loading bookings...</Text>
           </View>
         ) : bookings.length === 0 ? (
-          <View className="items-center justify-center mt-20 opacity-80">
+          <View className="items-center justify-center mt-20" style={{ opacity: 0.8 }}>
             <Ionicons name="ticket-outline" size={64} color="#94A3B8" />
             <Text className="text-textDark mt-4 font-bold text-lg">No bookings yet</Text>
             <Text className="text-textMuted text-sm mt-1 text-center">Your digital tickets will appear here.</Text>

@@ -86,7 +86,7 @@ const DriverManagementScreen = ({ navigation }) => {
     <AppCard className="mb-4">
       <View className="flex-row justify-between items-start mb-4">
         <View className="flex-row items-center flex-1">
-          <View className="bg-primary/10 w-12 h-12 rounded-full items-center justify-center mr-3">
+          <View className="w-12 h-12 rounded-full items-center justify-center mr-3" style={{ backgroundColor: "rgba(37,99,235,0.1)" }}>
             <Ionicons name={item.role === "Driver" ? "car-sport" : "ticket"} size={20} color="#2563EB" />
           </View>
           <View>
@@ -114,7 +114,7 @@ const DriverManagementScreen = ({ navigation }) => {
           <TouchableOpacity onPress={() => handleEdit(item)} className="bg-amber-50 p-2 rounded-lg border border-amber-200 ml-2">
             <Ionicons name="pencil" size={16} color="#D97706" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleDelete} className="bg-danger-bg p-2 rounded-lg border border-danger/20 ml-2">
+          <TouchableOpacity onPress={handleDelete} className="bg-danger-bg p-2 rounded-lg ml-2" style={{ borderWidth: 1, borderColor: "rgba(239,68,68,0.2)" }}>
             <Ionicons name="trash" size={16} color="#EF4444" />
           </TouchableOpacity>
         </View>
@@ -146,7 +146,7 @@ const DriverManagementScreen = ({ navigation }) => {
             <Text className="mt-4 text-textMuted font-medium">Loading crew data...</Text>
           </View>
         ) : crew.length === 0 ? (
-          <View className="items-center justify-center mt-20 opacity-80">
+          <View className="items-center justify-center mt-20" style={{ opacity: 0.8 }}>
             <Ionicons name="people-outline" size={64} color="#94A3B8" />
             <Text className="text-textDark mt-4 font-bold text-lg">No Crew Found</Text>
             <Text className="text-textMuted text-sm mt-1 text-center">Add a bus to register new crew members.</Text>

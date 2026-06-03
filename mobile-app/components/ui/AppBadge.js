@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 const STATUS_CONFIG = {
   active: { bg: "bg-success-bg", textClass: "text-success-text", iconColor: "#15803D", icon: "checkmark-circle" },
   available: { bg: "bg-success-bg", textClass: "text-success-text", iconColor: "#15803D", icon: "checkmark-circle" },
-  assigned: { bg: "bg-primary-light/20", textClass: "text-primary-dark", iconColor: "#1D4ED8", icon: "swap-horizontal" },
+  assigned: { bg: "bg-blue-100", textClass: "text-primary-dark", iconColor: "#1D4ED8", icon: "swap-horizontal" },
   booked: { bg: "bg-danger-bg", textClass: "text-danger-text", iconColor: "#B91C1C", icon: "close-circle" },
   inactive: { bg: "bg-danger-bg", textClass: "text-danger-text", iconColor: "#B91C1C", icon: "close-circle" },
   cancelled: { bg: "bg-danger-bg", textClass: "text-danger-text", iconColor: "#B91C1C", icon: "close-circle" },

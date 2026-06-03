@@ -22,7 +22,7 @@ const AdminGuideScreen = ({ navigation }) => {
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
-          <AppCard className="mb-6 bg-primary/5 border-primary/20">
+          <AppCard className="mb-6" style={{ backgroundColor: "rgba(37,99,235,0.05)", borderColor: "rgba(37,99,235,0.2)" }}>
             <Text className="text-xl font-extrabold text-primary mb-2 tracking-tight">Welcome to QuickBus Admin 🚍</Text>
             <Text className="text-textDark text-sm leading-relaxed font-medium">
               This detailed guide will walk you through the standard operating procedures for managing the bus booking system. 

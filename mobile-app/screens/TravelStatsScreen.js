@@ -23,7 +23,7 @@ const TravelStatsScreen = ({ navigation }) => {
           
           {/* Main Loyalty Card */}
           <AppCard className="mb-6 bg-slate-900 border-slate-800 p-6 overflow-hidden">
-            <View className="absolute top-0 right-0 opacity-10">
+            <View className="absolute top-0 right-0" style={{ opacity: 0.1 }}>
               <Ionicons name="star" size={120} color="#F59E0B" style={{ transform: [{ translateX: 20 }, { translateY: -20 }] }} />
             </View>
             <View className="flex-row items-center justify-between mb-6 z-10">
@@ -34,7 +34,7 @@ const TravelStatsScreen = ({ navigation }) => {
               <Ionicons name="star" size={32} color="#F59E0B" />
             </View>
             
-            <View className="bg-white/10 rounded-2xl p-5 border border-white/10 z-10">
+            <View className="rounded-2xl p-5 z-10" style={{ backgroundColor: "rgba(255,255,255,0.1)", borderWidth: 1, borderColor: "rgba(255,255,255,0.1)" }}>
               <Text className="text-slate-300 text-xs font-bold tracking-widest uppercase text-center mb-2">Available Loyalty Points</Text>
               <Text className="text-white text-5xl font-black tracking-tighter text-center">1,250</Text>
             </View>
@@ -76,7 +76,7 @@ const TravelStatsScreen = ({ navigation }) => {
           <AppCard className="bg-amber-50 border-amber-100">
             <Text className="text-textDark font-bold text-base mb-4">Recent Milestone</Text>
             <View className="flex-row items-center">
-              <View className="bg-white p-3 rounded-xl mr-4 shadow-sm">
+              <View className="bg-white p-3 rounded-xl mr-4">
                 <Ionicons name="trophy" size={24} color="#F59E0B" />
               </View>
               <View className="flex-1">

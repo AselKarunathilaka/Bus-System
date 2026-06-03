@@ -181,11 +181,12 @@ const BusFormScreen = ({ route, navigation }) => {
   };
 
   const renderOptionList = (items, selectedValue, onSelect) => (
-    <View className="bg-white rounded-xl border border-border mb-4 overflow-hidden shadow-sm">
+    <View className="bg-white rounded-xl border border-border mb-4 overflow-hidden">
       {items.map((item) => (
         <TouchableOpacity
           key={item}
-          className={`p-4 border-b border-slate-100 ${selectedValue === item ? 'bg-primary/5' : ''}`}
+          className={`p-4 border-b border-slate-100`}
+          style={selectedValue === item ? { backgroundColor: "rgba(37,99,235,0.05)" } : undefined}
           onPress={() => onSelect(item)}
         >
           <Text className="text-textDark text-sm font-bold">{item}</Text>
@@ -195,9 +196,10 @@ const BusFormScreen = ({ route, navigation }) => {
   );
 
   const renderRouteOptions = () => (
-    <View className="bg-white rounded-xl border border-border mb-4 overflow-hidden shadow-sm">
+    <View className="bg-white rounded-xl border border-border mb-4 overflow-hidden">
       <TouchableOpacity
-        className={`p-4 border-b border-slate-100 ${!assignedRoute ? 'bg-primary/5' : ''}`}
+        className="p-4 border-b border-slate-100"
+        style={!assignedRoute ? { backgroundColor: "rgba(37,99,235,0.05)" } : undefined}
         onPress={() => {
           setAssignedRoute("");
           setOpenRoute(false);
@@ -209,7 +211,8 @@ const BusFormScreen = ({ route, navigation }) => {
       {routes.map((item) => (
         <TouchableOpacity
           key={item._id}
-          className={`p-4 border-b border-slate-100 ${assignedRoute === item._id ? 'bg-primary/5' : ''}`}
+          className="p-4 border-b border-slate-100"
+          style={assignedRoute === item._id ? { backgroundColor: "rgba(37,99,235,0.05)" } : undefined}
           onPress={() => {
             setAssignedRoute(item._id);
             setOpenRoute(false);

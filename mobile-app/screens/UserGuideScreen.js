@@ -22,7 +22,7 @@ const UserGuideScreen = ({ navigation }) => {
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
-          <AppCard className="mb-6 bg-primary/5 border-primary/20">
+          <AppCard className="mb-6" style={{ backgroundColor: "rgba(37,99,235,0.05)", borderColor: "rgba(37,99,235,0.2)" }}>
             <Text className="text-xl font-extrabold text-primary mb-2 tracking-tight">Welcome to QuickBus! 🚍</Text>
             <Text className="text-textDark text-sm leading-relaxed font-medium">
               We're here to help you get the most out of your travel experience. Below is a quick guide on how to navigate the app and book your next journey.
@@ -71,22 +71,22 @@ const UserGuideScreen = ({ navigation }) => {
             </View>
           </AppCard>
 
-          <AppCard className="mb-6 bg-danger-bg border-danger/20">
-            <View className="flex-row items-center mb-4 border-b border-danger/20 pb-3">
+          <AppCard className="mb-6 bg-danger-bg" style={{ borderColor: "rgba(239,68,68,0.2)" }}>
+            <View className="flex-row items-center mb-4 pb-3" style={{ borderBottomWidth: 1, borderBottomColor: "rgba(239,68,68,0.2)" }}>
               <Ionicons name="call" size={24} color="#DC2626" className="mr-3" />
               <Text className="text-lg font-bold text-danger-text">Need More Help?</Text>
             </View>
-            <Text className="text-danger-text/80 text-sm leading-relaxed mb-4">
+            <Text className="text-danger-text text-sm leading-relaxed mb-4" style={{ opacity: 0.8 }}>
               If you have any issues with a booking or need to request a cancellation, please reach out to our support team:
             </Text>
             <View className="flex-row items-center mb-3">
-              <View className="bg-white p-2 rounded-full mr-3 shadow-sm">
+              <View className="bg-white p-2 rounded-full mr-3">
                 <Ionicons name="mail" size={16} color="#DC2626" />
               </View>
               <Text className="text-danger-text font-bold">support@quickbus.lk</Text>
             </View>
             <View className="flex-row items-center">
-              <View className="bg-white p-2 rounded-full mr-3 shadow-sm">
+              <View className="bg-white p-2 rounded-full mr-3">
                 <Ionicons name="call" size={16} color="#DC2626" />
               </View>
               <Text className="text-danger-text font-bold">+94 11 234 5678</Text>

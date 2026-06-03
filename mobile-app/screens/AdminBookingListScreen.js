@@ -238,7 +238,7 @@ const AdminBookingListScreen = ({ navigation }) => {
             <Text className="mt-4 text-textMuted font-medium">Loading bookings...</Text>
           </View>
         ) : bookings.length === 0 ? (
-          <View className="items-center justify-center mt-20 opacity-80">
+          <View className="items-center justify-center mt-20" style={{ opacity: 0.8 }}>
             <Ionicons name="folder-open-outline" size={64} color="#94A3B8" />
             <Text className="text-textDark mt-4 font-bold text-lg">No bookings found</Text>
             <Text className="text-textMuted text-sm mt-1 text-center">System booking records will appear here.</Text>

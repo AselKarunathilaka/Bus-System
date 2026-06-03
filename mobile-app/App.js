@@ -61,11 +61,11 @@ export default function App() {
   return (
     <SafeAreaProvider style={{ flex: 1 }}>
       <ErrorBoundary>
-        <NavigationContainer>
-          <AuthProvider>
+        <AuthProvider>
+          <NavigationContainer>
             <AppNavigator />
-          </AuthProvider>
-        </NavigationContainer>
+          </NavigationContainer>
+        </AuthProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
   );

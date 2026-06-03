@@ -90,7 +90,7 @@ const ContactUsScreen = ({ navigation }) => {
         </View>
 
         <AppCard className="mb-6 max-w-2xl w-full self-center">
-          <View className="bg-primary/10 self-start px-3 py-1 rounded-full mb-4 border border-primary/20">
+          <View className="self-start px-3 py-1 rounded-full mb-4" style={{ backgroundColor: "rgba(37,99,235,0.1)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}>
             <Text className="text-xs font-bold text-primary tracking-widest uppercase">
               24/7 Support
             </Text>

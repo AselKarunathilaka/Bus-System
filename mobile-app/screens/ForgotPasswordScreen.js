@@ -56,7 +56,10 @@ const ForgotPasswordScreen = ({ navigation }) => {
         </TouchableOpacity>
 
         <View className="mb-8 items-center">
-          <View className="bg-primary/10 px-3 py-1 rounded-full mb-4">
+          <View 
+            className="px-3 py-1 rounded-full mb-4"
+            style={{ backgroundColor: "rgba(37,99,235,0.1)" }}
+          >
             <Text className="text-primary font-sans text-xs font-bold tracking-widest uppercase">QuickBus Connect</Text>
           </View>
           <Text className="text-3xl font-sans font-extrabold text-textDark mb-2 text-center tracking-tight">

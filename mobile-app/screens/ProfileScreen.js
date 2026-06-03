@@ -64,7 +64,7 @@ const ProfileScreen = ({ navigation }) => {
 
         <AppCard className="mb-8 max-w-md w-full self-center">
           <View className="items-center mb-8 pb-6 border-b border-border">
-            <View className="w-24 h-24 bg-primary/10 rounded-full items-center justify-center mb-4 border border-primary/20">
+            <View className="w-24 h-24 rounded-full items-center justify-center mb-4" style={{ backgroundColor: "rgba(37,99,235,0.1)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}>
               <Text className="text-4xl">👤</Text>
             </View>
             <Text className="text-xl font-bold text-textDark">{user?.fullName || "User"}</Text>
@@ -87,7 +87,7 @@ const ProfileScreen = ({ navigation }) => {
             icon="mail-outline"
             value={user?.email || ""}
             editable={false}
-            containerClassName="mb-4 opacity-70"
+            containerClassName="mb-4"
           />
 
           <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Phone</Text>

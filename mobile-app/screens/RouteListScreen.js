@@ -253,7 +253,7 @@ const RouteListScreen = ({ navigation }) => {
       </View>
 
       <AppCard className="mb-6">
-        <View className="bg-primary/10 self-start px-3 py-1.5 rounded-full mb-4 border border-primary/20">
+        <View className="self-start px-3 py-1.5 rounded-full mb-4" style={{ backgroundColor: "rgba(37,99,235,0.1)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}>
           <Text className="text-xs font-bold text-primary uppercase tracking-widest">
             QuickBus Routing
           </Text>
@@ -323,7 +323,7 @@ const RouteListScreen = ({ navigation }) => {
             keyExtractor={(item) => item._id}
             ListHeaderComponent={renderHeader}
             ListEmptyComponent={
-              <View className="items-center justify-center mt-20 opacity-80">
+              <View className="items-center justify-center mt-20" style={{ opacity: 0.8 }}>
                 <Ionicons name="map-outline" size={64} color="#94A3B8" />
                 <Text className="text-textDark mt-4 font-bold text-lg">No routes found</Text>
                 <Text className="text-textMuted text-sm mt-1 text-center max-w-[250px]">Try adjusting your filters or checking back later.</Text>
@@ -390,7 +390,8 @@ const RouteListScreen = ({ navigation }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                  className="bg-primary/10 py-2 px-4 rounded-lg mt-2 self-center border border-primary/20"
+                  className="py-2 px-4 rounded-lg mt-2 self-center"
+                  style={{ backgroundColor: "rgba(37,99,235,0.1)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}
                   onPress={() => navigation.navigate("StopList", { routeId: item._id, routeName: item.routeName })}
                 >
                   <Text className="text-primary text-[10px] font-bold uppercase tracking-widest text-center">

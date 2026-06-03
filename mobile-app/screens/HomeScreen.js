@@ -106,7 +106,7 @@ const HomeScreen = ({ navigation }) => {
         <AppCard className="mb-8 p-5">
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center">
-              <View className="w-12 h-12 rounded-full bg-primary/10 items-center justify-center mr-4">
+              <View className="w-12 h-12 rounded-full items-center justify-center mr-4" style={{ backgroundColor: "rgba(37,99,235,0.1)" }}>
                 <Text className="text-primary font-bold text-lg uppercase">{user?.fullName?.charAt(0) || "U"}</Text>
               </View>
               <View>
@@ -128,7 +128,7 @@ const HomeScreen = ({ navigation }) => {
             <View className="flex-row flex-wrap justify-between">
               
               <TouchableOpacity className="w-[48%] mb-4" onPress={() => navigation.navigate("Routes")} activeOpacity={0.7}>
-                <AppCard className="h-32 justify-center items-center hover:shadow-md">
+                <AppCard className="h-32 justify-center items-center ">
                   <View className="w-10 h-10 rounded-full bg-blue-100 items-center justify-center mb-3">
                     <Ionicons name="map" size={20} color="#2563EB" />
                   </View>
@@ -137,7 +137,7 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[48%] mb-4" onPress={() => navigation.navigate("Buses")} activeOpacity={0.7}>
-                <AppCard className="h-32 justify-center items-center hover:shadow-md">
+                <AppCard className="h-32 justify-center items-center">
                   <View className="w-10 h-10 rounded-full bg-indigo-100 items-center justify-center mb-3">
                     <Ionicons name="bus" size={20} color="#4F46E5" />
                   </View>
@@ -146,7 +146,7 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[48%] mb-4" onPress={() => navigation.navigate("ScheduleList")} activeOpacity={0.7}>
-                <AppCard className="h-32 justify-center items-center hover:shadow-md">
+                <AppCard className="h-32 justify-center items-center">
                   <View className="w-10 h-10 rounded-full bg-amber-100 items-center justify-center mb-3">
                     <Ionicons name="calendar" size={20} color="#D97706" />
                   </View>
@@ -155,7 +155,7 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[48%] mb-4" onPress={() => navigation.navigate("BookingsTab")} activeOpacity={0.7}>
-                <AppCard className="h-32 justify-center items-center hover:shadow-md">
+                <AppCard className="h-32 justify-center items-center">
                   <View className="w-10 h-10 rounded-full bg-emerald-100 items-center justify-center mb-3">
                     <Ionicons name="receipt" size={20} color="#059669" />
                   </View>
@@ -164,7 +164,7 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[48%] mb-4" onPress={() => navigation.navigate("AdminDashboard")} activeOpacity={0.7}>
-                <AppCard className="h-32 justify-center items-center bg-slate-50 hover:shadow-md">
+                <AppCard className="h-32 justify-center items-center bg-slate-50">
                   <View className="w-10 h-10 rounded-full bg-slate-200 items-center justify-center mb-3">
                     <Ionicons name="bar-chart" size={20} color="#475569" />
                   </View>
@@ -173,7 +173,7 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[48%] mb-4" onPress={() => navigation.navigate("UserScheduleList")} activeOpacity={0.7}>
-                <AppCard className="h-32 justify-center items-center bg-slate-50 hover:shadow-md border-slate-200 border-dashed border-2">
+                <AppCard className="h-32 justify-center items-center bg-slate-50 border-slate-200 border-dashed border-2">
                   <View className="w-10 h-10 rounded-full bg-slate-200 items-center justify-center mb-3">
                     <Ionicons name="add-circle" size={20} color="#64748B" />
                   </View>
@@ -182,7 +182,7 @@ const HomeScreen = ({ navigation }) => {
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[48%] mb-4" onPress={() => navigation.navigate("AdminGuide")} activeOpacity={0.7}>
-                <AppCard className="h-32 justify-center items-center bg-slate-50 hover:shadow-md">
+                <AppCard className="h-32 justify-center items-center bg-slate-50">
                   <View className="w-10 h-10 rounded-full bg-slate-200 items-center justify-center mb-3">
                     <Ionicons name="book" size={20} color="#475569" />
                   </View>

@@ -98,7 +98,10 @@ const LoginScreen = ({ navigation }) => {
           </TouchableOpacity>
 
           {errorMessage ? (
-            <View className="bg-danger-bg border border-danger/20 p-4 rounded-xl mb-6 flex-row items-center">
+            <View 
+              className="bg-danger-bg p-4 rounded-xl mb-6 flex-row items-center"
+              style={{ borderWidth: 1, borderColor: "rgba(239,68,68,0.2)" }}
+            >
               <Ionicons name="alert-circle" size={20} color="#EF4444" />
               <Text className="text-danger font-medium text-sm ml-2 flex-1">{errorMessage}</Text>
             </View>

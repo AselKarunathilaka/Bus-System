@@ -132,7 +132,7 @@ const StopListScreen = ({ route, navigation }) => {
           contentContainerStyle={{ paddingBottom: 40 }}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <View className="items-center justify-center mt-16 opacity-80">
+            <View className="items-center justify-center mt-16" style={{ opacity: 0.8 }}>
               <Ionicons name="location-outline" size={64} color="#94A3B8" />
               <Text className="text-textDark mt-4 font-bold text-lg">No Stops Found</Text>
               <Text className="text-textMuted text-sm mt-1 text-center">
@@ -144,7 +144,7 @@ const StopListScreen = ({ route, navigation }) => {
             <AppCard className="mb-4">
               <View className="flex-row items-center justify-between mb-4 border-b border-border pb-4">
                 <View className="flex-row items-center flex-1">
-                  <View className="bg-primary/10 p-3 rounded-xl mr-4 border border-primary/20">
+                  <View className="p-3 rounded-xl mr-4" style={{ backgroundColor: "rgba(37,99,235,0.1)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}>
                     <Ionicons name="location" size={20} color="#2563EB" />
                   </View>
                   <View className="flex-1">

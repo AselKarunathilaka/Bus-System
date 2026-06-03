@@ -109,7 +109,7 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
             {/* Ticket styling with dashed borders */}
             <View className="bg-white rounded-2xl rounded-b-none border border-slate-200 border-b-0 pb-8 p-6">
               <View className="flex-row items-center mb-6 border-b border-slate-100 pb-4">
-                <View className="bg-primary/10 p-3 rounded-full mr-4 border border-primary/20">
+                <View className="p-3 rounded-full mr-4" style={{ backgroundColor: "rgba(37,99,235,0.1)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}>
                   <Ionicons name="bus" size={20} color="#2563EB" />
                 </View>
                 <Text className="text-xl font-bold text-textDark tracking-tight">Digital Ticket</Text>
@@ -143,7 +143,7 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
               <View className="flex-row justify-between border-t border-slate-100 pt-5">
                 <View>
                   <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Bus</Text>
-                  <Text className="text-sm font-bold text-textDark">{schedule.busId?.licenseNumber}</Text>
+                  <Text className="text-sm font-bold text-textDark">{schedule.busId?.licensePlate}</Text>
                 </View>
                 <View className="items-center">
                   <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Type</Text>

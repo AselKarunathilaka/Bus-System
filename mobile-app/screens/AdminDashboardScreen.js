@@ -475,7 +475,7 @@ const AdminDashboardScreen = ({ navigation }) => {
               title="Export" 
               icon={<Ionicons name="document-text" size={16} color="#2563EB" />} 
               variant="secondary"
-              className="py-2 px-4 shadow-sm"
+              className="py-2 px-4"
               textClassName="text-primary"
               onPress={generatePDFReport} 
             />

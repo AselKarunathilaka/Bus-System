@@ -205,7 +205,7 @@ const BusListScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <View className="bg-primary/5 rounded-xl p-4 border border-primary/20">
+      <View className="rounded-xl p-4" style={{ backgroundColor: "rgba(37,99,235,0.05)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}>
         <Text className="text-sm text-primary font-bold leading-relaxed">
           {item.assignedRoute
             ? `Route: ${item.assignedRoute.routeName}\n${item.assignedRoute.startLocation} → ${item.assignedRoute.endLocation}`
@@ -250,7 +250,7 @@ const BusListScreen = ({ navigation }) => {
             contentContainerStyle={{ paddingBottom: 40 }}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={
-              <View className="items-center justify-center mt-20 opacity-80">
+              <View className="items-center justify-center mt-20" style={{ opacity: 0.8 }}>
                 <Ionicons name="bus-outline" size={64} color="#94A3B8" />
                 <Text className="text-textDark mt-4 font-bold text-lg">No buses found</Text>
                 <Text className="text-textMuted text-sm mt-1 text-center">Your fleet is currently empty.</Text>

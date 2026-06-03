@@ -155,7 +155,7 @@ const ScheduleListScreen = ({ navigation }) => {
             <Text className="mt-4 text-textMuted font-medium">Loading schedules...</Text>
           </View>
         ) : schedules.length === 0 ? (
-          <View className="items-center justify-center mt-20 opacity-80">
+          <View className="items-center justify-center mt-20" style={{ opacity: 0.8 }}>
             <Ionicons name="calendar-outline" size={64} color="#94A3B8" />
             <Text className="text-textDark mt-4 font-bold text-lg">No schedules found</Text>
             <Text className="text-textMuted text-sm mt-1 text-center">Create a schedule to start assigning buses to routes.</Text>

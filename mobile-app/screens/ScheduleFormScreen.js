@@ -144,7 +144,7 @@ const ScheduleFormScreen = ({ route, navigation }) => {
             </View>
 
             <Text className="text-[10px] font-bold text-textMuted mb-2 uppercase tracking-widest ml-1">Select Bus</Text>
-            <View className={`bg-background border border-border rounded-xl mb-4 overflow-hidden ${!routeId ? 'opacity-50' : ''}`}>
+            <View className="bg-background border border-border rounded-xl mb-4 overflow-hidden" style={!routeId ? { opacity: 0.5 } : undefined}>
               {Platform.OS === 'web' ? (
                 <select
                   value={busId}
