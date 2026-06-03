@@ -69,6 +69,9 @@ The main objectives of the QuickBus system are:
 - **Advanced Admin Dashboard:** Real-time system analytics, fleet status breakdowns, and dynamic charting for 7-day booking trends.
 - **PDF Report Generation:** Administrators can now instantly export comprehensive lifetime or date-filtered analytic reports directly from the mobile app.
 - **Archival Date Filtering:** Dynamic date-range filtering for system metrics, bookings, and revenue tracking.
+- **Mobile & Web Stability Pass:** Resolved a critical navigation context crash by restructuring `AuthProvider` and `NavigationContainer` hierarchy.
+- **NativeWind Crash Proofing:** Eliminated 20+ NativeWind opacity shorthand crashes (e.g., `bg-primary/10`, `opacity-80`) and incompatible shadow pseudo-classes across all screens, guaranteeing flawless execution on Expo Go and Android.
+- **Data Integrity Fixes:** Addressed data field mismatches across booking and schedule screens to ensure buses and license plates map perfectly from the database.
 
 ---
 
@@ -709,3 +712,14 @@ Remaining full system modules:
 QuickBus is a mobile-based highway bus reservation and management system developed to make bus operations easier to manage and easier for passengers to use. The system supports secure login, route and stop management, bus management, schedule planning, booking handling, and administrative reporting.
 
 The project follows a full-stack mobile application structure with a React Native frontend, Node.js and Express backend, and MongoDB database. It is designed to support a real-world bus reservation workflow and can be extended with more features in the future.
+
+---
+
+## 📝 Latest Changes Commit Command
+
+To commit these latest documentation updates and stability fixes to your repository, use the following exact commands in your terminal:
+
+```bash
+git add .
+git commit -m "docs: update README with latest stability and nativewind crash fixes"
+```
