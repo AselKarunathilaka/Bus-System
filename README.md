@@ -120,12 +120,22 @@ QuickBus boasts a highly polished, professional SaaS-style interface engineered 
 
 ---
 
-## 👥 Team Details
+## 👥 Team Details & Core Responsibilities
 
 **Group Number:** WD-IT-01
 
-*   **Member 1:** Asel Karunathilaka (<a href="https://github.com/AselKarunathilaka">@AselKarunathilaka</a>) - *Login, Route & Stop Management, Admin Panel, and all core features (excluding Bus Management).*
-*   **Member 2:** Kethaka Biyanwila (<a href="https://github.com/sanklana123">@sanklana123</a>) - *Bus Management.*
+### 👤 Member 1: Asel Karunathilaka (<a href="https://github.com/AselKarunathilaka">@AselKarunathilaka</a>)
+*Engineered all core system architecture, authentication, route logistics, scheduling, booking, and administrative features.*
+*   **Authentication & Security:** Developed the entire login/registration flow, implemented `bcryptjs` for password hashing, and constructed the stateless JWT session architecture across both backend middleware and the frontend `AuthContext`.
+*   **Route & Stop Management:** Engineered the CRUD APIs and UI screens allowing administrators to define geographical bus routes, calculate base fares, and attach multi-point intermediate stops to specific journeys.
+*   **Schedule & Booking Core:** Built the complex transactional logic for bus scheduling and the passenger booking engine, including real-time seat capacity validation, pricing calculators, and QR code digital ticket generation.
+*   **Admin Dashboard & Analytics:** Designed the administrative command center, integrating real-time MongoDB aggregation pipelines for revenue tracking, fleet status updates, and HTML-to-PDF report generation.
+
+### 👤 Member 2: Kethaka Biyanwila (<a href="https://github.com/sanklana123">@sanklana123</a>)
+*Engineered the comprehensive Fleet and Bus Management subsystems.*
+*   **Bus Registry System:** Developed the backend models, API controllers, and frontend interfaces for registering and managing the entire physical bus fleet.
+*   **Vehicle Configurations:** Engineered logic to track individual bus configurations, including distinct seating capacities, license plate designations, and vehicle categorization.
+*   **Personnel & Status Tracking:** Implemented the systems that link physical buses to their assigned drivers and conductors for strict operational accountability, as well as tracking real-time maintenance vs. availability statuses.
 
 ---
 
