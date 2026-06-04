@@ -36,6 +36,30 @@ This project was developed as part of the **SE2020 Web and Mobile Technologies**
 
 ---
 
+## 🧩 Comprehensive System Modules
+
+### 🔐 1. Authentication & Security
+*   **User Management:** Secure registration and login workflows with password hashing (`bcryptjs`) and JWT-based session management.
+*   **Role-Based Access Control (RBAC):** Strict separation of privileges between standard passengers and administrators, preventing unauthorized access to management panels.
+
+### 📍 2. Route & Stop Management
+*   **Dynamic Routing:** Administrators can establish new travel routes, defining starting points, destinations, estimated durations, and base pricing.
+*   **Intermediate Stops:** Routes can be enriched with multiple stops, providing passengers with granular details about their journey's trajectory.
+
+### 🚌 3. Fleet & Bus Management
+*   **Fleet Database:** Comprehensive registry of all operational vehicles, including license plates, seating capacities, and bus types.
+*   **Personnel Assignment:** Links buses with dedicated drivers and conductors, ensuring accountability and streamlined operations.
+
+### 🗓️ 4. Advanced Scheduling
+*   **Trip Generation:** Admins can pair routes with specific buses to create actionable, date-specific schedules.
+*   **Capacity Tracking:** Real-time monitoring of booked vs. available seats for every active journey, avoiding overbooking.
+
+### 🎟️ 5. Booking Engine
+*   **Interactive Selection:** Passengers can visually select up to 8 seats (Family Booking) or single seats.
+*   **Automated Validation:** Server-side checks prevent double-booking and out-of-bounds seat selections, guaranteeing transactional integrity.
+
+---
+
 ## 💻 Technology Stack
 
 | Architecture | Technologies |
@@ -105,6 +129,29 @@ npx expo start -c
 
 ---
 
+---
+
+## 🔒 Security Architecture
+
+QuickBus prioritizes data integrity and access control:
+*   **Password Hashing:** Passwords are cryptographically hashed using `bcryptjs` before being stored in the database.
+*   **Stateless Authentication:** JSON Web Tokens (JWT) are utilized for secure, scalable session verification across both mobile and web platforms.
+*   **API Protection:** All critical backend routes are shielded by authorization middleware that validates JWT signatures and user roles before executing operations.
+*   **Input Validation:** Strict payload validation in the controllers prevents malformed requests, duplicate seat bookings, and unauthorized data manipulation.
+
+---
+
 <div align="center">
   <p>Built with ❤️ by Team WD-IT-01</p>
 </div>
+
+---
+
+## 📝 Latest Changes Commit Command
+
+To commit these latest documentation updates and comprehensive system details to your repository, use the following exact commands in your terminal:
+
+```bash
+git add .
+git commit -m "docs: expand README with comprehensive module breakdowns and security architecture"
+```
