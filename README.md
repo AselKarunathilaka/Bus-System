@@ -48,11 +48,11 @@ This project was developed as part of the **SE2020 Web and Mobile Technologies**
 *   **Role-Based Access Control (RBAC):** Strict separation of privileges. Standard passengers are firewalled from administrative panels, and all backend administrative routes validate the `admin` token signature before execution.
 *   **Payload Validation:** Strict algorithmic validation in backend controllers prevents malformed requests, duplicate seat bookings, and negative pricing injections.
 
-### 📍 2. Route & Stop Management *(Member 1 - IT21323102)*
+### 📍 2. Route & Stop Management
 *   **Route Lifecycle:** Full CRUD operations for routes. A route encapsulates the origin, destination, standard duration, and fare.
 *   **Waypoint Integration:** Routes are enriched with multiple intermediate stops, providing passengers with exact trajectory maps and estimated sub-journey times.
 
-### 🚌 3. Fleet & Bus Management *(Member 2 - IT21009372)*
+### 🚌 3. Fleet & Bus Management
 *   **Vehicle Registry:** Maintains the operational status of all buses (e.g., Available, In Maintenance).
 *   **Personnel Accountability:** Directly links physical buses with dedicated drivers and conductors, ensuring strict accountability and streamlined operations in case of emergencies.
 
@@ -124,8 +124,8 @@ QuickBus boasts a highly polished, professional SaaS-style interface engineered 
 
 **Group Number:** WD-IT-01
 
-*   **Member 1:** IT21323102 - Karunathilaka K.W.A.A.S. *(Auth, Route & Stop Management)*
-*   **Member 2:** IT21009372 - Biyanwila B.D.K.P.S. *(Fleet, Bus & Schedule Management)*
+*   **Member 1:** Asel Karunathilaka (<a href="https://github.com/AselKarunathilaka">@AselKarunathilaka</a>) - *Login, Route & Stop Management, Admin Panel, and all core features (excluding Bus Management).*
+*   **Member 2:** Kethaka Biyanwila (<a href="https://github.com/sanklana123">@sanklana123</a>) - *Bus Management.*
 
 ---
 
@@ -169,5 +169,5 @@ npx expo start -c
 ---
 
 <div align="center">
-  <p>Engineered with ❤️ by <a href="https://github.com/AselKarunathilaka">@AselKarunathilaka</a> and <a href="https://github.com/BiyanwilaB">@BiyanwilaB</a></p>
+  <p>Engineered by <a href="https://github.com/AselKarunathilaka">@AselKarunathilaka</a> and <a href="https://github.com/sanklana123">@sanklana123</a></p>
 </div>
