@@ -66,6 +66,20 @@ This project was developed as part of the **SE2020 Web and Mobile Technologies**
 
 ---
 
+## ⚙️ Internal Architecture & Core System Functions
+
+### 📡 API & Backend Controllers
+*   **Authentication Flow (`authController.js`):** Intercepts login requests, hashes incoming passwords using `bcryptjs`, compares them against the database, and issues signed JSON Web Tokens (JWT) valid for secure sessions.
+*   **Booking Engine (`bookingController.js`):** Implements rigorous transactional checks. Validates that selected seat indices do not exceed the linked `Bus.seatCapacity`, verifies seats aren't already included in `Schedule.bookedSeats`, and accurately calculates the `totalPrice` server-side before confirming the booking.
+*   **Analytics Aggregator (`adminController.js`):** Dynamically queries MongoDB to generate live statistical snapshots (total revenue, active routes, fleet status) and formats 7-day volume histories for the frontend dashboard.
+
+### ⚛️ Frontend State & Context Management
+*   **AuthContext (`AuthContext.js`):** A React Context provider that globally manages the user's authentication state, JWT token storage (via `AsyncStorage`), and user role (`admin` vs `user`), automatically dictating navigation stack access.
+*   **Cross-Platform UI Rendering:** Custom encapsulated components (e.g., `AppButton`, `AppCard`) utilize conditional NativeWind class merging and React Native `StyleSheet` properties to ensure pixel-perfect rendering across Web DOM, iOS UIViews, and Android Views, specifically mitigating common Android elevation clipping bugs.
+*   **PDF Generation (`html2pdf.js` & `expo-print`):** The Admin Dashboard dynamically compiles raw React state into an HTML template string and streams it to device-native PDF generators, integrating with `expo-sharing` for instant mobile export.
+
+---
+
 ## 💻 Technology Stack & Architecture
 
 | Architecture Layer | Core Technologies Utilized |
@@ -155,5 +169,5 @@ npx expo start -c
 ---
 
 <div align="center">
-  <p>Engineered with ❤️ by Team WD-IT-01</p>
+  <p>Engineered with ❤️ by <a href="https://github.com/AselKarunathilaka">@AselKarunathilaka</a> and <a href="https://github.com/BiyanwilaB">@BiyanwilaB</a></p>
 </div>
