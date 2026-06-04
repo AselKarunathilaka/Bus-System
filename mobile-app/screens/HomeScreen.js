@@ -259,42 +259,42 @@ const HomeScreen = ({ navigation }) => {
             <Text className="text-lg font-sans font-bold text-textDark mb-4 tracking-tight">Quick Actions</Text>
             <View className="flex-row flex-wrap justify-between mb-8">
               <TouchableOpacity className="w-[31%] items-center mb-4" onPress={() => navigation.navigate("UserScheduleList")} activeOpacity={0.7}>
-                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2 shadow-sm">
+                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2">
                   <Ionicons name="ticket" size={24} color="#059669" />
                 </View>
                 <Text className="text-textDark font-medium text-xs">Book</Text>
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[31%] items-center mb-4" onPress={() => navigation.navigate("BookingsTab")} activeOpacity={0.7}>
-                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2 shadow-sm">
+                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2">
                   <Ionicons name="receipt" size={24} color="#D97706" />
                 </View>
                 <Text className="text-textDark font-medium text-xs">Tickets</Text>
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[31%] items-center mb-4" onPress={() => navigation.navigate("Routes")} activeOpacity={0.7}>
-                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2 shadow-sm">
+                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2">
                   <Ionicons name="map" size={24} color="#2563EB" />
                 </View>
                 <Text className="text-textDark font-medium text-xs">Routes</Text>
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[31%] items-center" onPress={() => navigation.navigate("BookingGuide")} activeOpacity={0.7}>
-                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2 shadow-sm">
+                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2">
                   <Ionicons name="book" size={24} color="#059669" />
                 </View>
                 <Text className="text-textDark font-medium text-xs text-center">Guide</Text>
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[31%] items-center" onPress={() => navigation.navigate("AboutUs")} activeOpacity={0.7}>
-                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2 shadow-sm">
+                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2">
                   <Ionicons name="information-circle" size={24} color="#2563EB" />
                 </View>
                 <Text className="text-textDark font-medium text-xs text-center">About Us</Text>
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[31%] items-center" onPress={() => navigation.navigate("ContactUs")} activeOpacity={0.7}>
-                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2 shadow-sm">
+                <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2">
                   <Ionicons name="mail" size={24} color="#4F46E5" />
                 </View>
                 <Text className="text-textDark font-medium text-xs text-center">Support</Text>
