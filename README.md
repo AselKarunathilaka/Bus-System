@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://img.icons8.com/?size=100&id=46860&format=png&color=2563EB" alt="QuickBus Logo" width="100"/>
-  <h1>🚌 QuickBus</h1>
-  <p><strong>Next-Generation Highway Bus Reservation and Management System</strong></p>
+  <h1>🚌 QuickBus - Highway Bus Reservation & Management System</h1>
+  <p><strong>A Next-Generation, Full-Stack Solution for Public Transportation Management</strong></p>
 
   <p>
     <img src="https://img.shields.io/badge/Platform-Android%20%7C%20iOS%20%7C%20Web-blue.svg?style=flat-square" alt="Platform" />
@@ -12,77 +12,96 @@
 
 ---
 
-## 📖 Overview
+## 📖 Executive Overview
 
-**QuickBus** is a robust, full-stack mobile application designed to modernize and streamline highway bus operations. By replacing outdated, disconnected manual processes with a centralized digital platform, QuickBus provides passengers with a seamless booking experience and empowers administrators with powerful fleet, route, and scheduling management tools.
+**QuickBus** is a robust, full-stack mobile application engineered to modernize and streamline highway bus operations. The transportation sector often struggles with fragmented communication—relying on phone calls, paper ledgers, and disconnected agents. QuickBus bridges this gap by providing a centralized digital ecosystem. 
 
-This project was developed as part of the **SE2020 Web and Mobile Technologies** group assignment.
+It empowers passengers with a seamless, mobile-first booking experience while simultaneously equipping system administrators with powerful fleet orchestration, route planning, and real-time scheduling tools.
 
----
-
-## ✨ Key Features
-
-### 👤 For Passengers
-*   **🛣️ Route Discovery:** Browse available routes, view detailed stop information, and check estimated travel times.
-*   **🗓️ Real-Time Scheduling:** Check live availability for upcoming trips and filter by departure/arrival locations and dates.
-*   **🎫 Seamless Booking:** Select seats via an interactive layout, book tickets securely, and instantly access digital tickets.
-*   **🧑‍💻 Profile Management:** Track booking history, view past receipts, and manage personal profile information.
-
-### 🛡️ For Administrators
-*   **📈 Analytics Dashboard:** Access real-time system analytics, fleet status breakdowns, revenue tracking, and 7-day booking trends.
-*   **🗺️ Route & Fleet Management:** Create and manage routes, intermediate stops, and bus details (including capacity and driver assignments).
-*   **📅 Schedule Orchestration:** Allocate specific buses to routes, define departure and arrival times, and monitor seat availability.
-*   **📑 PDF Report Generation:** Instantly export comprehensive, date-filtered analytic reports directly from the mobile app.
+This project was developed as part of the **SE2020 Web and Mobile Technologies** group assignment, focusing on modern UI/UX principles, strict backend security, and cross-platform mobile stability.
 
 ---
 
-## 🧩 Comprehensive System Modules
+## ✨ Comprehensive Feature Set
 
-### 🔐 1. Authentication & Security
-*   **User Management:** Secure registration and login workflows with password hashing (`bcryptjs`) and JWT-based session management.
-*   **Role-Based Access Control (RBAC):** Strict separation of privileges between standard passengers and administrators, preventing unauthorized access to management panels.
+### 👤 Passenger Portal
+*   **🛣️ Dynamic Route Discovery:** Passengers can browse all active operational routes, view granular stop-by-stop geographical information, and check estimated travel durations.
+*   **🗓️ Real-Time Trip Scheduling:** Users can check live availability for upcoming trips, filter by departure/arrival hubs, and view precisely when buses depart.
+*   **🎫 Interactive Seat Booking:** An intuitive visual layout allows passengers to select exact seats (up to 8 for Family Bookings, or 1 for Single Bookings). 
+*   **📱 Digital Ticketing & QR Generation:** Upon booking, secure digital tickets are generated instantly alongside QR codes for fast boarding.
+*   **🧑‍💻 Profile & History Management:** Users maintain a personalized dashboard to track booking histories, view past receipts, and manage account credentials.
 
-### 📍 2. Route & Stop Management
-*   **Dynamic Routing:** Administrators can establish new travel routes, defining starting points, destinations, estimated durations, and base pricing.
-*   **Intermediate Stops:** Routes can be enriched with multiple stops, providing passengers with granular details about their journey's trajectory.
-
-### 🚌 3. Fleet & Bus Management
-*   **Fleet Database:** Comprehensive registry of all operational vehicles, including license plates, seating capacities, and bus types.
-*   **Personnel Assignment:** Links buses with dedicated drivers and conductors, ensuring accountability and streamlined operations.
-
-### 🗓️ 4. Advanced Scheduling
-*   **Trip Generation:** Admins can pair routes with specific buses to create actionable, date-specific schedules.
-*   **Capacity Tracking:** Real-time monitoring of booked vs. available seats for every active journey, avoiding overbooking.
-
-### 🎟️ 5. Booking Engine
-*   **Interactive Selection:** Passengers can visually select up to 8 seats (Family Booking) or single seats.
-*   **Automated Validation:** Server-side checks prevent double-booking and out-of-bounds seat selections, guaranteeing transactional integrity.
+### 🛡️ Administrative Command Center
+*   **📈 Real-Time Analytics Dashboard:** A comprehensive view of system health, including fleet status breakdowns (Available vs. Maintenance), aggregate revenue tracking, and dynamic 7-day booking volume charts.
+*   **🗺️ Route & Topology Management:** Admins can establish new travel routes, defining precise starting points, destinations, total distance, and base pricing structures.
+*   **🚌 Complete Fleet Management:** A deep registry of all operational vehicles. Admins can register new buses, assign license plates, configure seating capacities, and attach driver/conductor contact details.
+*   **📅 Schedule Orchestration:** Connect specific buses to established routes to create actionable, date-specific schedules.
+*   **📑 PDF Report Generation:** Instantly export comprehensive, date-filtered analytic reports (HTML-to-PDF) directly from the mobile interface for executive review.
 
 ---
 
-## 💻 Technology Stack
+## 🧩 Deep-Dive System Modules
 
-| Architecture | Technologies |
+### 🔐 1. Authentication & Security Architecture
+*   **Cryptographic User Management:** Secure registration and login workflows utilizing `bcryptjs` for one-way password hashing.
+*   **Stateless JWT Sessions:** JSON Web Tokens (JWT) are employed for secure, scalable session verification across mobile and web platforms.
+*   **Role-Based Access Control (RBAC):** Strict separation of privileges. Standard passengers are firewalled from administrative panels, and all backend administrative routes validate the `admin` token signature before execution.
+*   **Payload Validation:** Strict algorithmic validation in backend controllers prevents malformed requests, duplicate seat bookings, and negative pricing injections.
+
+### 📍 2. Route & Stop Management *(Member 1 - IT21323102)*
+*   **Route Lifecycle:** Full CRUD operations for routes. A route encapsulates the origin, destination, standard duration, and fare.
+*   **Waypoint Integration:** Routes are enriched with multiple intermediate stops, providing passengers with exact trajectory maps and estimated sub-journey times.
+
+### 🚌 3. Fleet & Bus Management *(Member 2 - IT21009372)*
+*   **Vehicle Registry:** Maintains the operational status of all buses (e.g., Available, In Maintenance).
+*   **Personnel Accountability:** Directly links physical buses with dedicated drivers and conductors, ensuring strict accountability and streamlined operations in case of emergencies.
+
+### 🗓️ 4. Advanced Scheduling Engine
+*   **Trip Generation:** Merges a `RouteId` and a `BusId` with specific chronological data (Departure Date/Time) to spawn a bookable Schedule.
+*   **Concurrency Control:** Real-time monitoring of booked vs. available seats. The backend utilizes atomic operations to ensure that two users cannot book the same seat simultaneously.
+
+### 🎟️ 5. Booking & Transaction Core
+*   **Server-Side Pricing Calculation:** Prices are strictly calculated on the backend based on `route.price * seats.length` to prevent frontend manipulation.
+*   **Automated Validation:** Checks ensure that the selected bus has the physical capacity for the selected seat index (e.g., preventing booking seat 45 on a 40-seat bus).
+
+---
+
+## 💻 Technology Stack & Architecture
+
+| Architecture Layer | Core Technologies Utilized |
 | :--- | :--- |
-| **📱 Frontend (Mobile & Web)** | React Native, Expo, React Navigation, Axios, NativeWind (Tailwind CSS) |
-| **⚙️ Backend API** | Node.js, Express.js, JSON Web Tokens (JWT), bcryptjs |
-| **🗄️ Database** | MongoDB Atlas, Mongoose |
-| **🚀 Deployment** | Render (Backend), Expo Go (Mobile Testing) |
+| **📱 Frontend UI (Mobile & Web)** | React Native, Expo, React Navigation, React Native SVG |
+| **🎨 Styling & Design System** | NativeWind (Tailwind CSS for React Native), Glassmorphism UI |
+| **⚙️ Backend API Server** | Node.js, Express.js, Axios |
+| **🔐 Security & Auth** | JSON Web Tokens (JWT), `bcryptjs`, CORS, Dotenv |
+| **🗄️ Database & ORM** | MongoDB Atlas (Cloud NoSQL), Mongoose ODM |
+| **🚀 Deployment Infrastructure** | Render (Backend Server), Expo Go (Mobile Client Testing) |
 
 ---
 
-## 🎨 UI/UX Highlights
+## 🗃️ Database Schema Overview (MongoDB)
 
-QuickBus boasts a highly polished, professional SaaS-style interface:
-*   **Modern Aesthetics:** Clean layouts, structured cards, and a carefully curated typography scale utilizing `Plus Jakarta Sans`.
-*   **Responsive Design:** Flawless rendering logic ensuring compatibility across Web browsers and native mobile environments.
-*   **Optimized Performance:** Fully stabilized frontend eliminating cross-platform CSS interop rendering bugs for a smooth, crash-free experience on Expo Go.
+QuickBus utilizes a relational NoSQL structure with the following primary collections:
+*   `Users`: Stores credentials, roles (`admin` or `user`), and contact info.
+*   `Routes`: Stores geographical data, pricing, and active status.
+*   `Buses`: Stores capacity, license plates, operational status, and assigned staff.
+*   `Schedules`: The intersection of a Route and a Bus, tracking specific dates, times, and an array of `bookedSeats`.
+*   `Bookings`: Transactional records linking a `User`, a `Schedule`, the specific seats booked, and the final calculated price.
 
 ---
 
-## 🔗 Live Deployments
+## 🎨 UI/UX Design Philosophy
 
-*   **API Base URL:** `https://bus-system-3lgy.onrender.com/api`
+QuickBus boasts a highly polished, professional SaaS-style interface engineered to stand out:
+*   **Modern Aesthetics:** Clean, solid-color layouts utilizing advanced Glassmorphism techniques, dynamic background gradients, and a curated typography scale (`Plus Jakarta Sans`).
+*   **Cross-Platform Responsive Design:** Flawless rendering logic ensuring structural integrity across Web browsers, Android, and iOS environments.
+*   **Optimized Performance:** Fully stabilized frontend architecture. We systematically eliminated cross-platform CSS interop rendering bugs (such as Android elevation shadow clipping) to guarantee a buttery-smooth, crash-free experience natively on Expo Go.
+
+---
+
+## 🔗 Live Deployments & Connections
+
+*   **API Base URL (Render):** `https://bus-system-3lgy.onrender.com/api`
 *   **GitHub Repository:** `https://github.com/AselKarunathilaka/Bus-System`
 
 ---
@@ -91,12 +110,12 @@ QuickBus boasts a highly polished, professional SaaS-style interface:
 
 **Group Number:** WD-IT-01
 
-*   **Member 1:** IT21323102 - Karunathilaka K.W.A.A.S. *(Login, Route & Stop Management)*
-*   **Member 2:** IT21009372 - Biyanwila B.D.K.P.S. *(Bus Management)*
+*   **Member 1:** IT21323102 - Karunathilaka K.W.A.A.S. *(Auth, Route & Stop Management)*
+*   **Member 2:** IT21009372 - Biyanwila B.D.K.P.S. *(Fleet, Bus & Schedule Management)*
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Getting Started & Installation Guide
 
 ### 1. Clone the Repository
 ```bash
@@ -104,54 +123,37 @@ git clone https://github.com/AselKarunathilaka/Bus-System.git
 cd Bus-System
 ```
 
-### 2. Run the Backend (Locally)
+### 2. Run the Backend Server (Local Development)
 If you prefer not to use the hosted backend, you can spin it up locally:
 ```bash
 cd backend
 npm install
 
-# Create a .env file with PORT, MONGO_URI, and JWT_SECRET
+# Create a .env file and configure the following:
+# PORT=5000
+# MONGO_URI=your_mongodb_atlas_connection_string
+# JWT_SECRET=your_secure_jwt_secret
+
 npm run dev
 ```
+*The local backend will run on `http://localhost:5000`.*
 
-### 3. Run the Mobile Application
-It is highly recommended to run the mobile app connected to the hosted backend for demonstration purposes.
+### 3. Run the Mobile Application (Frontend)
+It is highly recommended to run the mobile app connected to the hosted backend for immediate demonstration purposes.
 ```bash
 cd mobile-app
 npm install
 
-# Create a .env file and add the hosted API URL:
+# Create a .env file in the mobile-app root and add the hosted API URL:
 # EXPO_PUBLIC_API_URL=https://bus-system-3lgy.onrender.com/api
 
 npx expo start -c
 ```
-*Scan the generated QR code with the **Expo Go** app on your mobile device. If testing locally with a local backend on a physical device, ensure you use your computer's local IP address instead of `localhost`.*
-
----
-
----
-
-## 🔒 Security Architecture
-
-QuickBus prioritizes data integrity and access control:
-*   **Password Hashing:** Passwords are cryptographically hashed using `bcryptjs` before being stored in the database.
-*   **Stateless Authentication:** JSON Web Tokens (JWT) are utilized for secure, scalable session verification across both mobile and web platforms.
-*   **API Protection:** All critical backend routes are shielded by authorization middleware that validates JWT signatures and user roles before executing operations.
-*   **Input Validation:** Strict payload validation in the controllers prevents malformed requests, duplicate seat bookings, and unauthorized data manipulation.
+**Testing Instructions:** Scan the generated QR code with the **Expo Go** application on your physical mobile device. 
+> ⚠️ **Note on Local Testing:** If you are running the backend locally and testing on a physical phone, you MUST change your `.env` URL to use your computer's IPv4 address (e.g., `http://192.168.1.X:5000/api`) instead of `localhost`.
 
 ---
 
 <div align="center">
-  <p>Built with ❤️ by Team WD-IT-01</p>
+  <p>Engineered with ❤️ by Team WD-IT-01</p>
 </div>
-
----
-
-## 📝 Latest Changes Commit Command
-
-To commit these latest documentation updates and comprehensive system details to your repository, use the following exact commands in your terminal:
-
-```bash
-git add .
-git commit -m "docs: expand README with comprehensive module breakdowns and security architecture"
-```
