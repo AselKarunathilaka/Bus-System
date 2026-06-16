@@ -37,6 +37,7 @@ import PaymentScreen from "../screens/PaymentScreen";
 import PaymentSuccessScreen from "../screens/PaymentSuccessScreen";
 import PaymentFailedScreen from "../screens/PaymentFailedScreen";
 import RouteMapOverviewScreen from "../screens/RouteMapOverviewScreen";
+import AdminNetworkMapScreen from "../screens/AdminNetworkMapScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -157,6 +158,7 @@ const AppNavigator = () => {
               <Stack.Screen name="ScheduleForm" component={ScheduleFormScreen} />
               <Stack.Screen name="AdminBookingList" component={AdminBookingListScreen} />
               <Stack.Screen name="DriverManagement" component={DriverManagementScreen} options={{ title: "Drivers" }} />
+              <Stack.Screen name="AdminNetworkMap" component={AdminNetworkMapScreen} options={{ title: "Network Map" }} />
             </Stack.Group>
           )}
         </Stack.Group>

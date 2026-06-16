@@ -520,6 +520,12 @@ const AdminDashboardScreen = ({ navigation }) => {
               <Text className="text-xs font-sans text-textDark font-semibold text-center">Manage Crew</Text>
             </AppCard>
           </TouchableOpacity>
+          <TouchableOpacity className="w-[31%] mb-4" onPress={() => navigation.navigate("AdminNetworkMap")} activeOpacity={0.7}>
+            <AppCard className="h-28 justify-center items-center bg-slate-50 border border-slate-200">
+              <Ionicons name="analytics" size={24} color="#06B6D4" className="mb-2" />
+              <Text className="text-xs font-sans text-textDark font-semibold text-center">Network Map</Text>
+            </AppCard>
+          </TouchableOpacity>
         </View>
 
         <AppCard className="mb-6">
