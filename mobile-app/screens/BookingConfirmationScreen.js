@@ -38,7 +38,7 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
 
   const formattedSeats = selectedSeats.map(getSeatLabel).join(", ");
 
-  const handleConfirm = async () => {
+  const handleConfirm = async (bypassPayment = false) => {
     if (!isAdmin && (!contactNumber || contactNumber.trim() === "")) {
       Alert.alert("Error", "Contact number is required for your booking.");
       return;
@@ -59,6 +59,7 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
         passengerName,
         passengerPhone: contactNumber,
         adminNote: isAdmin ? adminNote : undefined,
+        bypassPayment: isAdmin ? bypassPayment : false,
       };
 
       const response = await api.post("/bookings", payload, {
@@ -235,12 +236,30 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
           </View>
 
           <View className="mb-10 max-w-md w-full self-center">
-            <AppButton
-              title={loading ? "Processing..." : (isAdmin ? "Create Manual Booking" : "Proceed to Payment")}
-              onPress={handleConfirm}
-              disabled={loading}
-              variant="primary"
-            />
+            {isAdmin ? (
+              <View>
+                <AppButton
+                  title={loading ? "Processing..." : "Proceed to Payment"}
+                  onPress={() => handleConfirm(false)}
+                  disabled={loading}
+                  variant="primary"
+                  className="mb-4"
+                />
+                <AppButton
+                  title={loading ? "Processing..." : "Bypass Payment (Manual Booking)"}
+                  onPress={() => handleConfirm(true)}
+                  disabled={loading}
+                  variant="outline"
+                />
+              </View>
+            ) : (
+              <AppButton
+                title={loading ? "Processing..." : "Proceed to Payment"}
+                onPress={() => handleConfirm(false)}
+                disabled={loading}
+                variant="primary"
+              />
+            )}
           </View>
         </ScrollView>
       </View>

@@ -177,7 +177,8 @@ exports.createBooking = async (req, res) => {
     const paymentHoldMinutes = parseInt(process.env.PAYMENT_HOLD_MINUTES || "10", 10);
     const paymentExpiresAt = new Date(Date.now() + paymentHoldMinutes * 60 * 1000);
 
-    const isAdminBooking = req.user.role === "admin";
+    const isAdmin = req.user.role === "admin";
+    const bypassPayment = isAdmin && req.body.bypassPayment === true;
 
     // Create the booking
     const booking = await Booking.create(
@@ -194,12 +195,12 @@ exports.createBooking = async (req, res) => {
           passengerPhone,
           createdByRole: req.user.role,
           createdBy: req.user._id,
-          isManualBooking: isAdminBooking,
-          adminNote: isAdminBooking ? adminNote : undefined,
-          status: isAdminBooking ? "Confirmed" : "PendingPayment",
-          paymentStatus: isAdminBooking ? "NotRequired" : "Pending",
-          paymentProvider: isAdminBooking ? "manual" : "mock",
-          paymentExpiresAt: isAdminBooking ? undefined : paymentExpiresAt,
+          isManualBooking: bypassPayment,
+          adminNote: isAdmin ? adminNote : undefined,
+          status: bypassPayment ? "Confirmed" : "PendingPayment",
+          paymentStatus: bypassPayment ? "NotRequired" : "Pending",
+          paymentProvider: bypassPayment ? "manual" : "mock",
+          paymentExpiresAt: bypassPayment ? undefined : paymentExpiresAt,
         },
       ],
       { session }

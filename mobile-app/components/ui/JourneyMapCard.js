@@ -1,10 +1,17 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, Text, ActivityIndicator } from "react-native";
-import MapView, { Marker, Polyline } from "react-native-maps";
+import { View, Text, ActivityIndicator, Platform } from "react-native";
 import polyline from "@mapbox/polyline";
 import { Ionicons } from "@expo/vector-icons";
 import api from "../../services/api";
 import { AuthContext } from "../../context/AuthContext";
+
+let MapView, Marker, Polyline;
+if (Platform.OS !== 'web') {
+  const Maps = require('react-native-maps');
+  MapView = Maps.default;
+  Marker = Maps.Marker;
+  Polyline = Maps.Polyline;
+}
 
 const JourneyMapCard = ({ routeId, schedule, compact = false, showDetails = false }) => {
   const { token } = useContext(AuthContext);
@@ -103,9 +110,18 @@ const JourneyMapCard = ({ routeId, schedule, compact = false, showDetails = fals
         )}
       </View>
 
-      <View className={compact ? "h-48" : "h-72"}>
-        <MapView
-          style={{ flex: 1 }}
+      {Platform.OS === 'web' ? (
+        <View className={`bg-slate-50 items-center justify-center ${compact ? "h-48" : "h-72"}`}>
+          <Ionicons name="map-outline" size={48} color="#CBD5E1" className="mb-3" />
+          <Text className="text-slate-500 font-bold mb-1">Interactive Map</Text>
+          <Text className="text-slate-400 text-xs text-center px-4">
+            Map view is currently optimized for our mobile app.
+          </Text>
+        </View>
+      ) : (
+        <View className={compact ? "h-48" : "h-72"}>
+          <MapView
+            style={{ flex: 1 }}
           initialRegion={initialRegion}
           showsUserLocation={false}
           scrollEnabled={!compact}
@@ -160,6 +176,7 @@ const JourneyMapCard = ({ routeId, schedule, compact = false, showDetails = fals
           )}
         </MapView>
       </View>
+      )}
 
       {!compact && showDetails && (
         <View className="p-4 bg-slate-50 flex-row justify-between">
