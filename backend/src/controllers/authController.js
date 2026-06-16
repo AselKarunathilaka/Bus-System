@@ -1,8 +1,18 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
+const {
+  cleanText,
+  isValidEmail,
+  isValidPhone,
+  isStrongEnoughPassword,
+} = require("../utils/validation");
 
 const createToken = (user) => {
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 24) {
+    throw new Error("JWT_SECRET must be configured with at least 24 characters");
+  }
+
   return jwt.sign(
     {
       id: user._id,
@@ -16,19 +26,30 @@ const createToken = (user) => {
 
 exports.register = async (req, res) => {
   try {
-    const { fullName, email, phone, password } = req.body;
+    const fullName = cleanText(req.body.fullName, 100);
+    const email = cleanText(req.body.email, 254).toLowerCase();
+    const phone = cleanText(req.body.phone, 20);
+    const { password } = req.body;
 
     if (!fullName || !email || !phone || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ message: "Password must be at least 6 characters" });
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "A valid email address is required" });
     }
 
-    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (!isValidPhone(phone)) {
+      return res.status(400).json({ message: "A valid phone number is required" });
+    }
+
+    if (!isStrongEnoughPassword(password)) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 8 characters and include a letter and number" });
+    }
+
+    const existingUser = await User.findOne({ email });
 
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
@@ -38,7 +59,7 @@ exports.register = async (req, res) => {
 
     const user = await User.create({
       fullName,
-      email: email.toLowerCase(),
+      email,
       phone,
       password: hashedPassword,
 
@@ -68,7 +89,8 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = cleanText(req.body.email, 254).toLowerCase();
+    const { password } = req.body;
 
     if (!email || !password) {
       return res
@@ -76,7 +98,11 @@ exports.login = async (req, res) => {
         .json({ message: "Email and password are required" });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    if (!isValidEmail(email)) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    const user = await User.findOne({ email });
 
     if (!user || !user.isActive) {
       return res.status(400).json({ message: "Invalid credentials" });

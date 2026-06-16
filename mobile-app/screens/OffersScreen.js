@@ -9,7 +9,7 @@ const offers = [
     id: "1",
     title: "Weekend Getaway 🌴",
     description: "Get 15% off on all inter-city bookings made for Saturday or Sunday travels. Perfect for a quick break!",
-    code: "WKND15",
+    code: "COMING SOON",
     color: "#10b981", // Emerald
     icon: "calendar-outline"
   },
@@ -17,7 +17,7 @@ const offers = [
     id: "2",
     title: "New User Welcome 🎁",
     description: "First time booking with QuickBus? Use this code at checkout to get a flat LKR 500 discount on your first journey.",
-    code: "WELCOME500",
+    code: "COMING SOON",
     color: "#3b82f6", // Blue
     icon: "gift-outline"
   },
@@ -25,7 +25,7 @@ const offers = [
     id: "3",
     title: "Family Pack 🎉",
     description: "Booking for 4 or more people? Enjoy a 10% group discount on your total fare automatically applied at checkout.",
-    code: "AUTO-APPLIED",
+    code: "COMING SOON",
     color: "#f59e0b", // Amber
     icon: "people-outline"
   },
@@ -33,7 +33,7 @@ const offers = [
     id: "4",
     title: "Night Owl Express 🌙",
     description: "Save 20% on all overnight bus schedules departing after 10:00 PM. Travel while you sleep!",
-    code: "NIGHT20",
+    code: "COMING SOON",
     color: "#8b5cf6", // Purple
     icon: "moon-outline"
   }
@@ -54,7 +54,7 @@ const OffersScreen = ({ navigation }) => {
 
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
           <Text className="text-textMuted font-medium mb-8 leading-relaxed max-w-2xl">
-            Apply these exclusive promo codes at checkout to save on your upcoming journeys with QuickBus!
+            Preview upcoming QuickBus rewards. Promotions are not yet applied during checkout, so no discount is included in current booking totals.
           </Text>
 
           <View className="flex-row flex-wrap gap-4">
@@ -75,7 +75,7 @@ const OffersScreen = ({ navigation }) => {
                 </Text>
                 
                 <View className="bg-slate-50 rounded-xl p-4 flex-row items-center justify-between border border-border">
-                  <Text className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Promo Code</Text>
+                  <Text className="text-slate-500 text-[10px] uppercase font-bold tracking-widest">Availability</Text>
                   <Text className="text-textDark font-black text-base tracking-widest">{offer.code}</Text>
                 </View>
               </AppCard>

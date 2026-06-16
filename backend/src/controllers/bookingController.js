@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
+const crypto = require("crypto");
 const Booking = require("../models/Booking");
 const Schedule = require("../models/Schedule");
 const Route = require("../models/Route");
 const Bus = require("../models/Bus");
+const { buildJourneyWindow } = require("../utils/dateTime");
+const { cleanText, isValidPhone } = require("../utils/validation");
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
@@ -11,7 +14,11 @@ exports.createBooking = async (req, res) => {
   session.startTransaction();
 
   try {
-    const { scheduleId, seatNumbers, bookingType, contactNumber, passengerName, passengerPhone, adminNote } = req.body;
+    const { scheduleId, seatNumbers, bookingType } = req.body;
+    const contactNumber = cleanText(req.body.contactNumber, 20);
+    const passengerName = cleanText(req.body.passengerName, 100);
+    const passengerPhone = cleanText(req.body.passengerPhone, 20);
+    const adminNote = cleanText(req.body.adminNote, 500);
 
     if (!scheduleId || !seatNumbers || !bookingType) {
       await session.abortTransaction();
@@ -29,6 +36,18 @@ exports.createBooking = async (req, res) => {
       await session.abortTransaction();
       session.endSession();
       return res.status(400).json({ message: "Seat numbers must be a non-empty array" });
+    }
+
+    if (!["Single", "Family"].includes(bookingType)) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "Invalid booking type" });
+    }
+
+    if (!seatNumbers.every((seat) => Number.isInteger(seat))) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "Seat numbers must be whole numbers" });
     }
 
     // Check for duplicate seats in request
@@ -51,6 +70,24 @@ exports.createBooking = async (req, res) => {
       return res.status(400).json({ message: "Family booking must have between 1 and 8 seats" });
     }
 
+    if (req.user.role !== "admin") {
+      if (!passengerName) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(400).json({ message: "Passenger name is required" });
+      }
+
+      if (!isValidPhone(passengerPhone || contactNumber)) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(400).json({ message: "A valid passenger phone number is required" });
+      }
+    } else if ((passengerPhone || contactNumber) && !isValidPhone(passengerPhone || contactNumber)) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(400).json({ message: "Passenger phone number is invalid" });
+    }
+
     const schedule = await Schedule.findById(scheduleId).session(session);
     if (!schedule) {
       await session.abortTransaction();
@@ -64,11 +101,15 @@ exports.createBooking = async (req, res) => {
       return res.status(400).json({ message: "This schedule is no longer active for booking" });
     }
 
-    const scheduleDate = new Date(schedule.departureDate);
-    if (scheduleDate < new Date().setHours(0,0,0,0)) {
+    const journeyWindow = buildJourneyWindow(
+      schedule.departureDate,
+      schedule.departureTime,
+      schedule.arrivalTime
+    );
+    if (!journeyWindow || journeyWindow.start <= new Date()) {
       await session.abortTransaction();
       session.endSession();
-      return res.status(400).json({ message: "Cannot book a schedule in the past" });
+      return res.status(400).json({ message: "This schedule has already departed" });
     }
 
     const bus = await Bus.findById(schedule.busId).session(session);
@@ -84,11 +125,11 @@ exports.createBooking = async (req, res) => {
       return res.status(400).json({ message: "The assigned bus is not available" });
     }
 
-    const invalidSeats = seatNumbers.filter(seat => seat < 1 || seat > bus.seatCapacity);
+    const invalidSeats = seatNumbers.filter(seat => seat < 1 || seat > bus.seatCount);
     if (invalidSeats.length > 0) {
       await session.abortTransaction();
       session.endSession();
-      return res.status(400).json({ message: `Seats out of bounds. Bus has ${bus.seatCapacity} seats.` });
+      return res.status(400).json({ message: `Seats out of bounds. Bus has ${bus.seatCount} seats.` });
     }
 
     const route = await Route.findById(schedule.routeId).session(session);
@@ -104,9 +145,17 @@ exports.createBooking = async (req, res) => {
       return res.status(400).json({ message: "This route is currently inactive" });
     }
 
-    // Check if any of the requested seats are already booked
-    const alreadyBooked = seatNumbers.some((seat) => schedule.bookedSeats.includes(seat));
-    if (alreadyBooked) {
+    const reservedSchedule = await Schedule.findOneAndUpdate(
+      {
+        _id: scheduleId,
+        status: "Scheduled",
+        bookedSeats: { $nin: seatNumbers },
+      },
+      { $addToSet: { bookedSeats: { $each: seatNumbers } } },
+      { new: true, session }
+    );
+
+    if (!reservedSchedule) {
       await session.abortTransaction();
       session.endSession();
       return res.status(400).json({ message: "One or more selected seats are already booked" });
@@ -115,8 +164,10 @@ exports.createBooking = async (req, res) => {
     // Server-side price calculation
     const calculatedPrice = route.price * seatNumbers.length;
 
-    // Generate unique booking ID
-    const bookingId = `BKG-${Math.floor(100000 + Math.random() * 900000)}`;
+    const bookingId = `BKG-${Date.now().toString(36).toUpperCase()}-${crypto
+      .randomBytes(3)
+      .toString("hex")
+      .toUpperCase()}`;
 
     // Create the booking
     const booking = await Booking.create(
@@ -141,10 +192,6 @@ exports.createBooking = async (req, res) => {
       { session }
     );
 
-    // Update the schedule's bookedSeats
-    schedule.bookedSeats.push(...seatNumbers);
-    await schedule.save({ session });
-
     await session.commitTransaction();
     session.endSession();
 
@@ -155,6 +202,11 @@ exports.createBooking = async (req, res) => {
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+    if (error?.errorLabels?.includes("TransientTransactionError")) {
+      return res.status(409).json({
+        message: "Seat availability changed while booking. Please select seats again.",
+      });
+    }
     return res.status(500).json({ message: error.message });
   }
 };
@@ -165,7 +217,7 @@ exports.getMyBookings = async (req, res) => {
       .populate({
         path: "scheduleId",
         populate: [
-          { path: "routeId", select: "routeName startLocation endLocation" },
+          { path: "routeId", select: "routeName startLocation endLocation distanceKm price" },
           { path: "busId", select: "busName licenseNumber" },
         ],
       })
@@ -184,7 +236,7 @@ exports.getAllBookings = async (req, res) => {
       .populate({
         path: "scheduleId",
         populate: [
-          { path: "routeId", select: "routeName startLocation endLocation" },
+          { path: "routeId", select: "routeName startLocation endLocation distanceKm price" },
           { path: "busId", select: "busName licenseNumber" },
         ],
       })
@@ -230,17 +282,30 @@ exports.cancelBooking = async (req, res) => {
       return res.status(400).json({ message: "Booking is already cancelled" });
     }
 
+    const schedule = await Schedule.findById(booking.scheduleId).session(session);
+    if (req.user.role !== "admin" && schedule) {
+      const journeyWindow = buildJourneyWindow(
+        schedule.departureDate,
+        schedule.departureTime,
+        schedule.arrivalTime
+      );
+      if (!journeyWindow || journeyWindow.start <= new Date()) {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(400).json({
+          message: "Bookings cannot be cancelled after the trip has departed",
+        });
+      }
+    }
+
     booking.status = "Cancelled";
     await booking.save({ session });
 
-    const schedule = await Schedule.findById(booking.scheduleId).session(session);
-    if (schedule) {
-      // Remove seats from schedule
-      schedule.bookedSeats = schedule.bookedSeats.filter(
-        (seat) => !booking.seatNumbers.includes(seat)
-      );
-      await schedule.save({ session });
-    }
+    await Schedule.updateOne(
+      { _id: booking.scheduleId },
+      { $pullAll: { bookedSeats: booking.seatNumbers } },
+      { session }
+    );
 
     await session.commitTransaction();
     session.endSession();
@@ -279,13 +344,11 @@ exports.deleteBooking = async (req, res) => {
 
     // Free up seats if it wasn't cancelled already
     if (booking.status !== "Cancelled") {
-      const schedule = await Schedule.findById(booking.scheduleId).session(session);
-      if (schedule) {
-        schedule.bookedSeats = schedule.bookedSeats.filter(
-          (seat) => !booking.seatNumbers.includes(seat)
-        );
-        await schedule.save({ session });
-      }
+      await Schedule.updateOne(
+        { _id: booking.scheduleId },
+        { $pullAll: { bookedSeats: booking.seatNumbers } },
+        { session }
+      );
     }
 
     await Booking.findByIdAndDelete(id, { session });

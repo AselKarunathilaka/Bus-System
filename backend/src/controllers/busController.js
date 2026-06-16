@@ -1,11 +1,26 @@
 const mongoose = require("mongoose");
 const Bus = require("../models/Bus");
 const Route = require("../models/Route");
+const Schedule = require("../models/Schedule");
+const Booking = require("../models/Booking");
+const { isPositiveNumber } = require("../utils/validation");
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
 const routePopulateFields =
   "routeName startLocation endLocation price distanceKm estimatedDuration status";
+const passengerBusFields =
+  "busName licenseNumber seatCount busType assignedRoute status";
+const VALID_BUS_TYPES = new Set([
+  "Normal",
+  "Semi Luxury",
+  "Luxury",
+  "Super Luxury",
+]);
+const VALID_BUS_STATUSES = new Set(["Available", "Maintenance", "Inactive"]);
+
+const applyBusVisibility = (query, user) =>
+  user?.role === "admin" ? query : query.select(passengerBusFields);
 
 const validateRequiredFields = (body) => {
   const requiredFields = [
@@ -55,10 +70,20 @@ exports.createBus = async (req, res) => {
       status,
     } = req.body;
 
-    if (Number(seatCount) <= 0 || Number(seatCount) > 100) {
+    if (
+      !isPositiveNumber(seatCount) ||
+      !Number.isInteger(Number(seatCount)) ||
+      Number(seatCount) > 100
+    ) {
       return res.status(400).json({
         message: "Seat count must be between 1 and 100",
       });
+    }
+    if (!VALID_BUS_TYPES.has(busType)) {
+      return res.status(400).json({ message: "Invalid bus type" });
+    }
+    if (status && !VALID_BUS_STATUSES.has(status)) {
+      return res.status(400).json({ message: "Invalid bus status" });
     }
 
     if (assignedRoute) {
@@ -113,10 +138,18 @@ exports.createBus = async (req, res) => {
 
 exports.getAllBuses = async (req, res) => {
   try {
-    const buses = await Bus.find()
+    const query = applyBusVisibility(
+      Bus.find(req.user.role === "admin" ? {} : { status: "Available" }),
+      req.user
+    )
       .populate("assignedRoute", routePopulateFields)
-      .populate("createdBy", "fullName email role")
       .sort({ createdAt: -1 });
+
+    if (req.user.role === "admin") {
+      query.populate("createdBy", "fullName email role");
+    }
+
+    const buses = await query;
 
     return res.status(200).json(buses);
   } catch (error) {
@@ -132,9 +165,18 @@ exports.getBusById = async (req, res) => {
       return res.status(400).json({ message: "Invalid bus ID" });
     }
 
-    const bus = await Bus.findById(id)
-      .populate("assignedRoute", routePopulateFields)
-      .populate("createdBy", "fullName email role");
+    const busFilter =
+      req.user.role === "admin"
+        ? { _id: id }
+        : { _id: id, status: "Available" };
+    const query = applyBusVisibility(Bus.findOne(busFilter), req.user)
+      .populate("assignedRoute", routePopulateFields);
+
+    if (req.user.role === "admin") {
+      query.populate("createdBy", "fullName email role");
+    }
+
+    const bus = await query;
 
     if (!bus) {
       return res.status(404).json({ message: "Bus not found" });
@@ -160,10 +202,21 @@ exports.getBusesByRoute = async (req, res) => {
       return res.status(404).json({ message: "Route not found" });
     }
 
-    const buses = await Bus.find({ assignedRoute: routeId })
+    const query = applyBusVisibility(
+      Bus.find({
+        assignedRoute: routeId,
+        ...(req.user.role === "admin" ? {} : { status: "Available" }),
+      }),
+      req.user
+    )
       .populate("assignedRoute", routePopulateFields)
-      .populate("createdBy", "fullName email role")
       .sort({ createdAt: -1 });
+
+    if (req.user.role === "admin") {
+      query.populate("createdBy", "fullName email role");
+    }
+
+    const buses = await query;
 
     return res.status(200).json(buses);
   } catch (error) {
@@ -173,10 +226,18 @@ exports.getBusesByRoute = async (req, res) => {
 
 exports.getAvailableBuses = async (req, res) => {
   try {
-    const buses = await Bus.find({ status: "Available" })
+    const query = applyBusVisibility(
+      Bus.find({ status: "Available" }),
+      req.user
+    )
       .populate("assignedRoute", routePopulateFields)
-      .populate("createdBy", "fullName email role")
       .sort({ createdAt: -1 });
+
+    if (req.user.role === "admin") {
+      query.populate("createdBy", "fullName email role");
+    }
+
+    const buses = await query;
 
     return res.status(200).json(buses);
   } catch (error) {
@@ -214,11 +275,33 @@ exports.updateBus = async (req, res) => {
 
     if (
       seatCount !== undefined &&
-      (Number(seatCount) <= 0 || Number(seatCount) > 100)
+      (!isPositiveNumber(seatCount) ||
+        !Number.isInteger(Number(seatCount)) ||
+        Number(seatCount) > 100)
     ) {
       return res.status(400).json({
         message: "Seat count must be between 1 and 100",
       });
+    }
+    if (busType && !VALID_BUS_TYPES.has(busType)) {
+      return res.status(400).json({ message: "Invalid bus type" });
+    }
+    if (status && !VALID_BUS_STATUSES.has(status)) {
+      return res.status(400).json({ message: "Invalid bus status" });
+    }
+
+    if (seatCount !== undefined && Number(seatCount) < bus.seatCount) {
+      const scheduleIds = await Schedule.find({ busId: id }).distinct("_id");
+      const bookingAboveCapacity = await Booking.exists({
+        scheduleId: { $in: scheduleIds },
+        seatNumbers: { $elemMatch: { $gt: Number(seatCount) } },
+      });
+
+      if (bookingAboveCapacity) {
+        return res.status(409).json({
+          message: "Seat count cannot be reduced below seats used in booking history",
+        });
+      }
     }
 
     if (
@@ -234,6 +317,37 @@ exports.updateBus = async (req, res) => {
 
       if (!routeExists) {
         return res.status(404).json({ message: "Assigned route not found" });
+      }
+    }
+
+    if (status && status !== "Available" && bus.status === "Available") {
+      const scheduledTrip = await Schedule.exists({
+        busId: id,
+        status: "Scheduled",
+      });
+      if (scheduledTrip) {
+        return res.status(409).json({
+          message: "Complete or cancel upcoming schedules before changing this bus's availability",
+        });
+      }
+    }
+
+    if (assignedRoute !== undefined) {
+      const normalizedRoute = assignedRoute || null;
+      const routeChanged =
+        String(normalizedRoute || "") !== String(bus.assignedRoute || "");
+
+      if (routeChanged) {
+        const conflictingSchedule = await Schedule.exists({
+          busId: id,
+          status: "Scheduled",
+          ...(normalizedRoute ? { routeId: { $ne: normalizedRoute } } : {}),
+        });
+        if (conflictingSchedule) {
+          return res.status(409).json({
+            message: "Complete or cancel upcoming schedules before changing this bus's route",
+          });
+        }
       }
     }
 
@@ -304,6 +418,17 @@ exports.assignBusToRoute = async (req, res) => {
       return res.status(404).json({ message: "Bus not found" });
     }
 
+    const conflictingSchedule = await Schedule.exists({
+      busId: id,
+      status: "Scheduled",
+      routeId: { $ne: routeId },
+    });
+    if (conflictingSchedule) {
+      return res.status(409).json({
+        message: "Complete or cancel this bus's existing schedules before assigning another route",
+      });
+    }
+
     const route = await Route.findById(routeId);
 
     if (!route) {
@@ -341,6 +466,16 @@ exports.removeBusFromRoute = async (req, res) => {
       return res.status(404).json({ message: "Bus not found" });
     }
 
+    const scheduledTrip = await Schedule.exists({
+      busId: id,
+      status: "Scheduled",
+    });
+    if (scheduledTrip) {
+      return res.status(409).json({
+        message: "Complete or cancel this bus's schedules before removing its route",
+      });
+    }
+
     bus.assignedRoute = null;
 
     await bus.save();
@@ -370,6 +505,13 @@ exports.deleteBus = async (req, res) => {
 
     if (!bus) {
       return res.status(404).json({ message: "Bus not found" });
+    }
+
+    const scheduleCount = await Schedule.countDocuments({ busId: id });
+    if (scheduleCount > 0) {
+      return res.status(409).json({
+        message: "Buses with schedule history cannot be deleted. Mark the bus inactive instead.",
+      });
     }
 
     await Bus.findByIdAndDelete(id);

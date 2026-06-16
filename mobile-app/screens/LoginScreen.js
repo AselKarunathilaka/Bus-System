@@ -13,6 +13,7 @@ import AppButton from "../components/ui/AppButton";
 import AppInput from "../components/ui/AppInput";
 import AppLayout from "../components/ui/AppLayout";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 const LoginScreen = ({ navigation }) => {
   const { login } = useContext(AuthContext);
@@ -54,6 +55,19 @@ const LoginScreen = ({ navigation }) => {
     >
       <View className={Platform.OS === 'web' ? "w-full max-w-md" : ""}>
         <View className="mb-8 items-center">
+          <LinearGradient
+            colors={["#2563EB", "#7C3AED"]}
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: 18,
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 20,
+            }}
+          >
+            <Ionicons name="bus" size={31} color="#FFFFFF" />
+          </LinearGradient>
           <View 
             className="px-3 py-1 rounded-full mb-4"
             style={{ backgroundColor: "rgba(37, 99, 235, 0.1)" }}
@@ -83,7 +97,7 @@ const LoginScreen = ({ navigation }) => {
           <AppInput
             label="Password"
             icon="lock-closed-outline"
-            placeholder="••••••••"
+            placeholder="Enter your password"
             value={password}
             onChangeText={setPassword}
             secureTextEntry

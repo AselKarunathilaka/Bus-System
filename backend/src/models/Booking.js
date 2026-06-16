@@ -33,6 +33,7 @@ const bookingSchema = new mongoose.Schema(
     totalPrice: {
       type: Number,
       required: true,
+      min: 0,
     },
     bookingDate: {
       type: Date,
@@ -79,5 +80,8 @@ const bookingSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+bookingSchema.index({ userId: 1, createdAt: -1 });
+bookingSchema.index({ scheduleId: 1, status: 1 });
 
 module.exports = mongoose.model("Booking", bookingSchema);

@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 const Route = require("../models/Route");
 const Stop = require("../models/Stop");
+const Schedule = require("../models/Schedule");
+const { isPositiveNumber } = require("../utils/validation");
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
+const VALID_ROUTE_STATUSES = new Set(["active", "inactive"]);
 
 exports.createRoute = async (req, res) => {
   try {
@@ -30,12 +33,15 @@ exports.createRoute = async (req, res) => {
       });
     }
 
-    if (Number(price) < 0) {
+    if (!isPositiveNumber(price, { allowZero: true })) {
       return res.status(400).json({ message: "Price must be 0 or greater" });
     }
 
-    if (Number(distanceKm) <= 0) {
+    if (!isPositiveNumber(distanceKm)) {
       return res.status(400).json({ message: "Distance must be greater than 0" });
+    }
+    if (status && !VALID_ROUTE_STATUSES.has(status)) {
+      return res.status(400).json({ message: "Invalid route status" });
     }
 
     const route = await Route.create({
@@ -61,10 +67,15 @@ exports.createRoute = async (req, res) => {
 
 exports.getAllRoutes = async (req, res) => {
   try {
-    const routes = await Route.find()
-      .populate("createdBy", "fullName email role")
+    const query = Route.find(
+      req.user.role === "admin" ? {} : { status: "active" }
+    )
       .sort({ createdAt: -1 })
       .lean();
+    if (req.user.role === "admin") {
+      query.populate("createdBy", "fullName email role");
+    }
+    const routes = await query;
 
     const routeIds = routes.map((route) => route._id);
 
@@ -99,9 +110,13 @@ exports.getRouteById = async (req, res) => {
       return res.status(400).json({ message: "Invalid route ID" });
     }
 
-    const route = await Route.findById(id)
-      .populate("createdBy", "fullName email role")
-      .lean();
+    const routeFilter =
+      req.user.role === "admin" ? { _id: id } : { _id: id, status: "active" };
+    const query = Route.findOne(routeFilter).lean();
+    if (req.user.role === "admin") {
+      query.populate("createdBy", "fullName email role");
+    }
+    const route = await query;
 
     if (!route) {
       return res.status(404).json({ message: "Route not found" });
@@ -144,12 +159,27 @@ exports.updateRoute = async (req, res) => {
       return res.status(404).json({ message: "Route not found" });
     }
 
-    if (price !== undefined && Number(price) < 0) {
+    if (price !== undefined && !isPositiveNumber(price, { allowZero: true })) {
       return res.status(400).json({ message: "Price must be 0 or greater" });
     }
 
-    if (distanceKm !== undefined && Number(distanceKm) <= 0) {
+    if (distanceKm !== undefined && !isPositiveNumber(distanceKm)) {
       return res.status(400).json({ message: "Distance must be greater than 0" });
+    }
+    if (status && !VALID_ROUTE_STATUSES.has(status)) {
+      return res.status(400).json({ message: "Invalid route status" });
+    }
+
+    if (status === "inactive" && route.status !== "inactive") {
+      const scheduledTrip = await Schedule.exists({
+        routeId: id,
+        status: "Scheduled",
+      });
+      if (scheduledTrip) {
+        return res.status(409).json({
+          message: "Complete or cancel upcoming schedules before deactivating this route",
+        });
+      }
     }
 
     route.routeName = routeName?.trim() ?? route.routeName;
@@ -184,6 +214,13 @@ exports.deleteRoute = async (req, res) => {
 
     if (!route) {
       return res.status(404).json({ message: "Route not found" });
+    }
+
+    const scheduleCount = await Schedule.countDocuments({ routeId: id });
+    if (scheduleCount > 0) {
+      return res.status(409).json({
+        message: "Routes with schedule history cannot be deleted. Mark the route inactive instead.",
+      });
     }
 
     await Stop.deleteMany({ routeId: route._id });

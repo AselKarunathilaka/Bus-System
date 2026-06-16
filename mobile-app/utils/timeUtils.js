@@ -13,3 +13,29 @@ export const getGreeting = (fullName) => {
   
   return `${greeting}, ${firstName}`;
 };
+
+export const getScheduleDeparture = (schedule) => {
+  if (!schedule?.departureDate || !schedule?.departureTime) return null;
+
+  const date = new Date(schedule.departureDate);
+  const match = String(schedule.departureTime)
+    .trim()
+    .match(/^([01]?\d|2[0-3]):([0-5]\d)(?:\s*([AP]M))?$/i);
+
+  if (Number.isNaN(date.getTime()) || !match) return null;
+
+  let hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  const period = match[3]?.toUpperCase();
+
+  if (period === "PM" && hours !== 12) hours += 12;
+  if (period === "AM" && hours === 12) hours = 0;
+
+  date.setHours(hours, minutes, 0, 0);
+  return date;
+};
+
+export const isBookableSchedule = (schedule) => {
+  const departure = getScheduleDeparture(schedule);
+  return schedule?.status === "Scheduled" && departure && departure > new Date();
+};

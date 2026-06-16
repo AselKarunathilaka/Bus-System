@@ -34,9 +34,18 @@ const scheduleSchema = new mongoose.Schema(
     bookedSeats: {
       type: [Number],
       default: [],
+      validate: [
+        (value) =>
+          value.every((seat) => Number.isInteger(seat) && seat > 0) &&
+          new Set(value).size === value.length,
+        "Booked seats must contain unique positive integers",
+      ],
     },
   },
   { timestamps: true }
 );
+
+scheduleSchema.index({ busId: 1, departureDate: 1, status: 1 });
+scheduleSchema.index({ routeId: 1, departureDate: 1, status: 1 });
 
 module.exports = mongoose.model("Schedule", scheduleSchema);

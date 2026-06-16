@@ -64,8 +64,10 @@ const ProfileScreen = ({ navigation }) => {
 
         <AppCard className="mb-8 max-w-md w-full self-center">
           <View className="items-center mb-8 pb-6 border-b border-border">
-            <View className="w-24 h-24 rounded-full items-center justify-center mb-4" style={{ backgroundColor: "rgba(37,99,235,0.1)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}>
-              <Text className="text-4xl">👤</Text>
+            <View className="w-24 h-24 rounded-[32px] items-center justify-center mb-4" style={{ backgroundColor: "rgba(79,70,229,0.10)", borderWidth: 1, borderColor: "rgba(79,70,229,0.18)" }}>
+              <Text className="text-4xl font-black text-indigo-600">
+                {user?.fullName?.charAt(0)?.toUpperCase() || "U"}
+              </Text>
             </View>
             <Text className="text-xl font-bold text-textDark">{user?.fullName || "User"}</Text>
             <Text className="text-sm font-medium text-textMuted mt-1">{user?.email}</Text>

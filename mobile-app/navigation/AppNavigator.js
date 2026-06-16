@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AuthContext } from "../context/AuthContext";
@@ -55,11 +54,23 @@ const MainTabs = () => {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: "#06b6d4", // Cyan 500
-        tabBarInactiveTintColor: "#64748b", // Slate 500
+        tabBarInactiveTintColor: "#94A3B8",
         tabBarStyle: {
-          backgroundColor: '#020617', // Slate 950
-          borderTopColor: 'rgba(255,255,255,0.1)',
-          paddingTop: 5,
+          position: "absolute",
+          left: 18,
+          right: 18,
+          bottom: 14,
+          height: 68,
+          borderRadius: 24,
+          backgroundColor: "rgba(15, 23, 42, 0.96)",
+          borderTopWidth: 0,
+          paddingTop: 8,
+          paddingBottom: 8,
+          shadowColor: "#0F172A",
+          shadowOffset: { width: 0, height: 10 },
+          shadowOpacity: 0.24,
+          shadowRadius: 20,
+          elevation: 12,
         }
       })}
     >
@@ -93,8 +104,9 @@ const MainTabs = () => {
 };
 
 const AppNavigator = () => {
-  const { token, loading } = useContext(AuthContext);
+  const { token, loading, user } = useContext(AuthContext);
   const authToken = token;
+  const isAdmin = user?.role === "admin";
 
   return (
     <Stack.Navigator
@@ -113,29 +125,32 @@ const AppNavigator = () => {
       ) : authToken ? (
         <Stack.Group>
           <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
-          <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: "Admin Dashboard" }} />
-          <Stack.Screen name="AdminGuide" component={AdminGuideScreen} options={{ title: "Admin Guide" }} />
           <Stack.Screen name="UserGuide" component={UserGuideScreen} options={{ title: "Help & Support" }} />
           <Stack.Screen name="Routes" component={RouteListScreen} />
-          <Stack.Screen name="RouteForm" component={RouteFormScreen} />
           <Stack.Screen name="StopList" component={StopListScreen} />
-          <Stack.Screen name="StopForm" component={StopFormScreen} />
           <Stack.Screen name="Buses" component={BusListScreen} />
-          <Stack.Screen name="BusForm" component={BusFormScreen} />
-          
-          <Stack.Screen name="ScheduleList" component={ScheduleListScreen} />
-          <Stack.Screen name="ScheduleForm" component={ScheduleFormScreen} />
           <Stack.Screen name="UserScheduleList" component={UserScheduleListScreen} />
           <Stack.Screen name="SeatSelection" component={SeatSelectionScreen} />
           <Stack.Screen name="BookingConfirmation" component={BookingConfirmationScreen} />
           <Stack.Screen name="MyBookings" component={MyBookingsScreen} />
-          <Stack.Screen name="AdminBookingList" component={AdminBookingListScreen} />
           <Stack.Screen name="Offers" component={OffersScreen} options={{ title: "Offers & Deals" }} />
           <Stack.Screen name="TravelStats" component={TravelStatsScreen} options={{ title: "Travel Stats" }} />
-          <Stack.Screen name="DriverManagement" component={DriverManagementScreen} options={{ title: "Drivers" }} />
           <Stack.Screen name="AboutUs" component={AboutUsScreen} options={{ title: "About Us" }} />
           <Stack.Screen name="BookingGuide" component={BookingGuideScreen} options={{ title: "How to Book" }} />
           <Stack.Screen name="ContactUs" component={ContactUsScreen} options={{ title: "Contact Us" }} />
+          {isAdmin && (
+            <Stack.Group>
+              <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: "Admin Dashboard" }} />
+              <Stack.Screen name="AdminGuide" component={AdminGuideScreen} options={{ title: "Admin Guide" }} />
+              <Stack.Screen name="RouteForm" component={RouteFormScreen} />
+              <Stack.Screen name="StopForm" component={StopFormScreen} />
+              <Stack.Screen name="BusForm" component={BusFormScreen} />
+              <Stack.Screen name="ScheduleList" component={ScheduleListScreen} />
+              <Stack.Screen name="ScheduleForm" component={ScheduleFormScreen} />
+              <Stack.Screen name="AdminBookingList" component={AdminBookingListScreen} />
+              <Stack.Screen name="DriverManagement" component={DriverManagementScreen} options={{ title: "Drivers" }} />
+            </Stack.Group>
+          )}
         </Stack.Group>
       ) : (
         <Stack.Group>

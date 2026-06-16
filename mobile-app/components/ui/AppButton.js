@@ -1,5 +1,6 @@
 import React from "react";
-import { Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Text, TouchableOpacity, ActivityIndicator, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 const AppButton = ({
   title,
@@ -35,14 +36,8 @@ const AppButton = ({
     bgColor = "";
   }
 
-  return (
-    <TouchableOpacity
-      disabled={disabled || loading}
-      onPress={onPress}
-      activeOpacity={0.8}
-      style={[style, disabled ? { opacity: 0.5 } : undefined]}
-      className={`flex-row items-center justify-center rounded-xl py-3.5 px-6 border ${borderColor} ${bgColor} ${className}`}
-    >
+  const content = (
+    <>
       {loading ? (
         <ActivityIndicator color={textColor === "text-white" ? "#fff" : "#2563EB"} size="small" />
       ) : (
@@ -57,6 +52,59 @@ const AppButton = ({
           </Text>
         </>
       )}
+    </>
+  );
+
+  const buttonStyle = [
+    {
+      minHeight: 52,
+      shadowColor: variant === "primary" ? "#2563EB" : "#0F172A",
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: variant === "primary" ? 0.2 : 0.06,
+      shadowRadius: 14,
+      elevation: variant === "primary" ? 4 : 1,
+    },
+    style,
+    disabled || loading ? { opacity: 0.55 } : undefined,
+  ];
+
+  if (variant === "primary" && !(style && style.backgroundColor)) {
+    return (
+      <TouchableOpacity
+        disabled={disabled || loading}
+        onPress={onPress}
+        activeOpacity={0.85}
+        style={buttonStyle}
+        className={`rounded-2xl overflow-hidden ${className}`}
+      >
+        <LinearGradient
+          colors={["#2563EB", "#4F46E5", "#7C3AED"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            minHeight: 52,
+            paddingVertical: 14,
+            paddingHorizontal: 24,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {content}
+        </LinearGradient>
+      </TouchableOpacity>
+    );
+  }
+
+  return (
+    <TouchableOpacity
+      disabled={disabled || loading}
+      onPress={onPress}
+      activeOpacity={0.8}
+      style={buttonStyle}
+      className={`flex-row items-center justify-center rounded-2xl py-3.5 px-6 border ${borderColor} ${bgColor} ${className}`}
+    >
+      <View className="flex-row items-center justify-center">{content}</View>
     </TouchableOpacity>
   );
 };

@@ -6,7 +6,14 @@ const API_BASE_URL =
 
 const api = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 15000,
 });
+
+let unauthorizedHandler = null;
+
+export const setUnauthorizedHandler = (handler) => {
+  unauthorizedHandler = handler;
+};
 
 // Automatically attach JWT token to all outgoing requests
 api.interceptors.request.use(
@@ -22,6 +29,20 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (
+      error.response?.status === 401 &&
+      !error.config?.url?.includes("/auth/login") &&
+      !error.config?.url?.includes("/auth/register")
+    ) {
+      await unauthorizedHandler?.();
+    }
     return Promise.reject(error);
   }
 );

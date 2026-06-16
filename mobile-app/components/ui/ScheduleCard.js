@@ -73,7 +73,9 @@ const ScheduleCard = ({ item, navigation }) => {
       <View className="flex-row items-start justify-between mb-8">
         <View className="flex-1 mr-4">
           <Text className="text-textDark text-2xl font-black tracking-tight mb-2">{startLoc} - {endLoc}</Text>
-          <Text className="text-textMuted text-sm font-medium">{item.busId?.licensePlate} • {item.busId?.busType}</Text>
+          <Text className="text-textMuted text-sm font-medium">
+            {item.busId?.licenseNumber || "Bus pending"} | {item.busId?.busType || "Standard"}
+          </Text>
         </View>
         
         {/* Price & Availability */}

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Stop = require("../models/Stop");
 const Route = require("../models/Route");
+const { isPositiveNumber } = require("../utils/validation");
 
 const isValidObjectId = (id) => mongoose.Types.ObjectId.isValid(id);
 
@@ -16,7 +17,7 @@ exports.createStop = async (req, res) => {
       return res.status(400).json({ message: "Invalid route ID" });
     }
 
-    if (Number(order) <= 0) {
+    if (!isPositiveNumber(order) || !Number.isInteger(Number(order))) {
       return res.status(400).json({ message: "Stop order must be greater than 0" });
     }
 
@@ -103,7 +104,7 @@ exports.updateStop = async (req, res) => {
     }
 
     if (order !== undefined) {
-      if (Number(order) <= 0) {
+      if (!isPositiveNumber(order) || !Number.isInteger(Number(order))) {
         return res.status(400).json({ message: "Stop order must be greater than 0" });
       }
 

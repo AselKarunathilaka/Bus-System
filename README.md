@@ -70,7 +70,7 @@ This project was developed as part of the **SE2020 Web and Mobile Technologies**
 
 ### 📡 API & Backend Controllers
 *   **Authentication Flow (`authController.js`):** Intercepts login requests, hashes incoming passwords using `bcryptjs`, compares them against the database, and issues signed JSON Web Tokens (JWT) valid for secure sessions.
-*   **Booking Engine (`bookingController.js`):** Implements rigorous transactional checks. Validates that selected seat indices do not exceed the linked `Bus.seatCapacity`, verifies seats aren't already included in `Schedule.bookedSeats`, and accurately calculates the `totalPrice` server-side before confirming the booking.
+*   **Booking Engine (`bookingController.js`):** Implements rigorous transactional checks. Validates that selected seat indices do not exceed the linked `Bus.seatCount`, atomically reserves seats in `Schedule.bookedSeats`, and accurately calculates the `totalPrice` server-side before confirming the booking.
 *   **Analytics Aggregator (`adminController.js`):** Dynamically queries MongoDB to generate live statistical snapshots (total revenue, active routes, fleet status) and formats 7-day volume histories for the frontend dashboard.
 
 ### ⚛️ Frontend State & Context Management
@@ -155,7 +155,7 @@ npm install
 
 # Create a .env file and configure the following:
 # PORT=5000
-# MONGO_URI=your_mongodb_atlas_connection_string
+# MONGODB_URI=your_mongodb_atlas_connection_string
 # JWT_SECRET=your_secure_jwt_secret
 
 npm run dev

@@ -8,6 +8,9 @@ mobile-app/node_modules/
 .env.*
 backend/.env
 mobile-app/.env
+!.env.example
+!backend/.env.example
+!mobile-app/.env.example
 
 # logs
 *.log

@@ -26,4 +26,6 @@ const stopSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+stopSchema.index({ routeId: 1, order: 1 }, { unique: true });
+
 module.exports = mongoose.model("Stop", stopSchema);

@@ -13,6 +13,7 @@ import api from "../services/api";
 import { Ionicons } from "@expo/vector-icons";
 import AppLayout from "../components/ui/AppLayout";
 import ScheduleCard from "../components/ui/ScheduleCard";
+import { isBookableSchedule } from "../utils/timeUtils";
 
 const UserScheduleListScreen = ({ navigation, route }) => {
   const { token } = useContext(AuthContext);
@@ -30,7 +31,7 @@ const UserScheduleListScreen = ({ navigation, route }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         
-        let activeSchedules = response.data.filter((s) => s.status !== "Cancelled");
+        let activeSchedules = response.data.filter(isBookableSchedule);
 
         // Apply filters if they exist
         if (from) {

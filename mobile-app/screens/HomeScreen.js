@@ -3,11 +3,12 @@ import { View, Text, TouchableOpacity, ScrollView, Platform, Alert, TextInput } 
 import { AuthContext } from "../context/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
+import { LinearGradient } from "expo-linear-gradient";
 import AppCard from "../components/ui/AppCard";
 import AppButton from "../components/ui/AppButton";
 import AppLayout from "../components/ui/AppLayout";
 import ScheduleCard from "../components/ui/ScheduleCard";
-import { getGreeting } from "../utils/timeUtils";
+import { getGreeting, isBookableSchedule } from "../utils/timeUtils";
 import api from "../services/api";
 
 const HomeScreen = ({ navigation }) => {
@@ -47,8 +48,7 @@ const HomeScreen = ({ navigation }) => {
           const schedResponse = await api.get("/schedules", {
             headers: { Authorization: `Bearer ${token}` }
           });
-          const active = schedResponse.data.filter(s => s.status !== "Cancelled");
-          // Just grab the first 3 for the home page preview
+          const active = schedResponse.data.filter(isBookableSchedule);
           setUpcomingSchedules(active.slice(0, 3));
         } catch (error) {
           console.error("Failed to fetch upcoming schedules", error);
@@ -93,14 +93,40 @@ const HomeScreen = ({ navigation }) => {
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 24, paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         
         {/* Hero Section */}
-        <View className="mb-8">
-          <Text className="text-3xl font-sans font-extrabold text-textDark tracking-tight">
-            {getGreeting(user?.fullName)}
-          </Text>
-          <Text className="text-base font-sans text-textMuted mt-1">
-            Welcome to the QuickBus {isAdmin ? 'Admin Dashboard' : 'Portal'}.
-          </Text>
-        </View>
+        <LinearGradient
+          colors={isAdmin ? ["#0F172A", "#312E81"] : ["#1D4ED8", "#4F46E5", "#7C3AED"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            borderRadius: 32,
+            padding: 28,
+            marginBottom: 32,
+            overflow: "hidden",
+          }}
+        >
+          <View
+            className="absolute w-44 h-44 rounded-full -right-12 -top-20"
+            style={{ backgroundColor: "rgba(255,255,255,0.10)" }}
+          />
+          <View className="flex-row justify-between items-center">
+            <View className="flex-1 pr-4">
+              <Text className="text-white/70 text-[10px] font-bold uppercase tracking-[3px] mb-2">
+                {isAdmin ? "Operations Center" : "Travel made simple"}
+              </Text>
+              <Text className="text-3xl font-extrabold text-white tracking-tight">
+                {getGreeting(user?.fullName)}
+              </Text>
+              <Text className="text-blue-100 text-sm mt-2 leading-5">
+                {isAdmin
+                  ? "Manage routes, fleet, schedules, and bookings from one place."
+                  : "Find your next route, choose a seat, and keep your ticket ready."}
+              </Text>
+            </View>
+            <View className="w-14 h-14 rounded-2xl bg-white/15 items-center justify-center">
+              <Ionicons name={isAdmin ? "analytics" : "bus"} size={28} color="#FFFFFF" />
+            </View>
+          </View>
+        </LinearGradient>
 
         {/* Profile Overview */}
         <AppCard className="mb-8 p-5">
@@ -286,11 +312,11 @@ const HomeScreen = ({ navigation }) => {
                 <Text className="text-textDark font-medium text-xs text-center">Guide</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity className="w-[31%] items-center" onPress={() => navigation.navigate("AboutUs")} activeOpacity={0.7}>
+              <TouchableOpacity className="w-[31%] items-center" onPress={() => navigation.navigate("TravelStats")} activeOpacity={0.7}>
                 <View className="w-14 h-14 rounded-2xl bg-white border border-border items-center justify-center mb-2">
-                  <Ionicons name="information-circle" size={24} color="#2563EB" />
+                  <Ionicons name="sparkles" size={24} color="#7C3AED" />
                 </View>
-                <Text className="text-textDark font-medium text-xs text-center">About Us</Text>
+                <Text className="text-textDark font-medium text-xs text-center">Insights</Text>
               </TouchableOpacity>
 
               <TouchableOpacity className="w-[31%] items-center" onPress={() => navigation.navigate("ContactUs")} activeOpacity={0.7}>

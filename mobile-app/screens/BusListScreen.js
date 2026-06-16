@@ -187,23 +187,27 @@ const BusListScreen = ({ navigation }) => {
           <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Seats</Text>
           <Text className="text-sm text-textDark font-bold">{item.seatCount}</Text>
         </View>
-        <View className="w-[100%] mb-3">
-          <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Contact</Text>
-          <Text className="text-sm text-textDark font-bold">{item.busContactNumber}</Text>
-        </View>
+        {isAdmin && (
+          <View className="w-[100%] mb-3">
+            <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1">Contact</Text>
+            <Text className="text-sm text-textDark font-bold">{item.busContactNumber}</Text>
+          </View>
+        )}
       </View>
 
-      <View className="bg-slate-50 rounded-xl p-4 mb-4 border border-border">
-        <Text className="text-xs font-bold text-textDark mb-3 uppercase">Crew Details</Text>
-        <View className="flex-row justify-between mb-2">
-          <Text className="text-xs text-textMuted font-medium">Driver:</Text>
-          <Text className="text-xs text-textDark font-bold text-right flex-1 ml-2">{item.driverName} ({item.driverNIC})</Text>
+      {isAdmin && (
+        <View className="bg-slate-50 rounded-xl p-4 mb-4 border border-border">
+          <Text className="text-xs font-bold text-textDark mb-3 uppercase">Crew Details</Text>
+          <View className="flex-row justify-between mb-2">
+            <Text className="text-xs text-textMuted font-medium">Driver:</Text>
+            <Text className="text-xs text-textDark font-bold text-right flex-1 ml-2">{item.driverName} ({item.driverNIC})</Text>
+          </View>
+          <View className="flex-row justify-between">
+            <Text className="text-xs text-textMuted font-medium">Conductor:</Text>
+            <Text className="text-xs text-textDark font-bold text-right flex-1 ml-2">{item.conductorName} ({item.conductorNIC})</Text>
+          </View>
         </View>
-        <View className="flex-row justify-between">
-          <Text className="text-xs text-textMuted font-medium">Conductor:</Text>
-          <Text className="text-xs text-textDark font-bold text-right flex-1 ml-2">{item.conductorName} ({item.conductorNIC})</Text>
-        </View>
-      </View>
+      )}
 
       <View className="rounded-xl p-4" style={{ backgroundColor: "rgba(37,99,235,0.05)", borderWidth: 1, borderColor: "rgba(37,99,235,0.2)" }}>
         <Text className="text-sm text-primary font-bold leading-relaxed">

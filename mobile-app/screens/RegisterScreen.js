@@ -12,6 +12,8 @@ import AppCard from "../components/ui/AppCard";
 import AppButton from "../components/ui/AppButton";
 import AppInput from "../components/ui/AppInput";
 import AppLayout from "../components/ui/AppLayout";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 const RegisterScreen = ({ navigation }) => {
   const { register } = useContext(AuthContext);
@@ -47,8 +49,8 @@ const RegisterScreen = ({ navigation }) => {
       Alert.alert("Validation Error", "Phone number should be between 10 and 12 digits.");
       return false;
     }
-    if (password.length < 6) {
-      Alert.alert("Validation Error", "Password must be at least 6 characters long.");
+    if (password.length < 8 || !/[A-Za-z]/.test(password) || !/\d/.test(password)) {
+      Alert.alert("Validation Error", "Password must be at least 8 characters and include a letter and number.");
       return false;
     }
     return true;
@@ -85,6 +87,19 @@ const RegisterScreen = ({ navigation }) => {
     >
       <View className={Platform.OS === 'web' ? "w-full max-w-md" : ""}>
         <View className="mb-8 items-center">
+          <LinearGradient
+            colors={["#2563EB", "#7C3AED"]}
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: 18,
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 20,
+            }}
+          >
+            <Ionicons name="person-add" size={29} color="#FFFFFF" />
+          </LinearGradient>
           <View 
             className="px-3 py-1 rounded-full mb-4"
             style={{ backgroundColor: "rgba(37,99,235,0.1)" }}
@@ -133,7 +148,7 @@ const RegisterScreen = ({ navigation }) => {
           <AppInput
             label="Password"
             icon="lock-closed-outline"
-            placeholder="••••••••"
+            placeholder="8+ characters with a number"
             value={password}
             onChangeText={setPassword}
             secureTextEntry

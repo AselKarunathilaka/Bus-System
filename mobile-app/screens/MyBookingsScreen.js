@@ -120,7 +120,7 @@ const MyBookingsScreen = ({ navigation }) => {
               <View className="flex-row justify-between mb-5">
                 <View>
                   <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Bus</Text>
-                  <Text className="text-sm font-bold text-textDark">{item.scheduleId?.busId?.licensePlate}</Text>
+                  <Text className="text-sm font-bold text-textDark">{item.scheduleId?.busId?.licenseNumber || "N/A"}</Text>
                 </View>
                 <View className="items-end">
                   <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1">Seats</Text>

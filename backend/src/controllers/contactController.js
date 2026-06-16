@@ -1,8 +1,44 @@
 const ContactMessage = require("../models/ContactMessage");
+const mongoose = require("mongoose");
+const {
+  cleanText,
+  isValidEmail,
+  isValidPhone,
+} = require("../utils/validation");
+
+const CATEGORIES = new Set([
+  "Booking Issue",
+  "Payment Issue",
+  "Route Inquiry",
+  "Bus Schedule Inquiry",
+  "Account Issue",
+  "General Support",
+]);
+
+const STATUSES = new Set(["New", "In Progress", "Resolved"]);
 
 exports.createContactMessage = async (req, res) => {
   try {
-    const { name, email, phone, subject, category, message } = req.body;
+    const name = cleanText(req.body.name, 100);
+    const email = cleanText(req.body.email, 254).toLowerCase();
+    const phone = cleanText(req.body.phone, 20);
+    const subject = cleanText(req.body.subject, 150);
+    const category = cleanText(req.body.category, 50);
+    const message = cleanText(req.body.message, 2000);
+
+    if (
+      !name ||
+      !subject ||
+      message.length < 10 ||
+      !isValidEmail(email) ||
+      !CATEGORIES.has(category)
+    ) {
+      return res.status(400).json({ message: "Please provide valid support message details" });
+    }
+
+    if (phone && !isValidPhone(phone)) {
+      return res.status(400).json({ message: "Please provide a valid phone number" });
+    }
 
     const newMessage = new ContactMessage({
       name,
@@ -39,6 +75,14 @@ exports.updateMessageStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid message ID" });
+    }
+
+    if (!STATUSES.has(status)) {
+      return res.status(400).json({ message: "Invalid message status" });
+    }
 
     const message = await ContactMessage.findByIdAndUpdate(
       id,

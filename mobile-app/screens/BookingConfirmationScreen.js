@@ -143,7 +143,7 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
               <View className="flex-row justify-between border-t border-slate-100 pt-5">
                 <View>
                   <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Bus</Text>
-                  <Text className="text-sm font-bold text-textDark">{schedule.busId?.licensePlate}</Text>
+                  <Text className="text-sm font-bold text-textDark">{schedule.busId?.licenseNumber || "N/A"}</Text>
                 </View>
                 <View className="items-center">
                   <Text className="text-[10px] font-bold text-textMuted uppercase tracking-widest mb-1.5">Type</Text>

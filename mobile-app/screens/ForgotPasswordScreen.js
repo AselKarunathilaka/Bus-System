@@ -13,6 +13,7 @@ import AppCard from "../components/ui/AppCard";
 import AppButton from "../components/ui/AppButton";
 import AppInput from "../components/ui/AppInput";
 import AppLayout from "../components/ui/AppLayout";
+import api from "../services/api";
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -28,15 +29,27 @@ const ForgotPasswordScreen = ({ navigation }) => {
       return;
     }
     setLoading(true);
-    // TODO: Connect this to the backend /auth/forgot-password route
-    setTimeout(() => {
+    try {
+      await api.post("/contact", {
+        name: "Password reset request",
+        email: email.trim().toLowerCase(),
+        subject: "Account recovery request",
+        category: "Account Issue",
+        message: "Please contact me to verify my identity and help recover access to my QuickBus account.",
+      });
       setLoading(false);
       Alert.alert(
-        "Reset Link Sent", 
-        "If an account exists with this email, a password reset link has been sent.",
+        "Recovery Request Sent",
+        "Our support team received your account recovery request. For your security, identity verification is required before access can be restored.",
         [{ text: "Back to Login", onPress: () => navigation.goBack() }]
       );
-    }, 1500);
+    } catch (error) {
+      setLoading(false);
+      Alert.alert(
+        "Request Failed",
+        error?.response?.data?.message || "Could not submit the recovery request. Please try again later."
+      );
+    }
   };
 
   const content = (

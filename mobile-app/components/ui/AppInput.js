@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, TextInput, Text, Platform, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -11,13 +11,15 @@ const AppInput = ({
   style,
   ...props
 }) => {
+  const [focused, setFocused] = useState(false);
   const getBorderColor = () => {
     if (error) return "#EF4444"; // danger
+    if (focused) return "#4F46E5";
     return "#E2E8F0"; // border
   };
 
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style]} className={containerClassName}>
       {label && (
         <Text style={styles.label}>
           {label}
@@ -26,7 +28,10 @@ const AppInput = ({
       <View
         style={[
           styles.inputContainer,
-          { borderColor: getBorderColor() }
+          {
+            borderColor: getBorderColor(),
+            shadowOpacity: focused ? 0.12 : 0,
+          }
         ]}
       >
         {icon && (
@@ -39,10 +44,26 @@ const AppInput = ({
         )}
         <TextInput
           placeholderTextColor="#94A3B8"
-          style={[styles.input, Platform.OS === "web" && { outlineStyle: "none" }]}
+          style={[
+            styles.input,
+            props.multiline && {
+              height: Math.max(104, Number(props.numberOfLines || 4) * 24),
+              paddingTop: 14,
+              textAlignVertical: "top",
+            },
+            Platform.OS === "web" && { outlineStyle: "none" },
+          ]}
           autoCorrect={false}
           spellCheck={false}
           {...props}
+          onFocus={(event) => {
+            setFocused(true);
+            props.onFocus?.(event);
+          }}
+          onBlur={(event) => {
+            setFocused(false);
+            props.onBlur?.(event);
+          }}
         />
       </View>
       {error && (
@@ -74,6 +95,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16, // px-4
     paddingVertical: 4, // py-1
     backgroundColor: "#FFFFFF", // bg-surface
+    shadowColor: "#4F46E5",
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 12,
+    elevation: 1,
   },
   icon: {
     marginRight: 12, // mr-3
