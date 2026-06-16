@@ -11,6 +11,8 @@ const busRoutes = require("./routes/busRoutes");
 const scheduleRoutes = require("./routes/scheduleRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const contactRoutes = require("./routes/contactRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const mapRoutes = require("./routes/mapRoutes");
 
 const app = express();
 
@@ -48,6 +50,8 @@ app.use("/api/buses", busRoutes);
 app.use("/api/schedules", scheduleRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/contact", contactRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/maps", mapRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

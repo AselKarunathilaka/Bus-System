@@ -24,6 +24,8 @@ const StopFormScreen = ({ route, navigation }) => {
 
   const [stopName, setStopName] = useState(stopData?.stopName || "");
   const [location, setLocation] = useState(stopData?.location || "");
+  const [lat, setLat] = useState(stopData?.coordinates?.lat !== undefined ? String(stopData.coordinates.lat) : "");
+  const [lng, setLng] = useState(stopData?.coordinates?.lng !== undefined ? String(stopData.coordinates.lng) : "");
   const [order, setOrder] = useState(
     stopData?.order !== undefined ? String(stopData.order) : ""
   );
@@ -35,6 +37,10 @@ const StopFormScreen = ({ route, navigation }) => {
 
   const sanitizeNumericField = (text) => {
     return text.replace(/[^0-9]/g, "");
+  };
+
+  const sanitizeCoordinateField = (text) => {
+    return text.replace(/[^0-9.-]/g, "");
   };
 
   const validateForm = () => {
@@ -69,6 +75,25 @@ const StopFormScreen = ({ route, navigation }) => {
       return false;
     }
 
+    if (lat || lng) {
+      if (!lat || !lng) {
+        Alert.alert("Validation Error", "Both Stop Latitude and Stop Longitude are required if providing coordinates.");
+        return false;
+      }
+      
+      const nLat = Number(lat);
+      const nLng = Number(lng);
+      
+      if (isNaN(nLat) || nLat < -90 || nLat > 90) {
+        Alert.alert("Validation Error", "Latitude must be between -90 and 90.");
+        return false;
+      }
+      if (isNaN(nLng) || nLng < -180 || nLng > 180) {
+        Alert.alert("Validation Error", "Longitude must be between -180 and 180.");
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -81,6 +106,10 @@ const StopFormScreen = ({ route, navigation }) => {
       order: Number(order),
       routeId,
     };
+
+    if (lat && lng) {
+      payload.coordinates = { lat: Number(lat), lng: Number(lng) };
+    }
 
     try {
       setLoading(true);
@@ -148,6 +177,32 @@ const StopFormScreen = ({ route, navigation }) => {
               returnKeyType="next"
               containerClassName="mb-4"
             />
+
+            <View className="bg-blue-50 p-4 rounded-xl mb-4 border border-blue-100">
+              <Text className="text-xs font-bold text-blue-800 mb-3">Google Maps Coordinates (Optional)</Text>
+              
+              <View className="flex-row gap-4 mb-1">
+                <View className="flex-1">
+                  <AppInput
+                    placeholder="Stop Latitude"
+                    value={lat}
+                    onChangeText={(text) => setLat(sanitizeCoordinateField(text))}
+                    keyboardType="numeric"
+                    containerClassName="mb-0"
+                  />
+                </View>
+                <View className="flex-1">
+                  <AppInput
+                    placeholder="Stop Longitude"
+                    value={lng}
+                    onChangeText={(text) => setLng(sanitizeCoordinateField(text))}
+                    keyboardType="numeric"
+                    containerClassName="mb-0"
+                  />
+                </View>
+              </View>
+              <Text className="text-[10px] text-blue-600 mt-2">Coordinates are required for Google Map route preview.</Text>
+            </View>
 
             <AppInput
               icon="list-outline"

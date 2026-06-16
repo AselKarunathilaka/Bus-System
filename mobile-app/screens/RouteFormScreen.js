@@ -25,6 +25,11 @@ const RouteFormScreen = ({ route, navigation }) => {
   const [routeName, setRouteName] = useState(editingRoute?.routeName || "");
   const [startLocation, setStartLocation] = useState(editingRoute?.startLocation || "");
   const [endLocation, setEndLocation] = useState(editingRoute?.endLocation || "");
+  
+  const [startLat, setStartLat] = useState(editingRoute?.startCoordinates?.lat !== undefined ? String(editingRoute.startCoordinates.lat) : "");
+  const [startLng, setStartLng] = useState(editingRoute?.startCoordinates?.lng !== undefined ? String(editingRoute.startCoordinates.lng) : "");
+  const [endLat, setEndLat] = useState(editingRoute?.endCoordinates?.lat !== undefined ? String(editingRoute.endCoordinates.lat) : "");
+  const [endLng, setEndLng] = useState(editingRoute?.endCoordinates?.lng !== undefined ? String(editingRoute.endCoordinates.lng) : "");
   const [price, setPrice] = useState(
     editingRoute?.price !== undefined ? String(editingRoute.price) : ""
   );
@@ -44,6 +49,10 @@ const RouteFormScreen = ({ route, navigation }) => {
 
   const sanitizeNumericField = (text) => {
     return text.replace(/[^0-9]/g, "");
+  };
+
+  const sanitizeCoordinateField = (text) => {
+    return text.replace(/[^0-9.-]/g, "");
   };
 
   const sanitizeDurationField = (text) => {
@@ -120,6 +129,27 @@ const RouteFormScreen = ({ route, navigation }) => {
       return false;
     }
 
+    if (startLat || startLng || endLat || endLng) {
+      if (!startLat || !startLng || !endLat || !endLng) {
+        Alert.alert("Validation Error", "If using map coordinates, all four coordinate fields are required.");
+        return false;
+      }
+      
+      const sLat = Number(startLat);
+      const sLng = Number(startLng);
+      const eLat = Number(endLat);
+      const eLng = Number(endLng);
+      
+      if (isNaN(sLat) || sLat < -90 || sLat > 90 || isNaN(eLat) || eLat < -90 || eLat > 90) {
+        Alert.alert("Validation Error", "Latitude must be between -90 and 90.");
+        return false;
+      }
+      if (isNaN(sLng) || sLng < -180 || sLng > 180 || isNaN(eLng) || eLng < -180 || eLng > 180) {
+        Alert.alert("Validation Error", "Longitude must be between -180 and 180.");
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -136,6 +166,11 @@ const RouteFormScreen = ({ route, navigation }) => {
       description: description.trim(),
       status: status.toLowerCase().trim(),
     };
+
+    if (startLat && startLng && endLat && endLng) {
+      payload.startCoordinates = { lat: Number(startLat), lng: Number(startLng) };
+      payload.endCoordinates = { lat: Number(endLat), lng: Number(endLng) };
+    }
 
     try {
       setLoading(true);
@@ -212,6 +247,53 @@ const RouteFormScreen = ({ route, navigation }) => {
               returnKeyType="next"
               containerClassName="mb-4"
             />
+            
+            <View className="bg-blue-50 p-4 rounded-xl mb-4 border border-blue-100">
+              <Text className="text-xs font-bold text-blue-800 mb-3">Google Maps Coordinates (Optional)</Text>
+              
+              <View className="flex-row gap-4 mb-3">
+                <View className="flex-1">
+                  <AppInput
+                    placeholder="Start Latitude"
+                    value={startLat}
+                    onChangeText={(text) => setStartLat(sanitizeCoordinateField(text))}
+                    keyboardType="numeric"
+                    containerClassName="mb-0"
+                  />
+                </View>
+                <View className="flex-1">
+                  <AppInput
+                    placeholder="Start Longitude"
+                    value={startLng}
+                    onChangeText={(text) => setStartLng(sanitizeCoordinateField(text))}
+                    keyboardType="numeric"
+                    containerClassName="mb-0"
+                  />
+                </View>
+              </View>
+              
+              <View className="flex-row gap-4 mb-1">
+                <View className="flex-1">
+                  <AppInput
+                    placeholder="End Latitude"
+                    value={endLat}
+                    onChangeText={(text) => setEndLat(sanitizeCoordinateField(text))}
+                    keyboardType="numeric"
+                    containerClassName="mb-0"
+                  />
+                </View>
+                <View className="flex-1">
+                  <AppInput
+                    placeholder="End Longitude"
+                    value={endLng}
+                    onChangeText={(text) => setEndLng(sanitizeCoordinateField(text))}
+                    keyboardType="numeric"
+                    containerClassName="mb-0"
+                  />
+                </View>
+              </View>
+              <Text className="text-[10px] text-blue-600 mt-2">Coordinates are required for Google Map route preview.</Text>
+            </View>
 
             <AppInput
               icon="cash-outline"

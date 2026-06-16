@@ -147,6 +147,19 @@ const ScheduleCard = ({ item, navigation }) => {
       {/* Action Buttons */}
       <View className="flex-row items-center justify-end border-t border-slate-100 pt-5 mt-2">
         <TouchableOpacity 
+          className="rounded-full px-6 py-3 flex-row items-center justify-center bg-blue-50 border border-blue-200 mr-3"
+          onPress={() => navigation.navigate("RouteMapOverview", { 
+            routeId: item.routeId?._id,
+            schedule: item 
+          })}
+        >
+          <Text className="text-blue-700 text-sm font-bold mr-1">
+            View Route Map
+          </Text>
+          <Ionicons name="map-outline" size={16} color="#1D4ED8" />
+        </TouchableOpacity>
+
+        <TouchableOpacity 
           className={`rounded-full px-6 py-3 flex-row items-center justify-center ${availableSeats === 0 ? 'bg-slate-300' : 'bg-primary'}`}
           style={{
             shadowColor: "#000",

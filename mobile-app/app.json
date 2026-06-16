@@ -21,13 +21,25 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "USE_ENV_OR_EAS_SECRET"
+        }
       }
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      "expo-web-browser"
+      "expo-web-browser",
+      [
+        "react-native-maps",
+        {
+          "androidGoogleMapsApiKey": "USE_ENV_OR_EAS_SECRET",
+          "iosGoogleMapsApiKey": "USE_ENV_OR_EAS_SECRET"
+        }
+      ]
     ]
   }
 }

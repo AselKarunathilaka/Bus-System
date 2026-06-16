@@ -42,6 +42,36 @@ const routeSchema = new mongoose.Schema(
       enum: ["active", "inactive"],
       default: "active",
     },
+    startCoordinates: {
+      lat: Number,
+      lng: Number
+    },
+    endCoordinates: {
+      lat: Number,
+      lng: Number
+    },
+    routePolyline: {
+      type: String,
+      default: ""
+    },
+    routeDistanceMeters: {
+      type: Number,
+      default: 0
+    },
+    routeDurationSeconds: {
+      type: Number,
+      default: 0
+    },
+    mapProvider: {
+      type: String,
+      default: "google"
+    },
+    mapLastSyncedAt: Date,
+    mapStatus: {
+      type: String,
+      enum: ["missing_coordinates", "ready", "sync_failed"],
+      default: "missing_coordinates"
+    },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

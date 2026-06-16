@@ -33,6 +33,10 @@ import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import AboutUsScreen from "../screens/AboutUsScreen";
 import BookingGuideScreen from "../screens/BookingGuideScreen";
 import ContactUsScreen from "../screens/ContactUsScreen";
+import PaymentScreen from "../screens/PaymentScreen";
+import PaymentSuccessScreen from "../screens/PaymentSuccessScreen";
+import PaymentFailedScreen from "../screens/PaymentFailedScreen";
+import RouteMapOverviewScreen from "../screens/RouteMapOverviewScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -138,6 +142,10 @@ const AppNavigator = () => {
           <Stack.Screen name="AboutUs" component={AboutUsScreen} options={{ title: "About Us" }} />
           <Stack.Screen name="BookingGuide" component={BookingGuideScreen} options={{ title: "How to Book" }} />
           <Stack.Screen name="ContactUs" component={ContactUsScreen} options={{ title: "Contact Us" }} />
+          <Stack.Screen name="PaymentScreen" component={PaymentScreen} />
+          <Stack.Screen name="PaymentSuccess" component={PaymentSuccessScreen} />
+          <Stack.Screen name="PaymentFailed" component={PaymentFailedScreen} />
+          <Stack.Screen name="RouteMapOverview" component={RouteMapOverviewScreen} />
           {isAdmin && (
             <Stack.Group>
               <Stack.Screen name="AdminDashboard" component={AdminDashboardScreen} options={{ title: "Admin Dashboard" }} />

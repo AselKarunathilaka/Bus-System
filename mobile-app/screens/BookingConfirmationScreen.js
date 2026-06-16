@@ -13,6 +13,7 @@ import AppLayout from "../components/ui/AppLayout";
 import AppCard from "../components/ui/AppCard";
 import AppButton from "../components/ui/AppButton";
 import AppInput from "../components/ui/AppInput";
+import JourneyMapCard from "../components/ui/JourneyMapCard";
 import { Ionicons } from "@expo/vector-icons";
 
 const BookingConfirmationScreen = ({ route, navigation }) => {
@@ -60,22 +61,36 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
         adminNote: isAdmin ? adminNote : undefined,
       };
 
-      await api.post("/bookings", payload, {
+      const response = await api.post("/bookings", payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (Platform.OS === "web") {
-        window.alert("Booking confirmed successfully!");
-        navigation.navigate("MainTabs", { screen: "BookingsTab" });
+      const booking = response.data.booking;
+
+      if (booking.status === "PendingPayment") {
+        // Initiate payment
+        const paymentResponse = await api.post(`/payments/initiate/${booking._id}`, {}, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        navigation.navigate("PaymentScreen", {
+          paymentDetails: paymentResponse.data,
+        });
       } else {
-        Alert.alert("Success", "Booking confirmed successfully!", [
-          {
-            text: isAdmin ? "View Bookings" : "View My Bookings",
-            onPress: () => {
-              navigation.navigate("MainTabs", { screen: "BookingsTab" });
+        // Admin manual booking or bypassed payment
+        if (Platform.OS === "web") {
+          window.alert("Booking confirmed successfully!");
+          navigation.navigate("MainTabs", { screen: "BookingsTab" });
+        } else {
+          Alert.alert("Success", "Booking confirmed successfully!", [
+            {
+              text: "View Bookings",
+              onPress: () => {
+                navigation.navigate("MainTabs", { screen: "BookingsTab" });
+              },
             },
-          },
-        ]);
+          ]);
+        }
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to confirm booking.";
@@ -210,9 +225,18 @@ const BookingConfirmationScreen = ({ route, navigation }) => {
             )}
           </AppCard>
 
+          <View className="mb-8 max-w-md w-full self-center">
+            <JourneyMapCard
+              routeId={schedule.routeId?._id}
+              schedule={schedule}
+              compact={true}
+              showDetails={true}
+            />
+          </View>
+
           <View className="mb-10 max-w-md w-full self-center">
             <AppButton
-              title={loading ? "Confirming..." : "Confirm Booking"}
+              title={loading ? "Processing..." : (isAdmin ? "Create Manual Booking" : "Proceed to Payment")}
               onPress={handleConfirm}
               disabled={loading}
               variant="primary"

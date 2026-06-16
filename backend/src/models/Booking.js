@@ -41,8 +41,35 @@ const bookingSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Confirmed", "Cancelled"],
-      default: "Confirmed",
+      enum: ["PendingPayment", "Confirmed", "Cancelled", "PaymentFailed", "Expired", "Refunded"],
+      default: "PendingPayment",
+    },
+    paymentStatus: {
+      type: String,
+      enum: ["NotRequired", "Pending", "Paid", "Failed", "Cancelled", "Refunded", "Expired"],
+      default: "Pending"
+    },
+    paymentProvider: {
+      type: String,
+      enum: ["payhere", "stripe", "mock", "manual"],
+      default: "mock"
+    },
+    paymentReference: {
+      type: String,
+      index: true
+    },
+    gatewayOrderId: String,
+    gatewayPaymentId: String,
+    currency: {
+      type: String,
+      default: "LKR"
+    },
+    paidAt: Date,
+    paymentExpiresAt: Date,
+    paymentFailureReason: String,
+    paymentMetadata: {
+      type: mongoose.Schema.Types.Mixed,
+      default: {}
     },
     contactNumber: {
       type: String,

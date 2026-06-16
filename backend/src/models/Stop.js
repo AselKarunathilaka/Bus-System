@@ -12,6 +12,10 @@ const stopSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    coordinates: {
+      lat: Number,
+      lng: Number
+    },
     order: {
       type: Number,
       required: true,

@@ -80,6 +80,20 @@ const MyBookingsScreen = ({ navigation }) => {
     }
   };
 
+  const handleContinuePayment = async (bookingId) => {
+    try {
+      const paymentResponse = await api.post(`/payments/initiate/${bookingId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      navigation.navigate("PaymentScreen", {
+        paymentDetails: paymentResponse.data,
+      });
+    } catch (error) {
+      Alert.alert("Error", error.response?.data?.message || "Failed to initiate payment");
+    }
+  };
+
   const getSeatLabel = (seatNumber) => {
     const row = Math.ceil(seatNumber / 4);
     const colIndex = (seatNumber - 1) % 4;
@@ -143,14 +157,23 @@ const MyBookingsScreen = ({ navigation }) => {
               )}
             </View>
 
-            <View className="justify-center items-center p-3 bg-white rounded-xl border border-slate-100">
-              <QRCode 
-                value={item.bookingId || item._id} 
-                size={80} 
-                color="#0F172A" 
-                backgroundColor="transparent"
-              />
-              <Text className="text-[8px] text-textMuted font-bold mt-2 uppercase tracking-widest">Scan Ticket</Text>
+            <View className="justify-center items-center p-3 bg-white rounded-xl border border-slate-100 min-w-[100px]">
+              {(item.status === "Confirmed" && (item.paymentStatus === "Paid" || item.paymentStatus === "NotRequired")) ? (
+                <>
+                  <QRCode 
+                    value={item.bookingId || item._id} 
+                    size={80} 
+                    color="#0F172A" 
+                    backgroundColor="transparent"
+                  />
+                  <Text className="text-[8px] text-textMuted font-bold mt-2 uppercase tracking-widest">Scan Ticket</Text>
+                </>
+              ) : (
+                <View className="items-center justify-center h-[100px]">
+                  <Ionicons name="lock-closed-outline" size={32} color="#94A3B8" />
+                  <Text className="text-[10px] text-textMuted font-bold mt-2 uppercase tracking-widest text-center">Ticket{'\n'}Unavailable</Text>
+                </View>
+              )}
             </View>
           </View>
         </View>
@@ -163,20 +186,43 @@ const MyBookingsScreen = ({ navigation }) => {
           </View>
           <View className="flex-row justify-between items-end">
             <View>
-              <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1.5">Total Paid</Text>
+              <Text className="text-[10px] text-textMuted font-bold uppercase tracking-widest mb-1.5">Total Amount</Text>
               <Text className="text-2xl font-black text-textDark tracking-tight">
                 <Text className="text-sm text-textMuted mr-1">LKR</Text> {item.totalPrice}
               </Text>
             </View>
             
-            {item.status !== "Cancelled" && (
-              <TouchableOpacity
-                className="bg-red-50 px-4 py-2.5 rounded-xl border border-red-200 active:bg-red-100"
-                onPress={() => handleCancel(item._id)}
-              >
-                <Text className="text-red-600 font-bold text-xs uppercase tracking-wider">Cancel</Text>
-              </TouchableOpacity>
-            )}
+            <View className="flex-row items-center">
+              {item.status === "Confirmed" && item.scheduleId?.routeId?._id && (
+                <TouchableOpacity
+                  className="bg-blue-50 px-4 py-2.5 rounded-xl border border-blue-200 active:bg-blue-100 mr-2"
+                  onPress={() => navigation.navigate("RouteMapOverview", { 
+                    routeId: item.scheduleId.routeId._id,
+                    schedule: item.scheduleId
+                  })}
+                >
+                  <Text className="text-blue-600 font-bold text-xs uppercase tracking-wider">Map</Text>
+                </TouchableOpacity>
+              )}
+              
+              {item.status === "PendingPayment" && item.paymentStatus === "Pending" && (
+                <TouchableOpacity
+                  className="bg-emerald-50 px-4 py-2.5 rounded-xl border border-emerald-200 active:bg-emerald-100 mr-2"
+                  onPress={() => handleContinuePayment(item._id)}
+                >
+                  <Text className="text-emerald-700 font-bold text-xs uppercase tracking-wider">Pay Now</Text>
+                </TouchableOpacity>
+              )}
+
+              {item.status !== "Cancelled" && item.status !== "PaymentFailed" && item.status !== "Expired" && (
+                <TouchableOpacity
+                  className="bg-red-50 px-4 py-2.5 rounded-xl border border-red-200 active:bg-red-100"
+                  onPress={() => handleCancel(item._id)}
+                >
+                  <Text className="text-red-600 font-bold text-xs uppercase tracking-wider">Cancel</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         </View>
       </View>
