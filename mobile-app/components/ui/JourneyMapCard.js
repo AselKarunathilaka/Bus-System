@@ -111,12 +111,16 @@ const JourneyMapCard = ({ routeId, schedule, compact = false, showDetails = fals
       </View>
 
       {Platform.OS === 'web' ? (
-        <View className={`bg-slate-50 items-center justify-center ${compact ? "h-48" : "h-72"}`}>
-          <Ionicons name="map-outline" size={48} color="#CBD5E1" className="mb-3" />
-          <Text className="text-slate-500 font-bold mb-1">Interactive Map</Text>
-          <Text className="text-slate-400 text-xs text-center px-4">
-            Map view is currently optimized for our mobile app.
-          </Text>
+        <View className={`w-full overflow-hidden ${compact ? "h-48" : "h-72"}`}>
+          <iframe 
+            src={`https://maps.google.com/maps?q=${encodeURIComponent(mapData?.startLocation || "Colombo")}+to+${encodeURIComponent(mapData?.endLocation || "Kandy")}&t=&z=10&ie=UTF8&iwloc=&output=embed`}
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            title="Route Map"
+          />
         </View>
       ) : (
         <View className={compact ? "h-48" : "h-72"}>
