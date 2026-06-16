@@ -40,6 +40,7 @@ const RouteFormScreen = ({ route, navigation }) => {
     editingRoute?.estimatedDuration || ""
   );
   const [description, setDescription] = useState(editingRoute?.description || "");
+  const [googleMapUrl, setGoogleMapUrl] = useState(editingRoute?.googleMapUrl || "");
   const [status, setStatus] = useState(editingRoute?.status || "active");
   const [loading, setLoading] = useState(false);
 
@@ -165,6 +166,7 @@ const RouteFormScreen = ({ route, navigation }) => {
       estimatedDuration: estimatedDuration.trim(),
       description: description.trim(),
       status: status.toLowerCase().trim(),
+      googleMapUrl: googleMapUrl.trim(),
     };
 
     if (startLat && startLng && endLat && endLng) {
@@ -244,6 +246,15 @@ const RouteFormScreen = ({ route, navigation }) => {
               placeholder="End Location"
               value={endLocation}
               onChangeText={(text) => setEndLocation(sanitizeNameField(text))}
+              returnKeyType="next"
+              containerClassName="mb-4"
+            />
+            
+            <AppInput
+              icon="map-outline"
+              placeholder="Google Maps Embed URL (Overrides custom map)"
+              value={googleMapUrl}
+              onChangeText={setGoogleMapUrl}
               returnKeyType="next"
               containerClassName="mb-4"
             />

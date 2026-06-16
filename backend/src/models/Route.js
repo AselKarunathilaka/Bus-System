@@ -66,6 +66,11 @@ const routeSchema = new mongoose.Schema(
       type: String,
       default: "google"
     },
+    googleMapUrl: {
+      type: String,
+      trim: true,
+      default: ""
+    },
     mapLastSyncedAt: Date,
     mapStatus: {
       type: String,

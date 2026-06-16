@@ -96,60 +96,18 @@ const JourneyMapCard = ({ routeId, schedule, compact = false, showDetails = fals
   const mins = durationMinutes % 60;
   const durationText = hours > 0 ? `${hours}h ${mins}m` : `${mins}m`;
 
-  const getLeafletHtml = () => {
-    const coords = decodedPolyline.map(p => [p.latitude, p.longitude]);
-    const start = startCoordinates ? [startCoordinates.lat, startCoordinates.lng] : null;
-    const end = endCoordinates ? [endCoordinates.lat, endCoordinates.lng] : null;
-    
-    return `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-        <style>
-          body { padding: 0; margin: 0; }
-          #map { height: 100vh; width: 100vw; }
-          .custom-div-icon { background: none; border: none; }
-          .marker-start { background-color: #ffffff; border: 3px solid #2563EB; border-radius: 50%; width: 16px; height: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-          .marker-end { background-color: #10B981; border: 3px solid #ffffff; border-radius: 50%; width: 16px; height: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-          .marker-stop { background-color: #ffffff; border: 4px solid #94A3B8; border-radius: 50%; width: 10px; height: 10px; }
-        </style>
-      </head>
-      <body>
-        <div id="map"></div>
-        <script>
-          const map = L.map('map', { zoomControl: false, attributionControl: false });
-          L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; OpenStreetMap'
-          }).addTo(map);
-
-          const coords = ${JSON.stringify(coords)};
-          if (coords && coords.length > 0) {
-            const polyline = L.polyline(coords, { color: '#3B82F6', weight: 5, opacity: 0.9 }).addTo(map);
-            map.fitBounds(polyline.getBounds(), { padding: [20, 20] });
-          } else if (${JSON.stringify(start)}) {
-            map.setView(${JSON.stringify(start)}, 13);
-          }
-
-          const createIcon = (className) => L.divIcon({ className: 'custom-div-icon', html: '<div class="' + className + '"></div>', iconSize: [22, 22], iconAnchor: [11, 11] });
-
-          const startCoord = ${JSON.stringify(start)};
-          if (startCoord) L.marker(startCoord, { icon: createIcon('marker-start') }).addTo(map);
-          
-          const endCoord = ${JSON.stringify(end)};
-          if (endCoord) L.marker(endCoord, { icon: createIcon('marker-end') }).addTo(map);
-
-          const stops = ${JSON.stringify(stops.filter(s => s.coordinates).map(s => [s.coordinates.lat, s.coordinates.lng]))};
-          stops.forEach(stop => {
-            L.marker(stop, { icon: createIcon('marker-stop') }).addTo(map);
-          });
-        </script>
-      </body>
-      </html>
-    `;
-  };
+  let mapSrcUrl = `https://maps.google.com/maps?q=${encodeURIComponent(mapData?.startLocation || "Colombo")}+to+${encodeURIComponent(mapData?.endLocation || "Kandy")}&t=&z=10&ie=UTF8&iwloc=&output=embed`;
+  
+  if (mapData.googleMapUrl) {
+    if (mapData.googleMapUrl.includes("<iframe") && mapData.googleMapUrl.includes('src="')) {
+      const srcMatch = mapData.googleMapUrl.match(/src="([^"]+)"/);
+      if (srcMatch && srcMatch[1]) {
+        mapSrcUrl = srcMatch[1];
+      }
+    } else {
+      mapSrcUrl = mapData.googleMapUrl;
+    }
+  }
 
   return (
     <View className="bg-white rounded-3xl overflow-hidden border border-slate-200">
@@ -168,10 +126,12 @@ const JourneyMapCard = ({ routeId, schedule, compact = false, showDetails = fals
       {Platform.OS === 'web' ? (
         <View className={`w-full overflow-hidden ${compact ? "h-48" : "h-72"}`}>
           <iframe 
-            srcDoc={getLeafletHtml()}
+            src={mapSrcUrl}
             width="100%"
             height="100%"
             style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
             title="Route Map"
           />
         </View>

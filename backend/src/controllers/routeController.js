@@ -53,6 +53,7 @@ exports.createRoute = async (req, res) => {
       estimatedDuration: estimatedDuration.trim(),
       description: description?.trim() || "",
       status: status || "active",
+      googleMapUrl: googleMapUrl?.trim() || "",
       createdBy: req.user._id,
     });
 
@@ -151,6 +152,7 @@ exports.updateRoute = async (req, res) => {
       estimatedDuration,
       description,
       status,
+      googleMapUrl,
     } = req.body;
 
     const route = await Route.findById(id);
@@ -190,6 +192,7 @@ exports.updateRoute = async (req, res) => {
     route.estimatedDuration = estimatedDuration?.trim() ?? route.estimatedDuration;
     route.description = description !== undefined ? description.trim() : route.description;
     route.status = status ?? route.status;
+    route.googleMapUrl = googleMapUrl !== undefined ? googleMapUrl.trim() : route.googleMapUrl;
 
     await route.save();
 
